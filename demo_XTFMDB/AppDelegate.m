@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import "XTFMDB.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +18,10 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    // 在这初始化数据库
+    [[XTFMDB sharedInstance] configureDB:@"akateason"] ;
+    
     return YES;
 }
 

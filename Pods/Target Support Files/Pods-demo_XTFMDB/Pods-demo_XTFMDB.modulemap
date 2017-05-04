@@ -1,0 +1,6 @@
+framework module Pods_demo_XTFMDB {
+  umbrella header "Pods-demo_XTFMDB-umbrella.h"
+
+  export *
+  module * { export * }
+}
