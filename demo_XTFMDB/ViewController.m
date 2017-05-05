@@ -246,7 +246,7 @@ static float const kBtFlex = 5 ;
 
 - (void)updateAction
 {
-    Model1 *m1 = [Model1 new] ; // 不需设置主键
+    Model1 *m1 = [Model1 new] ;
     m1.pkid = 1 ;
     m1.age = 4444444 ;
     m1.floatVal = 44.4444 ;
