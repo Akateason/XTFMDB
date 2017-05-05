@@ -45,9 +45,9 @@ static NSString *const kPkid = @"pkid" ;
 + (BOOL)deleteModelWhere:(NSString *)strWhere ; // param e.g. @" pkid = '1' "
 + (BOOL)dropTable ;
 
-#pragma mark - 
+#pragma mark - Constraints
 //props Sqlite Keywords
-+ (NSDictionary *)modelPropertiesSqliteKeywords ;
++ (NSDictionary *)modelPropertiesSqliteKeywords ; // set Constraints of property
 //ignore Properties
 + (NSArray *)ignoreProperties ;
 

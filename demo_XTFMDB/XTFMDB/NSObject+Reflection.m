@@ -50,7 +50,6 @@
  *
  *  属性列表与属性的各种信息
  *
- *  @return <#return value description#>
  */
 + (NSArray *)propertiesInfo
 {

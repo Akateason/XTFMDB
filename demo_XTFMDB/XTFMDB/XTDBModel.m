@@ -270,11 +270,13 @@
 #pragma mark --
 #pragma mark -
 // rewrite in subClass if Needed .
+// set constraints of properties
 + (NSDictionary *)modelPropertiesSqliteKeywords
 {
     return nil ;
 }
 
+// rewrite in subClass if Needed .
 // ignore Properties
 + (NSArray *)ignoreProperties
 {
