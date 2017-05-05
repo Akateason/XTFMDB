@@ -24,10 +24,10 @@
     if (!model) return ;
     
     Model1 *m1 = model ;
-    self.lbPkid.text = [self.lbPkid.text stringByAppendingString:[NSString stringWithFormat:@": %d",m1.pkid]] ;
-    self.lbAge.text = [self.lbAge.text stringByAppendingString:[NSString stringWithFormat:@": %d",m1.age]] ;
-    self.lbFloatVal.text = [self.lbFloatVal.text stringByAppendingString:[NSString stringWithFormat:@": %f",m1.floatVal]] ;
-    self.lbTitle.text = [self.lbTitle.text stringByAppendingString:[NSString stringWithFormat:@": %@",m1.title]] ;
+    self.lbPkid.text = [@"pkid" stringByAppendingString:[NSString stringWithFormat:@": %d",m1.pkid]] ;
+    self.lbAge.text = [@"age" stringByAppendingString:[NSString stringWithFormat:@": %d",m1.age]] ;
+    self.lbFloatVal.text = [@"floatVal" stringByAppendingString:[NSString stringWithFormat:@": %f",m1.floatVal]] ;
+    self.lbTitle.text = [@"title" stringByAppendingString:[NSString stringWithFormat:@": %@",m1.title]] ;
 }
 
 - (void)awakeFromNib {
