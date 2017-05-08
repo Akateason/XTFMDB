@@ -16,7 +16,7 @@
  
 导入 XTFMDB.h
 
-###初始化 在app启动时调用配置函数
+### 初始化 在app启动时调用配置函数
 
 ```
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
