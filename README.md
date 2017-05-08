@@ -1,5 +1,6 @@
-# XTFMDB
-对fmdb再封装.
+
+
+#XTFMDB
 
 ### 特性
 1. Model直接存储.获取. 无需再转换
@@ -12,53 +13,54 @@
 8. 可指定哪些字段不参与建表.
 
 ## 使用方法
-# `XTFMDB`数据库单例类. 
+# XTFMDBBase
+数据库工厂类
 ### 初始化
 在app启动时调用配置函数
 ```
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // 在这初始化数据库
-    [[XTFMDB sharedInstance] configureDB:@"akateason"] ;
-    
-    return YES;
+// 在这初始化数据库
+[[XTFMDB sharedInstance] configureDB:@"akateason"] ;
+
+return YES;
 }
 
 ```
 
 ---
 
-# `XTDBModel`模型制表基类.
+# XTDBModel
+模型制表基类.
 ### 使用
-`XTDBModel`可以实现对数据库操作增删改查等.并且无需设置主键!
-先创建一个`XTDBModel`的子类`Model1`
+无须继承, 可以直接实现对数据库操作增删改查等.并且无需设置主键!
+先创建一个自定义模型类`Model1`
 ```
 
-#import "XTDBModel.h"
 
-@interface Model1 : XTDBModel
+@interface Model1 : NSObject
 // 无需设置主键 默认 pkid
 @property (nonatomic)       int             age         ;
 @property (nonatomic)       float           floatVal    ;
 @property (nonatomic)       long long       tick        ;
 @property (nonatomic,copy)  NSString        *title      ;
-@property (nonatomic,copy)  NSString        *abcabc     ;
+@property (nonatomic,copy)  NSString        *abcabc     ; // 不想在表里出现这个 !!
 
 @end
 
 ```
 #### 可配置各个字段关键字
 注意:
-1. 在.m中覆盖基类modelPropertiesSqliteKeywords方法. 返回一个Dictionary. key为字段名. val为关键字, 加入想要多个关键字,以空格隔开即可.
-2. 无需添加NOT NULL和DEFAULT关键字. (已集成)
-例如,
+1. 在.m中覆盖基类`modelPropertiesSqliteKeywords`方法. 返回一个Dictionary. key为字段名. val为关键字, 加入想要多个关键字,以空格隔开即可 .
+2. 无需添加`NOT NULL`和`DEFAULT`关键字. (已集成) .
+
 ```
 + (NSDictionary *)modelPropertiesSqliteKeywords
 {
-    return @{
-                @"title" : @"UNIQUE" , 
-                ...           
-             } ;
+return @{
+@"title" : @"UNIQUE" ,  // 
+...           
+} ;
 }
 ```
 
@@ -67,74 +69,77 @@
 ```
 + (NSArray *)ignoreProperties
 {
-    return @[
-                @"abcabc" ,
-                ...
-             ] ;
+return @[
+@"abcabc" ,
+...
+] ;
 }
 ```
+
+###### 只需要导入`"XTFMDB.h"就可使用
 
 #### 创建表
 1. 马上创建一张名为`Model1`的数据库表
 ```
-  [Model1 createTable] ;
+[Model1 createTable] ;
 ```
 
 #### 插入
 1. 插入单个
 ```
-    // 生成aModel对象. 直接插入
-    int lastRowID = [aModel insert] ; // 默认返回Sqlite LastRowId
+// 生成aModel对象. 直接插入
+int lastRowID = [aModel insert] ; // 默认返回Sqlite LastRowId
 ```
 2. 批量插入
 ```
-    Bool isSuccess = [Model1 insertList:modelList] ;
+Bool isSuccess = [Model1 insertList:modelList] ;
 ```
 
 #### 更新
 1. 更新单个
 ```
-    Bool isSuccess = [aModel update] ;
+Bool isSuccess = [aModel update] ;
 ```
 2. 批量更新
 ```
-    Bool isSuccess = [Model1 updateList:modelList] ;
+Bool isSuccess = [Model1 updateList:modelList] ;
 ```
 
 #### 查询
 1. 查询表中所有数据
 ```
-  NSArray *list = [Model1 selectAll] ;
+NSArray *list = [Model1 selectAll] ;
 ```
 2. 按条件查询
 ```      
-  NSArray *list = [Model1 selectWhere:@" title = 'aaaaaa' "] ; // 直接传入where条件即可
+NSArray *list = [Model1 selectWhere:@" title = 'aaaaaa' "] ; // 直接传入where条件即可
 ```
 3. 按条件查询单个
 ```
-  Model1 *model = [Model1 findFirstWhere:@"pkid == 2"] ;
+Model1 *model = [Model1 findFirstWhere:@"pkid == 2"] ;
 ```
 4. 按条件查询是否包含
 ```
-  BOOL isContained = [Model1 hasModelWhere:@"pkid == 1"] ;
+BOOL isContained = [Model1 hasModelWhere:@"pkid == 1"] ;
 ```
 
 #### 删除
 1. 删除当前Model
 ```
-  BOOL isDel = [aModel deleteModel] ;
+BOOL isDel = [aModel deleteModel] ;
 ```
 2. 按条件删除某Model
 ```
-  BOOL isDel = [Model1 deleteModelWhere:@" title == 'aaa' "] ;
+BOOL isDel = [Model1 deleteModelWhere:@" title == 'aaa' "] ;
 ```
 3. 删除本表
 ```
-  BOOL isDel = [Model1 dropTable] ;
+BOOL isDel = [Model1 dropTable] ;
 ```
 
 ---
 
-你的Star是我的动力!
-有任何疑问或建议. 欢迎issue我!
 
+
+你的star是我的动力
+有任何疑问或建议. 欢迎在github或博客里issue我. 
