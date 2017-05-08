@@ -8,6 +8,8 @@
 
 #import "DisplayCell.h"
 #import "Model1.h"
+#import "NSObject+XTFMDB.h"
+
 
 @interface DisplayCell ()
 @property (weak, nonatomic) IBOutlet UILabel *lbPkid;

@@ -10,6 +10,8 @@
 #import "DisplayCell.h"
 #import "Model1.h"
 
+#import "XTFMDB.h"
+
 @interface DisplayViewController () <UITableViewDataSource,UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *table ;
 @property (nonatomic,copy) NSArray *list ;

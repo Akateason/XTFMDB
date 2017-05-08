@@ -7,7 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "XTFMDB.h"
+#import "XTFMDBBase.h"
 
 @interface AppDelegate ()
 
@@ -20,7 +20,7 @@
     // Override point for customization after application launch.
     
     // 在这初始化数据库
-    [[XTFMDB sharedInstance] configureDB:@"akateason"] ;
+    [[XTFMDBBase sharedInstance] configureDB:@"akateason"] ;
     
     return YES;
 }

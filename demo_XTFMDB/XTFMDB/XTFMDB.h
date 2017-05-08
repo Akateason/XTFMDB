@@ -1,31 +1,16 @@
 //
 //  XTFMDB.h
-//  XTkit
+//  demo_XTFMDB
 //
-//  Created by teason23 on 2017/4/28.
-//  Copyright © 2017年 teason. All rights reserved.
+//  Created by teason23 on 2017/5/8.
+//  Copyright © 2017年 teaason. All rights reserved.
 //
-//
 
-#import <Foundation/Foundation.h>
-#import "FMDB.h"
+#ifndef XTFMDB_h
+#define XTFMDB_h
 
-#define QUEUE                         [XTFMDB sharedInstance].queue
+#import "NSObject+XTFMDB.h"
+#import "XTFMDBBase.h"
+#import "XTDBModel.h"
 
-@interface XTFMDB : NSObject
-
-+ (XTFMDB *)sharedInstance ;
-
-@property (nonatomic,strong,readonly) FMDatabase         *database   ;
-@property (nonatomic,strong)          FMDatabaseQueue    *queue      ;
-
-#pragma mark --
-
-// config db in "- [(AppDelegate *) AppDidLaunchFinish]"
-- (void)configureDB:(NSString *)name ;
-
-- (BOOL)verify ;
-
-- (BOOL)isTableExist:(NSString *)tableName ;
-
-@end
+#endif /* XTFMDB_h */

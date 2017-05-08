@@ -14,6 +14,8 @@
 #import "YYModel.h"
 #import "DisplayViewController.h"
 
+#import "XTFMDB.h"
+
 @interface ViewController ()
 
 @property (strong, nonatomic) UIButton *btCreate ;

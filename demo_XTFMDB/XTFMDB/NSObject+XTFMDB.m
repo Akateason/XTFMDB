@@ -1,21 +1,33 @@
 //
-//  XTDBModel.m
-//  XTkit
+//  NSObject+XTFMDB.m
+//  demo_XTFMDB
 //
-//  Created by teason23 on 2017/5/4.
-//  Copyright © 2017年 teason. All rights reserved.
+//  Created by teason23 on 2017/5/8.
+//  Copyright © 2017年 teaason. All rights reserved.
 //
 
-#import "XTDBModel.h"
+#import "NSObject+XTFMDB.h"
 #import "XTFMDBBase.h"
 #import "XTDBModel+autoSql.h"
 #import "YYModel.h"
+#import <objc/runtime.h>
 
-@interface XTDBModel ()
 
-@end
+static void *key_pkid = &key_pkid;
 
-@implementation XTDBModel
+@implementation NSObject (XTFMDB)
+
+#pragma mark --
+- (void)setPkid:(int)pkid
+{
+    objc_setAssociatedObject(self, &key_pkid, @(pkid), OBJC_ASSOCIATION_ASSIGN) ;
+}
+
+- (int)pkid
+{
+    return [objc_getAssociatedObject(self, &key_pkid) intValue] ;
+}
+
 
 #pragma mark --
 #pragma mark - tableIsExist
@@ -208,8 +220,8 @@
     [QUEUE inDatabase:^(FMDatabase *db) {
         
         NSString *sql = !strWhere
-                        ? [NSString stringWithFormat:@"SELECT * FROM %@",tableName]
-                        : [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@",tableName,strWhere] ;
+        ? [NSString stringWithFormat:@"SELECT * FROM %@",tableName]
+        : [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@",tableName,strWhere] ;
         NSLog(@"sql :\n %@",sql) ;
         FMResultSet *rs = [db executeQuery:sql] ;
         while ([rs next])
@@ -291,9 +303,3 @@
 }
 
 @end
-
-
-
-
-
-
