@@ -13,15 +13,16 @@
 8. 可指定哪些字段不参与建表.
 
 ## 使用方法
-# XTFMDBBase
-数据库工厂类
-### 初始化
-在app启动时调用配置函数
+ 
+导入 XTFMDB.h
+
+###初始化 在app启动时调用配置函数
+
 ```
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
 // 在这初始化数据库
-[[XTFMDB sharedInstance] configureDB:@"akateason"] ;
+[[XTFMDBbase sharedInstance] configureDB:@"akateason"] ;
 
 return YES;
 }
@@ -30,9 +31,7 @@ return YES;
 
 ---
 
-# XTDBModel
-模型制表基类.
-### 使用
+### 使用ACID
 无须继承, 可以直接实现对数据库操作增删改查等.并且无需设置主键!
 先创建一个自定义模型类`Model1`
 ```
@@ -142,4 +141,5 @@ BOOL isDel = [Model1 dropTable] ;
 
 
 你的star是我的动力
+
 有任何疑问或建议. 欢迎在github或博客里issue我. 
