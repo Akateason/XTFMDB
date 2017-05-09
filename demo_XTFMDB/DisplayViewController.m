@@ -24,7 +24,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.list = ({
-        NSArray *list = [Model1 selectAll] ;
+        NSArray *list = [Model1 xt_selectAll] ;
         list ;
     }) ;
     

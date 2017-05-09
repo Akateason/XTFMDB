@@ -214,13 +214,13 @@ static float const kBtFlex = 5 ;
 - (void)createAction
 {
     NSLog(@"%s",__func__) ;
-    [Model1 createTable] ;
+    [Model1 xt_createTable] ;
 }
 
 - (void)selectAction
 {
     NSLog(@"%s",__func__) ;
-    NSArray *list = [Model1 selectAll] ;
+    NSArray *list = [Model1 xt_selectAll] ;
     for (Model1 *model in list) {
         NSLog(@"%d",model.pkid) ;
     }
@@ -229,7 +229,7 @@ static float const kBtFlex = 5 ;
 - (void)selectWhereAction
 {
     NSLog(@"%s",__func__) ;
-    NSArray *list = [Model1 selectWhere:@"title = 'jk4j3j43' "] ;
+    NSArray *list = [Model1 xt_selectWhere:@"title = 'jk4j3j43' "] ;
     NSLog(@"list : %@ \ncount:%@",list,@(list.count)) ;
 }
 
@@ -241,7 +241,7 @@ static float const kBtFlex = 5 ;
     m1.floatVal = 3232.89f ;
     m1.tick = 666666666666 ;
     m1.title = [NSString stringWithFormat:@"atitle%d",arc4random()%999] ;
-    [m1 insert] ;
+    [m1 xt_insert] ;
     
     [self displayJump] ;
 }
@@ -254,21 +254,21 @@ static float const kBtFlex = 5 ;
     m1.floatVal = 44.4444 ;
     m1.tick = 666666666666 ;
     m1.title = @"我就改你" ;
-    [m1 update] ;
+    [m1 xt_update] ;
     
     [self displayJump] ;
 }
 
 - (void)deleteAction
 {
-    [Model1 deleteModelWhere:@"title = '我就改你' "] ;
+    [Model1 xt_deleteModelWhere:@"title = '我就改你' "] ;
  
     [self displayJump] ;
 }
 
 - (void)dropAction
 {
-    [Model1 dropTable] ;
+    [Model1 xt_dropTable] ;
     
     [self displayJump] ;
 }
@@ -286,7 +286,7 @@ static float const kBtFlex = 5 ;
         
         [list addObject:m1] ;
     }
-    [Model1 insertList:list] ;
+    [Model1 xt_insertList:list] ;
     
     
     [self displayJump] ;
@@ -294,7 +294,7 @@ static float const kBtFlex = 5 ;
 
 - (void)updateListAction
 {
-    NSArray *getlist = [Model1 selectWhere:@"age > 5"] ;
+    NSArray *getlist = [Model1 xt_selectWhere:@"age > 5"] ;
     NSMutableArray *tmplist = [@[] mutableCopy] ;
     for (int i = 0 ; i < getlist.count ; i++)
     {
@@ -302,14 +302,14 @@ static float const kBtFlex = 5 ;
         model.title = [model.title stringByAppendingString:[NSString stringWithFormat:@"+%d",model.age]] ;
         [tmplist addObject:model] ;
     }
-    [Model1 updateList:tmplist] ;
+    [Model1 xt_updateList:tmplist] ;
     
     [self displayJump] ;
 }
 
 - (void)findFirstAction
 {
-    Model1 *model = [Model1 findFirstWhere:@"pkid == 2"] ;
+    Model1 *model = [Model1 xt_findFirstWhere:@"pkid == 2"] ;
     NSLog(@"m : %@",[model yy_modelToJSONObject]) ;
 }
 

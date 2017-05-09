@@ -31,7 +31,7 @@ static void *key_pkid = &key_pkid;
 
 #pragma mark --
 #pragma mark - tableIsExist
-+ (BOOL)tableIsExist
++ (BOOL)xt_tableIsExist
 {
     NSString *tableName = NSStringFromClass([self class]) ;
     return [[XTFMDBBase sharedInstance] isTableExist:tableName] ;
@@ -39,7 +39,7 @@ static void *key_pkid = &key_pkid;
 
 #pragma mark --
 #pragma mark - create
-+ (BOOL)createTable
++ (BOOL)xt_createTable
 {
     NSString *tableName = NSStringFromClass([self class]) ;
     
@@ -66,7 +66,7 @@ static void *key_pkid = &key_pkid;
 #pragma mark --
 #pragma mark - insert
 
-- (int)insert
+- (int)xt_insert
 {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return -1 ;
@@ -91,7 +91,7 @@ static void *key_pkid = &key_pkid;
     return lastRowId ;
 }
 
-+ (BOOL)insertList:(NSArray *)modelList
++ (BOOL)xt_insertList:(NSArray *)modelList
 {
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:NSStringFromClass([[modelList firstObject] class])]) return FALSE ;
@@ -132,7 +132,7 @@ static void *key_pkid = &key_pkid;
 
 #pragma mark --
 #pragma mark - update
-- (BOOL)update
+- (BOOL)xt_update
 {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
@@ -155,7 +155,7 @@ static void *key_pkid = &key_pkid;
     return bSuccess ;
 }
 
-+ (BOOL)updateList:(NSArray *)modelList
++ (BOOL)xt_updateList:(NSArray *)modelList
 {
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:NSStringFromClass([[modelList firstObject] class])]) return FALSE ;
@@ -195,22 +195,22 @@ static void *key_pkid = &key_pkid;
 
 #pragma mark --
 #pragma mark - select
-+ (NSArray *)selectAll
++ (NSArray *)xt_selectAll
 {
-    return [self selectWhere:nil] ;
+    return [self xt_selectWhere:nil] ;
 }
 
-+ (instancetype)findFirstWhere:(NSString *)strWhere
++ (instancetype)xt_findFirstWhere:(NSString *)strWhere
 {
-    return [[self selectWhere:strWhere] firstObject] ;
+    return [[self xt_selectWhere:strWhere] firstObject] ;
 }
 
-+ (BOOL)hasModelWhere:(NSString *)strWhere
++ (BOOL)xt_hasModelWhere:(NSString *)strWhere
 {
-    return [self selectWhere:strWhere].count > 0 ? TRUE : FALSE ;
+    return [self xt_selectWhere:strWhere].count > 0 ;
 }
 
-+ (NSArray *)selectWhere:(NSString *)strWhere
++ (NSArray *)xt_selectWhere:(NSString *)strWhere
 {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return nil ;
@@ -236,12 +236,12 @@ static void *key_pkid = &key_pkid;
 
 #pragma mark --
 #pragma mark - delete
-- (BOOL)deleteModel
+- (BOOL)xt_deleteModel
 {
     return [[self class] deleteModelWhere:[NSString stringWithFormat:@"pkid = '%d'",self.pkid]] ;
 }
 
-+ (BOOL)deleteModelWhere:(NSString *)strWhere
++ (BOOL)xt_deleteModelWhere:(NSString *)strWhere
 {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
@@ -264,7 +264,7 @@ static void *key_pkid = &key_pkid;
     return bSuccess ;
 }
 
-+ (BOOL)dropTable
++ (BOOL)xt_dropTable
 {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;

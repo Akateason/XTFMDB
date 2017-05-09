@@ -14,29 +14,29 @@
 @property (nonatomic,assign) int pkid ;
 
 #pragma mark - tableIsExist
-+ (BOOL)tableIsExist ;
++ (BOOL)xt_tableIsExist ;
 
 #pragma mark - create
-+ (BOOL)createTable ;
++ (BOOL)xt_createTable ;
 
 #pragma mark - insert
-- (int)insert ; // return lastRowId .
-+ (BOOL)insertList:(NSArray *)modelList ;
+- (int)xt_insert ; // return lastRowId .
++ (BOOL)xt_insertList:(NSArray *)modelList ;
 
 #pragma mark - update
-- (BOOL)update ;
-+ (BOOL)updateList:(NSArray *)modelList ;
+- (BOOL)xt_update ;
++ (BOOL)xt_updateList:(NSArray *)modelList ;
 
 #pragma mark - select
-+ (NSArray *)selectAll ;
-+ (NSArray *)selectWhere:(NSString *)strWhere ; // param e.g. @" pkid = '1' "
-+ (instancetype)findFirstWhere:(NSString *)strWhere ;
-+ (BOOL)hasModelWhere:(NSString *)strWhere ;
++ (NSArray *)xt_selectAll ;
++ (NSArray *)xt_selectWhere:(NSString *)strWhere ; // param e.g. @" pkid = '1' "
++ (instancetype)xt_findFirstWhere:(NSString *)strWhere ;
++ (BOOL)xt_hasModelWhere:(NSString *)strWhere ;
 
 #pragma mark - delete
-- (BOOL)deleteModel ;
-+ (BOOL)deleteModelWhere:(NSString *)strWhere ; // param e.g. @" pkid = '1' "
-+ (BOOL)dropTable ;
+- (BOOL)xt_deleteModel ;
++ (BOOL)xt_deleteModelWhere:(NSString *)strWhere ; // param e.g. @" pkid = '1' "
++ (BOOL)xt_dropTable ;
 
 #pragma mark - Constraints
 //props Sqlite Keywords
