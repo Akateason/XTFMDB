@@ -80,60 +80,60 @@ return @[
 #### 创建表
 1. 马上创建一张名为`Model1`的数据库表
 ```
-[Model1 createTable] ;
+[Model1 xt_createTable] ;
 ```
 
 #### 插入
 1. 插入单个
 ```
 // 生成aModel对象. 直接插入
-int lastRowID = [aModel insert] ; // 默认返回Sqlite LastRowId
+int lastRowID = [aModel xt_insert] ; // 默认返回Sqlite LastRowId
 ```
 2. 批量插入
 ```
-Bool isSuccess = [Model1 insertList:modelList] ;
+Bool isSuccess = [Model1 xt_insertList:modelList] ;
 ```
 
 #### 更新
 1. 更新单个
 ```
-Bool isSuccess = [aModel update] ;
+Bool isSuccess = [aModel xt_update] ;
 ```
 2. 批量更新
 ```
-Bool isSuccess = [Model1 updateList:modelList] ;
+Bool isSuccess = [Model1 xt_updateList:modelList] ;
 ```
 
 #### 查询
 1. 查询表中所有数据
 ```
-NSArray *list = [Model1 selectAll] ;
+NSArray *list = [Model1 xt_selectAll] ;
 ```
 2. 按条件查询
 ```      
-NSArray *list = [Model1 selectWhere:@" title = 'aaaaaa' "] ; // 直接传入where条件即可
+NSArray *list = [Model1 xt_selectWhere:@" title = 'aaaaaa' "] ; // 直接传入where条件即可
 ```
 3. 按条件查询单个
 ```
-Model1 *model = [Model1 findFirstWhere:@"pkid == 2"] ;
+Model1 *model = [Model1 xt_findFirstWhere:@"pkid == 2"] ;
 ```
 4. 按条件查询是否包含
 ```
-BOOL isContained = [Model1 hasModelWhere:@"pkid == 1"] ;
+BOOL isContained = [Model1 xt_hasModelWhere:@"pkid == 1"] ;
 ```
 
 #### 删除
 1. 删除当前Model
 ```
-BOOL isDel = [aModel deleteModel] ;
+BOOL isDel = [aModel xt_deleteModel] ;
 ```
 2. 按条件删除某Model
 ```
-BOOL isDel = [Model1 deleteModelWhere:@" title == 'aaa' "] ;
+BOOL isDel = [Model1 xt_deleteModelWhere:@" title == 'aaa' "] ;
 ```
 3. 删除本表
 ```
-BOOL isDel = [Model1 dropTable] ;
+BOOL isDel = [Model1 xt_dropTable] ;
 ```
 
 ---
