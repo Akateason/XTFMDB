@@ -37,7 +37,7 @@
         }
         else continue ;
     }
-
+    
     // other props in sub cls
     NSArray *propInfoList = [cls propertiesInfo] ;
     for (int i = 0; i < propInfoList.count; i++)
