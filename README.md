@@ -32,12 +32,12 @@ return YES;
 ---
 
 ### 使用ACID
-无须继承, 可以直接实现对数据库操作增删改查等.并且无需设置主键!
+XTDBModel的子类, 可以直接实现对数据库操作增删改查等.并且无需设置主键!
 先创建一个自定义模型类`Model1`
 ```
 
 
-@interface Model1 : NSObject
+@interface Model1 : XTDBModel
 // 无需设置主键 默认 pkid
 @property (nonatomic)       int             age         ;
 @property (nonatomic)       float           floatVal    ;
