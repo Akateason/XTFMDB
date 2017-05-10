@@ -32,11 +32,12 @@ return YES;
 ---
 
 ### 使用ACID
-XTDBModel的子类, 可以直接实现对数据库操作增删改查等.并且无需设置主键!
 先创建一个自定义模型类`Model1`
+
+支持两种建模方式
+
+方式1) XTDBModel的子类, 可以直接实现对数据库操作增删改查等.并且无需设置主键pkid
 ```
-
-
 @interface Model1 : XTDBModel
 // 无需设置主键 默认 pkid
 @property (nonatomic)       int             age         ;
@@ -44,9 +45,18 @@ XTDBModel的子类, 可以直接实现对数据库操作增删改查等.并且�
 @property (nonatomic)       long long       tick        ;
 @property (nonatomic,copy)  NSString        *title      ;
 @property (nonatomic,copy)  NSString        *abcabc     ; // 不想在表里出现这个 !!
-
 @end
-
+```
+方式2) 任意创建一个类, 可以直接实现对数据库操作增删改查等.但需要手动设置主键pkid
+```
+@interface Model1 : NSObject
+@property (nonatomic)       int             pkid        ; // primary key
+@property (nonatomic)       int             age         ;
+@property (nonatomic)       float           floatVal    ;
+@property (nonatomic)       long long       tick        ;
+@property (nonatomic,copy)  NSString        *title      ;
+@property (nonatomic,copy)  NSString        *abcabc     ; // 不想在表里出现这个 !!
+@end
 ```
 #### 可配置各个字段关键字
 注意:
@@ -80,7 +90,7 @@ return @[
 #### 创建表
 1. 马上创建一张名为`Model1`的数据库表
 ```
-[Model1 xt_createTable] ;
+[Model1 xt_createTable] ; // [Model1 createTable] ; 当Model1是XTDBModel子类时,也可以用这个方法.以下方法均可以同上.
 ```
 
 #### 插入
