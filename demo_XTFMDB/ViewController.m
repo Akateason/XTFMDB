@@ -249,11 +249,12 @@ static float const kBtFlex = 5 ;
 - (void)updateAction
 {
     Model1 *m1 = [Model1 new] ;
-    m1.pkid = 1 ;
+    m1.pkid = ((Model1 *)[[Model1 xt_selectAll] lastObject]).pkid ;
     m1.age = 4444444 ;
     m1.floatVal = 44.4444 ;
     m1.tick = 666666666666 ;
-    m1.title = @"我就改你" ;
+    m1.title = [NSString stringWithFormat:@"我就改你,r%d",arc4random() % 99] ;
+    
     [m1 xt_update] ;
     
     [self displayJump] ;
@@ -261,7 +262,8 @@ static float const kBtFlex = 5 ;
 
 - (void)deleteAction
 {
-    [Model1 xt_deleteModelWhere:@"title = '我就改你' "] ;
+    NSString *titleDel = ((Model1 *)[[Model1 xt_selectAll] lastObject]).title ;
+    [Model1 xt_deleteModelWhere:[NSString stringWithFormat:@"title == '%@'",titleDel]] ;
  
     [self displayJump] ;
 }
@@ -315,7 +317,7 @@ static float const kBtFlex = 5 ;
 
 
 #pragma mark -
-// 显示跳转
+
 - (void)displayJump
 {
     [self performSegueWithIdentifier:@"root2display" sender:nil] ;

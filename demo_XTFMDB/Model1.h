@@ -6,9 +6,12 @@
 //  Copyright © 2017年 teason. All rights reserved.
 
 
-#import "XTDBModel.h"
+//#import "XTDBModel.h"
+#import <Foundation/Foundation.h>
 
-@interface Model1 : XTDBModel
+@interface Model1 : NSObject //XTDBModel
+
+@property (nonatomic)       int             pkid        ;   //  继承XTDBModel时无需写这行
 
 @property (nonatomic)       int             age         ;
 @property (nonatomic)       float           floatVal    ;
