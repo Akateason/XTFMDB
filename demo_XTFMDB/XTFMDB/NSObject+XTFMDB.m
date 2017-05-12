@@ -238,7 +238,7 @@ static void *key_pkid = &key_pkid;
 #pragma mark - delete
 - (BOOL)xt_deleteModel
 {
-    return [[self class] deleteModelWhere:[NSString stringWithFormat:@"pkid = '%d'",self.pkid]] ;
+    return [[self class] xt_deleteModelWhere:[NSString stringWithFormat:@"pkid = '%d'",self.pkid]] ;
 }
 
 + (BOOL)xt_deleteModelWhere:(NSString *)strWhere
