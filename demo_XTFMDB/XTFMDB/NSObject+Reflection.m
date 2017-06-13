@@ -11,25 +11,37 @@
 @implementation NSObject (Reflection)
 
 
--(NSDictionary *)propertyDictionary
+- (NSDictionary *)propertyDictionary
 {
-    //创建可变字典
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    unsigned int outCount;
-    objc_property_t *props = class_copyPropertyList([self class], &outCount);
-    for(int i=0;i<outCount;i++){
-        objc_property_t prop = props[i];
-        NSString *propName = [[NSString alloc]initWithCString:property_getName(prop) encoding:NSUTF8StringEncoding];
-        id propValue = [self valueForKey:propName];
-        [dict setObject:propValue?:[NSNull null] forKey:propName];
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary] ;
+    unsigned int outCount ;
+    Class cls = [self class] ;
+    while (1)
+    {
+        objc_property_t *props = class_copyPropertyList(cls, &outCount) ;
+        for(int i = 0 ; i < outCount ; i++)
+        {
+            objc_property_t prop = props[i] ;
+            NSString *propName = [[NSString alloc] initWithCString:property_getName(prop)
+                                                          encoding:NSUTF8StringEncoding] ;
+            id propValue = [self valueForKey:propName] ;
+            [dict setObject:propValue ?: [NSNull null]
+                     forKey:propName] ;
+        }
+        free(props) ;
+        cls = [cls superclass] ;
+        if ([NSStringFromClass(cls) isEqualToString:NSStringFromClass([NSObject class])]) {
+            break ;
+        }
     }
-    free(props);
-    return dict;
+    return dict ;
 }
+
 - (NSArray*)propertyKeys
 {
     return [[self class] propertyKeys];
 }
+
 + (NSArray *)propertyKeys {
     unsigned int propertyCount = 0;
     objc_property_t * properties = class_copyPropertyList(self, &propertyCount);
@@ -42,6 +54,7 @@
     free(properties);
     return propertyNames;
 }
+
 - (NSArray *)propertiesInfo
 {
     return [[self class] propertiesInfo];
