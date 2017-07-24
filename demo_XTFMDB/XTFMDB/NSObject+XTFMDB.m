@@ -11,7 +11,7 @@
 #import "XTDBModel+autoSql.h"
 #import "YYModel.h"
 #import <objc/runtime.h>
-
+#import "XTFMDBConst.h"
 
 static void *key_pkid = &key_pkid;
 

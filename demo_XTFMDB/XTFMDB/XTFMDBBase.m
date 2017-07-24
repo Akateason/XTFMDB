@@ -7,6 +7,7 @@
 //
 
 #import "XTFMDBBase.h"
+#import "XTFMDBConst.h"
 
 #define SQLITE_NAME( _name_ )   [name stringByAppendingString:@".sqlite"]
 

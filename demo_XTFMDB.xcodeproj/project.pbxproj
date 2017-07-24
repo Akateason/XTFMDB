@@ -28,6 +28,7 @@
 		36908B1C80D5651BA7D9EF56 /* Pods-demo_XTFMDB.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-demo_XTFMDB.debug.xcconfig"; path = "Pods/Target Support Files/Pods-demo_XTFMDB/Pods-demo_XTFMDB.debug.xcconfig"; sourceTree = "<group>"; };
 		69780A6434E49AF6BA093C3D /* Pods-demo_XTFMDB.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-demo_XTFMDB.release.xcconfig"; path = "Pods/Target Support Files/Pods-demo_XTFMDB/Pods-demo_XTFMDB.release.xcconfig"; sourceTree = "<group>"; };
 		7473C28BD95C9470D4806ECC /* Pods_demo_XTFMDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_demo_XTFMDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F16B9AE1F25EE750049CEE1 /* XTFMDBConst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XTFMDBConst.h; path = XTFMDB/XTFMDBConst.h; sourceTree = "<group>"; };
 		8FFD738A1EBB1C2C00148B83 /* demo_XTFMDB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = demo_XTFMDB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FFD738E1EBB1C2C00148B83 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8FFD73901EBB1C2C00148B83 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -121,6 +122,7 @@
 		8FFD73A91EBB1D8500148B83 /* XTFMDB */ = {
 			isa = PBXGroup;
 			children = (
+				8F16B9AE1F25EE750049CEE1 /* XTFMDBConst.h */,
 				8FFD74001EC0479C00148B83 /* XTFMDB.h */,
 				8FFD73F11EBB1F4500148B83 /* NSObject+Reflection.h */,
 				8FFD73F21EBB1F4500148B83 /* NSObject+Reflection.m */,

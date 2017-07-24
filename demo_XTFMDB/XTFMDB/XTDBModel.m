@@ -10,6 +10,7 @@
 #import "XTFMDBBase.h"
 #import "XTDBModel+autoSql.h"
 #import "YYModel.h"
+#import "XTFMDBConst.h"
 
 @interface XTDBModel ()
 

@@ -8,7 +8,7 @@
 
 #import "XTDBModel+autoSql.h"
 #import "NSObject+Reflection.h"
-
+#import "XTFMDBConst.h"
 
 @implementation XTDBModel (autoSql)
 
