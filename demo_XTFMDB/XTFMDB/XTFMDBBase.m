@@ -33,14 +33,21 @@
 #pragma mark - configure
 - (void)configureDB:(NSString *)name
 {
-    NSArray *filePath = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) ;
-    NSString *documentPath = [filePath firstObject] ;
-    NSLog(@"xt_db documentPath :\n%@", documentPath) ;
+    NSString *documentPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] ;
+    [self configureDB:name
+                 path:documentPath] ;
+}
+
+- (void)configureDB:(NSString *)name
+               path:(NSString *)path
+{
+    NSLog(@"xt_db path :\n%@", path) ;
     NSLog(@"xt_db sqlName  : %@",name) ;
-    NSString *path = [documentPath stringByAppendingPathComponent:SQLITE_NAME(name)] ;
-    DB = [FMDatabase databaseWithPath:path] ;
+    NSString *finalPath = [path stringByAppendingPathComponent:SQLITE_NAME(name)] ;
+    
+    DB = [FMDatabase databaseWithPath:finalPath] ;
     [DB open] ;
-    QUEUE = [FMDatabaseQueue databaseQueueWithPath:path] ;
+    QUEUE = [FMDatabaseQueue databaseQueueWithPath:finalPath] ;
 }
 
 #pragma mark --

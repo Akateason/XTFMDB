@@ -39,6 +39,11 @@
 + (BOOL)xt_deleteModelWhere:(NSString *)strWhere ; // param e.g. @" pkid = '1' "
 + (BOOL)xt_dropTable ;
 
+#pragma mark - alter
+
++ (BOOL)alterAddColumn:(NSString *)name
+                  type:(NSString *)type ;
+
 #pragma mark - Constraints
 //props Sqlite Keywords
 + (NSDictionary *)modelPropertiesSqliteKeywords ; // set Constraints of property

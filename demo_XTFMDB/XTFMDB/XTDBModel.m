@@ -20,6 +20,7 @@
 
 #pragma mark --
 #pragma mark - tableIsExist
+
 + (BOOL)tableIsExist
 {
     NSString *tableName = NSStringFromClass([self class]) ;
@@ -28,6 +29,7 @@
 
 #pragma mark --
 #pragma mark - create
+
 + (BOOL)createTable
 {
     NSString *tableName = NSStringFromClass([self class]) ;
@@ -121,6 +123,7 @@
 
 #pragma mark --
 #pragma mark - update
+
 - (BOOL)update
 {
     NSString *tableName = NSStringFromClass([self class]) ;
@@ -184,6 +187,7 @@
 
 #pragma mark --
 #pragma mark - select
+
 + (NSArray *)selectAll
 {
     return [self selectWhere:nil] ;
@@ -202,15 +206,21 @@
 + (NSArray *)selectWhere:(NSString *)strWhere
 {
     NSString *tableName = NSStringFromClass([self class]) ;
+    NSString *sql = !strWhere
+    ? [NSString stringWithFormat:@"SELECT * FROM %@",tableName]
+    : [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@",tableName,strWhere] ;
+    return [self findWithSql:sql] ;
+}
+
+// any sql
++ (NSArray *)findWithSql:(NSString *)sql
+{
+    NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return nil ;
     if(![[XTFMDBBase sharedInstance] isTableExist:tableName]) return nil ;
     
     __block NSMutableArray *resultList = [@[] mutableCopy] ;
     [QUEUE inDatabase:^(FMDatabase *db) {
-        
-        NSString *sql = !strWhere
-                        ? [NSString stringWithFormat:@"SELECT * FROM %@",tableName]
-                        : [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@",tableName,strWhere] ;
         NSLog(@"sql :\n %@",sql) ;
         FMResultSet *rs = [db executeQuery:sql] ;
         while ([rs next])
@@ -223,8 +233,14 @@
     return resultList ;
 }
 
++ (instancetype)findFirstWithSql:(NSString *)sql
+{
+    return [[self findWithSql:sql] firstObject] ;
+}
+
 #pragma mark --
 #pragma mark - delete
+
 - (BOOL)deleteModel
 {
     return [[self class] deleteModelWhere:[NSString stringWithFormat:@"pkid = '%d'",self.pkid]] ;
@@ -261,7 +277,7 @@
     
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {
-        bSuccess = [db executeUpdate:[[XTDBModel class] drop:tableName]] ;
+        bSuccess = [db executeUpdate:[[XTDBModel class] sqlDrop:tableName]] ;
         if (bSuccess)
         {
             NSLog(@"xt_db drop success") ;
@@ -275,8 +291,33 @@
     return bSuccess ;
 }
 
+#pragma mark - alter
+
++ (BOOL)alterAddColumn:(NSString *)name
+                  type:(NSString *)type
+{
+    NSString *tableName = NSStringFromClass([self class]) ;
+    if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
+    if(![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
+    
+    __block BOOL bSuccess = FALSE ;
+    [QUEUE inDatabase:^(FMDatabase *db) {
+        bSuccess = [db executeUpdate:[[XTDBModel class] sqlAlterAdd:name
+                                                               type:type
+                                                              table:tableName]] ;
+        if (bSuccess) {
+            NSLog(@"xt_db alter add success") ;
+        }
+        else {
+            NSLog(@"xt_db alter add fail") ;
+        }
+    }] ;
+    return bSuccess ;
+}
+
 #pragma mark --
-#pragma mark -
+#pragma mark - constrains
+
 // rewrite in subClass if Needed .
 // set constraints of properties
 + (NSDictionary *)modelPropertiesSqliteKeywords

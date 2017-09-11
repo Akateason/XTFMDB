@@ -144,16 +144,22 @@
 }
 
 
-+ (NSString *)drop:(NSString *)tableName
++ (NSString *)sqlDrop:(NSString *)tableName
 {
     return [NSString stringWithFormat:@"DROP TABLE %@",tableName] ;
 }
 
-
++ (NSString *)sqlAlterAdd:(NSString *)name
+                     type:(NSString *)type
+                    table:(NSString *)tableName
+{
+    return [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ %@",tableName,name,type] ;
+}
 
 
 #pragma mark -- 
 #pragma mark - private
+
 + (NSString *)sqlTypeWithType:(NSString *)strType
 {
     if ([strType containsString:@"int"] || [strType containsString:@"Integer"])

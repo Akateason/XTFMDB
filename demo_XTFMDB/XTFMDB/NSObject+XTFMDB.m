@@ -272,7 +272,7 @@ static void *key_pkid = &key_pkid;
     
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {
-        bSuccess = [db executeUpdate:[[XTDBModel class] drop:tableName]] ;
+        bSuccess = [db executeUpdate:[[XTDBModel class] sqlDrop:tableName]] ;
         if (bSuccess)
         {
             NSLog(@"xt_db drop success") ;
@@ -283,6 +283,31 @@ static void *key_pkid = &key_pkid;
         }
     }] ;
     
+    return bSuccess ;
+}
+
+
+#pragma mark - alter
+
++ (BOOL)alterAddColumn:(NSString *)name
+                  type:(NSString *)type
+{
+    NSString *tableName = NSStringFromClass([self class]) ;
+    if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
+    if(![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
+    
+    __block BOOL bSuccess = FALSE ;
+    [QUEUE inDatabase:^(FMDatabase *db) {
+        bSuccess = [db executeUpdate:[[XTDBModel class] sqlAlterAdd:name
+                                                               type:type
+                                                              table:tableName]] ;
+        if (bSuccess) {
+            NSLog(@"xt_db alter add success") ;
+        }
+        else {
+            NSLog(@"xt_db alter add fail") ;
+        }
+    }] ;
     return bSuccess ;
 }
 

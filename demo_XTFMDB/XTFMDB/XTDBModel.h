@@ -20,39 +20,57 @@
 static NSString *const kPkid = @"pkid" ;
 
 @interface XTDBModel : NSObject
+
 // primaryKey
 @property (nonatomic,assign) int pkid ;
 
 #pragma mark - tableIsExist
+
 + (BOOL)tableIsExist ;
 
 #pragma mark - create
+
 + (BOOL)createTable ;
 
 #pragma mark - insert
+
 // insert or replace
 - (int)insert ; // return lastRowId .
 + (BOOL)insertList:(NSArray *)modelList ;
 
 #pragma mark - update
+
 - (BOOL)update ;
 + (BOOL)updateList:(NSArray *)modelList ;
 
 #pragma mark - select
+
 + (NSArray *)selectAll ;
 + (NSArray *)selectWhere:(NSString *)strWhere ; // param e.g. @" pkid = '1' "
 + (instancetype)findFirstWhere:(NSString *)strWhere ;
 + (BOOL)hasModelWhere:(NSString *)strWhere ;
 
+// any sql
++ (NSArray *)findWithSql:(NSString *)sql ;
++ (instancetype)findFirstWithSql:(NSString *)sql ;
+
 #pragma mark - delete
+
 - (BOOL)deleteModel ;
 + (BOOL)deleteModelWhere:(NSString *)strWhere ; // param e.g. @" pkid = '1' "
 + (BOOL)dropTable ;
 
+#pragma mark - alter
+
++ (BOOL)alterAddColumn:(NSString *)name
+                  type:(NSString *)type ;
+
+
 #pragma mark - Constraints
-//props Sqlite Keywords
+
+// props Sqlite Keywords
 + (NSDictionary *)modelPropertiesSqliteKeywords ; // set Constraints of property
-//ignore Properties
+// ignore Properties
 + (NSArray *)ignoreProperties ;
 
 @end

@@ -19,7 +19,12 @@
 + (NSString *)sqlDeleteWithTableName:(NSString *)tableName
                                where:(NSString *)strWhere ;
 
-+ (NSString *)drop:(NSString *)tableName ;
++ (NSString *)sqlDrop:(NSString *)tableName ;
+
++ (NSString *)sqlAlterAdd:(NSString *)name
+                     type:(NSString *)type
+                    table:(NSString *)tableName ;
+
 
 
 @end

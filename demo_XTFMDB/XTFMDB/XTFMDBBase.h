@@ -21,6 +21,8 @@
 
 // config db in "- [(AppDelegate *) AppDidLaunchFinish]"
 - (void)configureDB:(NSString *)name ;
+- (void)configureDB:(NSString *)name
+               path:(NSString *)path ;
 
 - (BOOL)verify ;
 

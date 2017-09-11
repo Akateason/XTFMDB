@@ -28,13 +28,15 @@
 @property (strong, nonatomic) UIButton *btInsertList ;
 @property (strong, nonatomic) UIButton *btUpdateList ;
 @property (strong, nonatomic) UIButton *btFindFirst ;
+@property (strong, nonatomic) UIButton *btAlterAdd ;
 
 @end
 
 @implementation ViewController
 
 
-static float const kBtFlex = 5 ;
+static float const kBtFlex      = 2 ;
+static float const kBtHeight    = 35. ;
 
 - (void)viewDidLoad
 {
@@ -55,7 +57,7 @@ static float const kBtFlex = 5 ;
         [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
         [self.view addSubview:bt] ;
         [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, 40)) ;
+            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
             make.centerX.equalTo(self.view) ;
             make.top.mas_equalTo(kBtFlex) ;
         }] ;
@@ -70,7 +72,7 @@ static float const kBtFlex = 5 ;
         [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
         [self.view addSubview:bt] ;
         [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, 40)) ;
+            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
             make.centerX.equalTo(self.view) ;
             make.top.equalTo(self.btCreate.mas_bottom).offset(kBtFlex) ;
         }] ;
@@ -85,7 +87,7 @@ static float const kBtFlex = 5 ;
         [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
         [self.view addSubview:bt] ;
         [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, 40)) ;
+            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
             make.centerX.equalTo(self.view) ;
             make.top.equalTo(self.btSelect.mas_bottom).offset(kBtFlex) ;
         }] ;
@@ -100,7 +102,7 @@ static float const kBtFlex = 5 ;
         [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
         [self.view addSubview:bt] ;
         [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, 40)) ;
+            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
             make.centerX.equalTo(self.view) ;
             make.top.equalTo(self.btSelectWhere.mas_bottom).offset(kBtFlex) ;
         }] ;
@@ -115,7 +117,7 @@ static float const kBtFlex = 5 ;
         [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
         [self.view addSubview:bt] ;
         [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, 40)) ;
+            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
             make.centerX.equalTo(self.view) ;
             make.top.equalTo(self.btInsert.mas_bottom).offset(kBtFlex) ;
         }] ;
@@ -130,7 +132,7 @@ static float const kBtFlex = 5 ;
         [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
         [self.view addSubview:bt] ;
         [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, 40)) ;
+            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
             make.centerX.equalTo(self.view) ;
             make.top.equalTo(self.btUpdate.mas_bottom).offset(kBtFlex) ;
         }] ;
@@ -145,7 +147,7 @@ static float const kBtFlex = 5 ;
         [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
         [self.view addSubview:bt] ;
         [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, 40)) ;
+            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
             make.centerX.equalTo(self.view) ;
             make.top.equalTo(self.btDelete.mas_bottom).offset(kBtFlex) ;
         }] ;
@@ -160,7 +162,7 @@ static float const kBtFlex = 5 ;
         [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
         [self.view addSubview:bt] ;
         [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, 40)) ;
+            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
             make.centerX.equalTo(self.view) ;
             make.top.equalTo(self.btDrop.mas_bottom).offset(kBtFlex) ;
         }] ;
@@ -175,7 +177,7 @@ static float const kBtFlex = 5 ;
         [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
         [self.view addSubview:bt] ;
         [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, 40)) ;
+            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
             make.centerX.equalTo(self.view) ;
             make.top.equalTo(self.btInsertList.mas_bottom).offset(kBtFlex) ;
         }] ;
@@ -190,14 +192,27 @@ static float const kBtFlex = 5 ;
         [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
         [self.view addSubview:bt] ;
         [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, 40)) ;
+            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
             make.centerX.equalTo(self.view) ;
             make.top.equalTo(self.btUpdateList.mas_bottom).offset(kBtFlex) ;
         }] ;
         bt ;
     }) ;
     
-    
+    self.btAlterAdd = ({
+        UIButton *bt = [UIButton new] ;
+        [bt setTitle:@"AlterAdd" forState:0] ;
+        bt.backgroundColor = [UIColor grayColor] ;
+        bt.titleLabel.textColor = [UIColor whiteColor] ;
+        [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
+        [self.view addSubview:bt] ;
+        [bt mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
+            make.centerX.equalTo(self.view) ;
+            make.top.equalTo(self.btFindFirst.mas_bottom).offset(kBtFlex) ;
+        }] ;
+        bt ;
+    }) ;
 }
 
 - (void)btOnClick:(UIButton *)sender
@@ -224,6 +239,7 @@ static float const kBtFlex = 5 ;
     for (Model1 *model in list) {
         NSLog(@"%d",model.pkid) ;
     }
+    [self displayJump] ;
 }
 
 - (void)selectWhereAction
@@ -313,6 +329,12 @@ static float const kBtFlex = 5 ;
 {
     Model1 *model = [Model1 xt_findFirstWhere:@"pkid == 2"] ;
     NSLog(@"m : %@",[model yy_modelToJSONObject]) ;
+}
+
+- (void)AlterAddAction
+{
+    [Model1 alterAddColumn:@"adddddddddd"
+                      type:@"INTEGER default 0 NOT NULL"] ;
 }
 
 

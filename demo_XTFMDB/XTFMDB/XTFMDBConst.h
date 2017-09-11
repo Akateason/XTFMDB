@@ -10,7 +10,7 @@
 #define XTFMDBConst_h
 
 
-#define xt_DEBUG    0
+#define xt_DEBUG    1
 #if xt_DEBUG
 #   define NSLog(...) NSLog(__VA_ARGS__)
 #else
