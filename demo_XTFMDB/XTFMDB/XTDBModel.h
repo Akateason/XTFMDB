@@ -73,5 +73,4 @@ static NSString *const kPkid = @"pkid" ;
 // ignore Properties
 + (NSArray *)ignoreProperties ;
 
-+ (void)test ;
 @end

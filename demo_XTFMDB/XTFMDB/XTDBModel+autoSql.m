@@ -53,7 +53,7 @@
         if ([self propIsIgnore:name class:cls]) continue ;
         
         // default prop
-        strTmp = [NSString stringWithFormat:@"%@ %@ %@ %@,", // @"%@ %@ NOT NULL %@ %@,",
+        strTmp = [NSString stringWithFormat:@"%@ %@ NOT NULL %@ %@,",
                   name,
                   sqlType,
                   [self defaultValWithSqlType:sqlType],
