@@ -30,9 +30,13 @@
 
 #pragma mark - select
 + (NSArray *)xt_selectAll ;
-+ (NSArray *)xt_selectWhere:(NSString *)strWhere ; // param e.g. @" pkid = '1' "
 + (instancetype)xt_findFirstWhere:(NSString *)strWhere ;
 + (BOOL)xt_hasModelWhere:(NSString *)strWhere ;
++ (NSArray *)xt_selectWhere:(NSString *)strWhere ;
+
+// any sql
++ (NSArray *)xt_findWithSql:(NSString *)sql ;
++ (instancetype)xt_findFirstWithSql:(NSString *)sql ;
 
 #pragma mark - delete
 - (BOOL)xt_deleteModel ;

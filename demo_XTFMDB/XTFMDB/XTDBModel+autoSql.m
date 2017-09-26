@@ -9,6 +9,8 @@
 #import "XTDBModel+autoSql.h"
 #import "NSObject+Reflection.h"
 #import "XTFMDBConst.h"
+#import "NSString+JKBase64.h"
+#import <FMDB.h>
 
 @implementation XTDBModel (autoSql)
 
@@ -52,7 +54,7 @@
         if ([self propIsIgnore:name class:cls]) continue ;
         
         // default prop
-        strTmp = [NSString stringWithFormat:@"%@ %@ NOT NULL %@ %@,",
+        strTmp = [NSString stringWithFormat:@"%@ %@ %@ %@,", // @"%@ %@ NOT NULL %@ %@,",
                   name,
                   sqlType,
                   [self defaultValWithSqlType:sqlType],
@@ -69,10 +71,10 @@
     return resultSql ;
 }
 
-
 + (NSString *)sqlInsertWithModel:(id)model
 {
     NSDictionary *dicModel = [model propertyDictionary] ;
+    dicModel = [self changeNSDataValToUTF8StringVal:dicModel] ;
     NSString *tableName = NSStringFromClass([model class]) ;
     
     NSString *propertiesStr = @"" ;
@@ -108,7 +110,7 @@
 + (NSString *)sqlUpdateWithModel:(id)model
 {
     NSString *tableName = NSStringFromClass([model class]) ;
-    NSMutableDictionary *dic = [[model propertyDictionary] mutableCopy] ;
+    NSMutableDictionary *dic = [[self changeNSDataValToUTF8StringVal:[model propertyDictionary]] mutableCopy] ;
     
     NSString *setsStr       = @"" ;
     NSString *whereStr      = @"" ;
@@ -162,26 +164,21 @@
 
 + (NSString *)sqlTypeWithType:(NSString *)strType
 {
-    if ([strType containsString:@"int"] || [strType containsString:@"Integer"])
-    {
+    if ([strType containsString:@"int"] || [strType containsString:@"Integer"]) {
         return @"INTEGER" ;
     }
-    else if ([strType containsString:@"float"] || [strType containsString:@"double"])
-    {
+    else if ([strType containsString:@"float"] || [strType containsString:@"double"]) {
         return @"DOUBLE" ;
     }
-    else if ([strType containsString:@"long"])
-    {
+    else if ([strType containsString:@"long"]) {
         return @"BIGINT" ;
     }
-    else if ([strType containsString:@"NSString"] || [strType containsString:@"char"])
-    {
+    else if ([strType containsString:@"NSString"] || [strType containsString:@"char"]) {
         return @"TEXT" ;
     }
-//    else if ([strType containsString:@"NSData"])
-//    {
-//        return @"blob" ;
-//    }
+    else if ([strType containsString:@"NSData"]) {
+        return @"TEXT" ;
+    }
     NSLog(@"xt_db no type to transform !!") ;
     return nil ;
 }
@@ -189,10 +186,6 @@
 + (NSString *)defaultValWithSqlType:(NSString *)sqlType
 {
     if ([sqlType containsString:@"TEXT"] || [sqlType containsString:@"char"])
-    {
-        return @" DEFAULT ''" ;
-    }
-    else if ([sqlType containsString:@"BLOB"])
     {
         return @" DEFAULT ''" ;
     }
@@ -215,5 +208,32 @@
     return [list containsObject:name] ;
 }
 
++ (NSDictionary *)changeNSDataValToUTF8StringVal:(NSDictionary *)dic {
+    NSMutableDictionary *tmpDic = [dic mutableCopy] ;
+    for (NSString *key in dic) {
+        id val = dic[key] ;
+        if ([val isKindOfClass:[NSData class]]) {
+            NSString *encodingString = [val base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength] ;
+            [tmpDic setObject:encodingString forKey:key] ;
+        }
+    }
+    return tmpDic ;
+}
+
++ (NSDictionary *)getResultDicFromClass:(Class)cls resultSet:(FMResultSet *)resultSet {
+    NSMutableDictionary *tmpDic = [[resultSet resultDictionary] mutableCopy] ;
+    NSArray *propInfoList = [cls propertiesInfo] ;
+    for (int i = 0; i < propInfoList.count; i++) {
+        NSDictionary *dic   = propInfoList[i] ;
+        NSString *name      = dic[@"name"] ;
+        NSString *type      = dic[@"type"] ;
+        if ([type containsString:@"NSData"]) {
+            NSString *valFromFMDB = tmpDic[name] ;
+            NSData *tmpData = [[NSData alloc] initWithBase64EncodedString:valFromFMDB options:NSDataBase64DecodingIgnoreUnknownCharacters] ;
+            [tmpDic setObject:tmpData forKey:name] ;
+        }
+    }
+    return tmpDic ;
+}
 
 @end

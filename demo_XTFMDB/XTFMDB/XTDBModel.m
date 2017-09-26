@@ -61,7 +61,7 @@
 {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return -1 ;
-    if(![[XTFMDBBase sharedInstance] isTableExist:tableName]) return -2 ;
+    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return -2 ;
     
     __block int lastRowId = 0 ;
     
@@ -217,7 +217,7 @@
 {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return nil ;
-    if(![[XTFMDBBase sharedInstance] isTableExist:tableName]) return nil ;
+    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return nil ;
     
     __block NSMutableArray *resultList = [@[] mutableCopy] ;
     [QUEUE inDatabase:^(FMDatabase *db) {
@@ -225,7 +225,9 @@
         FMResultSet *rs = [db executeQuery:sql] ;
         while ([rs next])
         {
-            [resultList addObject:[[self class] yy_modelWithDictionary:[rs resultDictionary]]] ;
+            NSDictionary *rstDic = [XTDBModel getResultDicFromClass:[self class]
+                                                          resultSet:rs] ;
+            [resultList addObject:[[self class] yy_modelWithDictionary:rstDic]] ;
         }
         [rs close] ;
     }] ;
@@ -250,7 +252,7 @@
 {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
-    if(![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
+    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
     
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {
@@ -273,7 +275,7 @@
 {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
-    if(![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
+    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
     
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {
@@ -298,7 +300,7 @@
 {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
-    if(![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
+    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
     
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {

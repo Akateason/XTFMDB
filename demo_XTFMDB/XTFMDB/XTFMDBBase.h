@@ -10,7 +10,7 @@
 #import "FMDB.h"
 
 #define QUEUE                         [XTFMDBBase sharedInstance].queue
-
+#define DB                            [XTFMDBBase sharedInstance].database
 
 @interface XTFMDBBase : NSObject
 + (XTFMDBBase *)sharedInstance ;

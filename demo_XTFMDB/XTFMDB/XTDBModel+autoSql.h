@@ -7,6 +7,7 @@
 //
 
 #import "XTDBModel.h"
+@class FMResultSet ;
 
 @interface XTDBModel (autoSql)
 
@@ -25,6 +26,7 @@
                      type:(NSString *)type
                     table:(NSString *)tableName ;
 
-
++ (NSDictionary *)getResultDicFromClass:(Class)cls
+                              resultSet:(FMResultSet *)resultSet ;
 
 @end
