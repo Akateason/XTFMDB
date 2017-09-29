@@ -20,7 +20,6 @@
 @property (nonatomic,copy)      NSString        *title      ;
 @property (nonatomic,copy)      NSString        *abcabc     ;
 @property (nonatomic,strong)    UIImage         *image      ;
-//@property (nonatomic,copy)      NSData          *dataImage  ;
 @property (nonatomic,copy)      NSArray         *myArr      ;
 @property (nonatomic,copy)      NSDictionary    *myDic      ;
 

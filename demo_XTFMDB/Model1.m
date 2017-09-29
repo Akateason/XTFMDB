@@ -10,18 +10,6 @@
 
 @implementation Model1
 
-//@synthesize image = _image ;
-
-//- (void)setImage:(UIImage *)image {
-//    _image = image ;
-//    if (!_dataImage) _dataImage = UIImagePNGRepresentation(image) ;
-//}
-//
-//- (UIImage *)image {
-//    _image = [UIImage imageWithData:self.dataImage] ;
-//    return _image ;
-//}
-
 + (NSDictionary *)modelPropertiesSqliteKeywords
 {
     return @{
