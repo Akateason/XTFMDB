@@ -10,6 +10,7 @@
 #import "NSObject+Reflection.h"
 #import "XTFMDBConst.h"
 #import "FMDB.h"
+#import <UIKit/UIKit.h>
 
 @implementation XTDBModel (autoSql)
 
@@ -73,7 +74,7 @@
 + (NSString *)sqlInsertWithModel:(id)model
 {
     NSDictionary *dicModel = [model propertyDictionary] ;
-    dicModel = [self changeNSDataValToUTF8StringVal:dicModel] ;
+    dicModel = [self changeSpecifiedValToUTF8StringVal:dicModel] ;
     NSString *tableName = NSStringFromClass([model class]) ;
     
     NSString *propertiesStr = @"" ;
@@ -109,7 +110,7 @@
 + (NSString *)sqlUpdateWithModel:(id)model
 {
     NSString *tableName = NSStringFromClass([model class]) ;
-    NSMutableDictionary *dic = [[self changeNSDataValToUTF8StringVal:[model propertyDictionary]] mutableCopy] ;
+    NSMutableDictionary *dic = [[self changeSpecifiedValToUTF8StringVal:[model propertyDictionary]] mutableCopy] ;
     
     NSString *setsStr       = @"" ;
     NSString *whereStr      = @"" ;
@@ -178,6 +179,19 @@
     else if ([strType containsString:@"NSData"]) {
         return @"TEXT" ;
     }
+    else if ([strType containsString:@"NSArray"]) {
+        return @"TEXT" ;
+    }
+    else if ([strType containsString:@"NSDictionary"]) {
+        return @"TEXT" ;
+    }
+    else if ([strType containsString:@"NSSet"]) {
+        return @"TEXT" ;
+    }
+    else if ([strType containsString:@"UIImage"]) {
+        return @"TEXT" ;
+    }
+    
     NSLog(@"xt_db no type to transform !!") ;
     return nil ;
 }
@@ -207,16 +221,35 @@
     return [list containsObject:name] ;
 }
 
-+ (NSDictionary *)changeNSDataValToUTF8StringVal:(NSDictionary *)dic {
++ (NSDictionary *)changeSpecifiedValToUTF8StringVal:(NSDictionary *)dic {
     NSMutableDictionary *tmpDic = [dic mutableCopy] ;
     for (NSString *key in dic) {
         id val = dic[key] ;
         if ([val isKindOfClass:[NSData class]]) {
-            NSString *encodingString = [val base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength] ;
-            [tmpDic setObject:encodingString forKey:key] ;
+            [tmpDic setObject:[self encodingB64String:val]
+                       forKey:key] ;
+        }
+        else if ([val isKindOfClass:[NSArray class]]) {
+            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:(NSArray *)val] ;
+            [tmpDic setObject:[self encodingB64String:data]
+                       forKey:key] ;
+        }
+        else if ([val isKindOfClass:[NSDictionary class]]) {
+            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:(NSDictionary *)val] ;
+            [tmpDic setObject:[self encodingB64String:data]
+                       forKey:key] ;
+        }
+        else if ([val isKindOfClass:[UIImage class]]) {
+            NSData *data = UIImageJPEGRepresentation(val, 1) ?: UIImagePNGRepresentation(val) ;
+            [tmpDic setObject:[self encodingB64String:data]
+                       forKey:key] ;
         }
     }
     return tmpDic ;
+}
+
++ (NSString *)encodingB64String:(NSData *)data {
+    return [data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength] ;
 }
 
 + (NSDictionary *)getResultDicFromClass:(Class)cls resultSet:(FMResultSet *)resultSet {
@@ -226,13 +259,42 @@
         NSDictionary *dic   = propInfoList[i] ;
         NSString *name      = dic[@"name"] ;
         NSString *type      = dic[@"type"] ;
+        NSString *valFromFMDB = tmpDic[name] ;
         if ([type containsString:@"NSData"]) {
-            NSString *valFromFMDB = tmpDic[name] ;
-            NSData *tmpData = [[NSData alloc] initWithBase64EncodedString:valFromFMDB options:NSDataBase64DecodingIgnoreUnknownCharacters] ;
-            [tmpDic setObject:tmpData forKey:name] ;
+            NSData *tmpData = [[NSData alloc] initWithBase64EncodedString:valFromFMDB   options:NSDataBase64DecodingIgnoreUnknownCharacters] ;
+            [tmpDic setObject:tmpData
+                       forKey:name] ;
+        }
+        else if ([type containsString:@"NSArray"]) {
+            NSData *tmpData = [[NSData alloc] initWithBase64EncodedString:valFromFMDB   options:NSDataBase64DecodingIgnoreUnknownCharacters] ;
+            NSArray *resultArr = [NSKeyedUnarchiver unarchiveObjectWithData:tmpData] ;
+            if (!resultArr) continue ;
+            [tmpDic setObject:resultArr
+                       forKey:name] ;
+        }
+        else if ([type containsString:@"NSDictionary"]) {
+            NSData *tmpData = [[NSData alloc] initWithBase64EncodedString:valFromFMDB   options:NSDataBase64DecodingIgnoreUnknownCharacters] ;
+            NSDictionary *resultDic = [NSKeyedUnarchiver unarchiveObjectWithData:tmpData] ;
+            if (!resultDic) continue ;
+            [tmpDic setObject:resultDic
+                       forKey:name] ;
+        }
+        else if ([type containsString:@"UIImage"]) {
+            NSData *tmpData = [[NSData alloc] initWithBase64EncodedString:valFromFMDB   options:NSDataBase64DecodingIgnoreUnknownCharacters] ;
+            UIImage *image = [UIImage imageWithData:tmpData] ;
+            if (!image) continue ;
+            [tmpDic setObject:image
+                       forKey:name] ;
         }
     }
     return tmpDic ;
 }
 
 @end
+
+
+
+
+
+
+

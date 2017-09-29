@@ -257,6 +257,12 @@ static float const kBtHeight    = 35. ;
     m1.floatVal = 3232.89f ;
     m1.tick = 666666666666 ;
     m1.title = [NSString stringWithFormat:@"atitle%d",arc4random()%999] ;
+    m1.image = [UIImage imageNamed:@"kobe"] ;
+    m1.myArr = @[@"2342423423432",@"asfads",@"ddxxxxzzz",@33] ;
+    m1.myDic = @{@"k1":@"dafafadf",
+                 @"k2":@44,
+                 @"k3":@"klkkdlslll"} ;
+    
     [m1 xt_insert] ;
     
     [self displayJump] ;
@@ -270,7 +276,8 @@ static float const kBtHeight    = 35. ;
     m1.floatVal = 44.4444 ;
     m1.tick = 666666666666 ;
     m1.title = [NSString stringWithFormat:@"我就改你,r%d",arc4random() % 99] ;
-    
+    m1.myArr = @[@11111111111] ;
+    m1.myDic = @{@"key":@"daafafafafaa1111aaa"} ;
     [m1 xt_update] ;
     
     [self displayJump] ;
@@ -301,6 +308,13 @@ static float const kBtHeight    = 35. ;
         m1.floatVal = i + 0.3 ;
         m1.tick = 666666666666 ;
         m1.title = [NSString stringWithFormat:@"title%d",i] ;
+        m1.image = [UIImage imageNamed:@"kobe"] ;
+        m1.myArr = @[@"2342423423432",
+                     @"asfads",
+                     @"ddxxxxzzz",@33] ;
+        m1.myDic = @{@"k1":@"dafafadf",
+                     @"k2":@44,
+                     @"k3":@"klkkdlslll"} ;
         
         [list addObject:m1] ;
     }
@@ -318,6 +332,9 @@ static float const kBtHeight    = 35. ;
     {
         Model1 *model = getlist[i] ;
         model.title = [model.title stringByAppendingString:[NSString stringWithFormat:@"+%d",model.age]] ;
+        model.myArr = @[@15] ;
+        model.myDic = @{@"y":@"9339"} ;
+
         [tmplist addObject:model] ;
     }
     [Model1 xt_updateList:tmplist] ;

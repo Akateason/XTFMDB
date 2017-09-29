@@ -19,8 +19,7 @@
 
 @implementation DisplayViewController
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.list = ({
@@ -31,10 +30,6 @@
     self.table.dataSource = self ;
     self.table.delegate = self ;
 }
-
-
-
-
 
 #pragma mark - UITableViewDataSource UITableViewDelegate
 
@@ -52,7 +47,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 125. ;
+    return 315 ;
 }
 
 

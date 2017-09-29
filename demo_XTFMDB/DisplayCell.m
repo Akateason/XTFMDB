@@ -16,6 +16,9 @@
 @property (weak, nonatomic) IBOutlet UILabel *lbAge;
 @property (weak, nonatomic) IBOutlet UILabel *lbFloatVal;
 @property (weak, nonatomic) IBOutlet UILabel *lbTitle;
+@property (weak, nonatomic) IBOutlet UIImageView *img;
+@property (weak, nonatomic) IBOutlet UILabel *lbArr;
+@property (weak, nonatomic) IBOutlet UILabel *lbDic;
 @end
 
 @implementation DisplayCell
@@ -24,12 +27,15 @@
 - (void)configure:(id)model
 {
     if (!model) return ;
-    
     Model1 *m1 = model ;
+    
     self.lbPkid.text = [@"pkid" stringByAppendingString:[NSString stringWithFormat:@": %d",m1.pkid]] ;
     self.lbAge.text = [@"age" stringByAppendingString:[NSString stringWithFormat:@": %d",m1.age]] ;
     self.lbFloatVal.text = [@"floatVal" stringByAppendingString:[NSString stringWithFormat:@": %f",m1.floatVal]] ;
     self.lbTitle.text = [@"title" stringByAppendingString:[NSString stringWithFormat:@": %@",m1.title]] ;
+    self.img.image = m1.image ;
+    self.lbArr.text = [NSString stringWithFormat:@"%@",m1.myArr] ;
+    self.lbDic.text = [NSString stringWithFormat:@"%@",m1.myDic] ;
 }
 
 - (void)awakeFromNib {
@@ -39,7 +45,6 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
     // Configure the view for the selected state
 }
 
