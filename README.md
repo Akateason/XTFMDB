@@ -156,6 +156,13 @@ BOOL isDel = [Model1 xt_deleteModelWhere:@" title == 'aaa' "] ;
 BOOL isDel = [Model1 xt_dropTable] ;
 ```
 
+####更新版本
+```
+加一个int类型的字段
+[Model1 alterAddColumn:@"adddddddddd"
+type:@"INTEGER default 0 NOT NULL"] ;
+```
+
 ---
 
 
