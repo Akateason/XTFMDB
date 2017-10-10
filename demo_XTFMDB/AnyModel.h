@@ -1,18 +1,17 @@
 //
-//  Model1.h
-//  XTkit
+//  AnyModel.h
+//  demo_XTFMDB
 //
-//  Created by teason23 on 2017/5/2.
-//  Copyright © 2017年 teason. All rights reserved.
+//  Created by teason23 on 2017/10/9.
+//  Copyright © 2017年 teaason. All rights reserved.
+//
 
-
-#import "XTDBModel.h"
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-//#import <Foundation/Foundation.h>
 
-@interface Model1 : XTDBModel   //NSObject //XTDBModel
+@interface AnyModel : NSObject
 
-//@property (nonatomic)           int             pkid        ;   //  继承XTDBModel时无需写这行
+@property (nonatomic)           int             pkid        ; //
 
 @property (nonatomic)           int             age         ;
 @property (nonatomic)           float           floatVal    ;

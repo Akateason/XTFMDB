@@ -8,7 +8,7 @@
 
 #import "DisplayViewController.h"
 #import "DisplayCell.h"
-#import "Model1.h"
+#import "CustomDBModel.h"
 
 #import "XTFMDB.h"
 
@@ -23,7 +23,7 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.list = ({
-        NSArray *list = [Model1 xt_selectAll] ;
+        NSArray *list = [CustomDBModel selectAll] ;
         list ;
     }) ;
     

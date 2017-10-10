@@ -7,7 +7,7 @@
 //
 
 #import "DisplayCell.h"
-#import "Model1.h"
+#import "CustomDBModel.h"
 #import "NSObject+XTFMDB.h"
 
 
@@ -27,7 +27,7 @@
 - (void)configure:(id)model
 {
     if (!model) return ;
-    Model1 *m1 = model ;
+    CustomDBModel *m1 = model ;
     
     self.lbPkid.text = [@"pkid" stringByAppendingString:[NSString stringWithFormat:@": %d",m1.pkid]] ;
     self.lbAge.text = [@"age" stringByAppendingString:[NSString stringWithFormat:@": %d",m1.age]] ;

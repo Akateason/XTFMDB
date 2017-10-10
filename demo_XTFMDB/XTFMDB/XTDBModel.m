@@ -11,6 +11,7 @@
 #import "XTDBModel+autoSql.h"
 #import "YYModel.h"
 #import "XTFMDBConst.h"
+#import "NSDate+XTTick.h"
 
 @interface XTDBModel ()
 
@@ -66,15 +67,15 @@
     __block int lastRowId = 0 ;
     
     [QUEUE inDatabase:^(FMDatabase *db) {
+        self.createTime = [NSDate xt_getNowTick] ;
+        self.updateTime = [NSDate xt_getNowTick] ;
         BOOL bSuccess = [db executeUpdate:[[XTDBModel class] sqlInsertWithModel:self]] ;
-        if (bSuccess)
-        {
+        if (bSuccess) {
             lastRowId = (int)[db lastInsertRowId] ;
-            NSLog(@"xt_db insert success lastRowID : %d",lastRowId) ;
+            NSLog(@"xt_db insert success lastRowID : %d \n\n",lastRowId) ;
         }
-        else
-        {
-            NSLog(@"xt_db insert fail") ;
+        else {
+            NSLog(@"xt_db insert fail\n\n") ;
             lastRowId = -3 ;
         }
     }] ;
@@ -92,14 +93,14 @@
         
         for (int i = 0; i < [modelList count]; i++)
         {
-            id model = [modelList objectAtIndex:i] ;
+            XTDBModel *model = [modelList objectAtIndex:i] ;
+            model.createTime = [NSDate xt_getNowTick] ;
+            model.updateTime = [NSDate xt_getNowTick] ;
             BOOL bSuccess = [db executeUpdate:[[XTDBModel class] sqlInsertWithModel:model]] ;
-            if (bSuccess)
-            {
+            if (bSuccess) {
                 NSLog(@"xt_db transaction insert Successfrom index :%d",i) ;
             }
-            else
-            {  // error
+            else {  // error
                 NSLog(@"xt_db transaction insert Failure from index :%d",i) ;
                 *rollback = TRUE ;
                 bAllSuccess = FALSE ;
@@ -108,10 +109,10 @@
         }
         
         if (bAllSuccess) {
-            NSLog(@"xt_db transaction insert all complete") ;
+            NSLog(@"xt_db transaction insert all complete\n\n") ;
         }
         else {
-            NSLog(@"xt_db transaction insert all fail") ;
+            NSLog(@"xt_db transaction insert all fail\n\n") ;
         }
         
     }] ;
@@ -132,15 +133,13 @@
     
     __block BOOL bSuccess ;
     [QUEUE inDatabase:^(FMDatabase *db) {
-        
+        self.updateTime = [NSDate xt_getNowTick] ;
         bSuccess = [db executeUpdate:[[XTDBModel class] sqlUpdateWithModel:self]] ;
-        if (bSuccess)
-        {
-            NSLog(@"xt_db update success") ;
+        if (bSuccess) {
+            NSLog(@"xt_db update success\n\n") ;
         }
-        else
-        {
-            NSLog(@"xt_db update fail") ;
+        else {
+            NSLog(@"xt_db update fail\n\n") ;
         }
     }] ;
     
@@ -155,16 +154,15 @@
     __block BOOL bAllSuccess = TRUE ;
     [QUEUE inTransaction:^(FMDatabase *db, BOOL *rollback) {
         
-        for (int i = 0; i < [modelList count]; i++)
-        {
-            id model = [modelList objectAtIndex:i] ;
+        for (int i = 0; i < [modelList count]; i++) {
+            
+            XTDBModel *model = [modelList objectAtIndex:i] ;
+            model.updateTime = [NSDate xt_getNowTick] ;
             BOOL bSuccess = [db executeUpdate:[[XTDBModel class] sqlUpdateWithModel:model]] ;
-            if (bSuccess)
-            {
+            if (bSuccess) {
                 NSLog(@"xt_db transaction update Successfrom index :%d",i) ;
             }
-            else
-            {
+            else {
                 // error
                 NSLog(@"xt_db transaction update Failure from index :%d",i) ;
                 *rollback = TRUE ;
@@ -174,10 +172,10 @@
         }
         
         if (bAllSuccess) {
-            NSLog(@"xt_db transaction update all complete") ;
+            NSLog(@"xt_db transaction update all complete \n\n") ;
         }
         else {
-            NSLog(@"xt_db transaction update all fail") ;
+            NSLog(@"xt_db transaction update all fail \n\n") ;
         }
         
     }] ;
@@ -223,8 +221,8 @@
     [QUEUE inDatabase:^(FMDatabase *db) {
         NSLog(@"sql :\n %@",sql) ;
         FMResultSet *rs = [db executeQuery:sql] ;
-        while ([rs next])
-        {
+        while ([rs next]) {
+            
             NSDictionary *rstDic = [XTDBModel getResultDicFromClass:[self class]
                                                           resultSet:rs] ;
             [resultList addObject:[[self class] yy_modelWithDictionary:rstDic]] ;
@@ -260,11 +258,11 @@
         bSuccess = [db executeUpdate:[[XTDBModel class] sqlDeleteWithTableName:tableName where:strWhere]] ;
         if (bSuccess)
         {
-            NSLog(@"xt_db delete model success") ;
+            NSLog(@"xt_db delete model success\n\n") ;
         }
         else
         {
-            NSLog(@"xt_db delete model fail") ;
+            NSLog(@"xt_db delete model fail\n\n") ;
         }
     }] ;
     
@@ -282,11 +280,11 @@
         bSuccess = [db executeUpdate:[[XTDBModel class] sqlDrop:tableName]] ;
         if (bSuccess)
         {
-            NSLog(@"xt_db drop success") ;
+            NSLog(@"xt_db drop success\n\n") ;
         }
         else
         {
-            NSLog(@"xt_db drop fail") ;
+            NSLog(@"xt_db drop fail\n\n") ;
         }
     }] ;
     
@@ -308,10 +306,10 @@
                                                                type:type
                                                               table:tableName]] ;
         if (bSuccess) {
-            NSLog(@"xt_db alter add success") ;
+            NSLog(@"xt_db alter add success\n\n") ;
         }
         else {
-            NSLog(@"xt_db alter add fail") ;
+            NSLog(@"xt_db alter add fail\n\n") ;
         }
     }] ;
     return bSuccess ;

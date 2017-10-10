@@ -21,8 +21,10 @@ static NSString *const kPkid = @"pkid" ;
 
 @interface XTDBModel : NSObject
 
-// primaryKey
-@property (nonatomic,assign) int pkid ;
+@property (nonatomic,assign)    int         pkid        ; // primaryKey
+@property (nonatomic,assign)    long long   createTime  ;
+@property (nonatomic,assign)    long long   updateTime  ;
+@property (nonatomic,assign)    BOOL        isDel       ;
 
 #pragma mark - tableIsExist
 

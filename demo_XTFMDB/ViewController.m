@@ -10,10 +10,11 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 #import "Masonry.h"
-#import "Model1.h"
+#import "CustomDBModel.h"
+#import "AnyModel.h"
+
 #import "YYModel.h"
 #import "DisplayViewController.h"
-
 #import "XTFMDB.h"
 
 @interface ViewController ()
@@ -229,14 +230,14 @@ static float const kBtHeight    = 35. ;
 - (void)createAction
 {
     NSLog(@"%s",__func__) ;
-    [Model1 xt_createTable] ;
+    [CustomDBModel createTable] ;
 }
 
 - (void)selectAction
 {
     NSLog(@"%s",__func__) ;
-    NSArray *list = [Model1 xt_selectAll] ;
-    for (Model1 *model in list) {
+    NSArray *list = [CustomDBModel selectAll] ;
+    for (CustomDBModel *model in list) {
         NSLog(@"%d",model.pkid) ;
     }
     [self displayJump] ;
@@ -245,14 +246,14 @@ static float const kBtHeight    = 35. ;
 - (void)selectWhereAction
 {
     NSLog(@"%s",__func__) ;
-    NSArray *list = [Model1 xt_selectWhere:@"title = 'jk4j3j43' "] ;
+    NSArray *list = [CustomDBModel selectWhere:@"title = 'jk4j3j43' "] ;
     NSLog(@"list : %@ \ncount:%@",list,@(list.count)) ;
 }
 
 - (void)insertAction
 {
     NSLog(@"%s",__func__) ;
-    Model1 *m1 = [Model1 new] ; // 不需设置主键
+    CustomDBModel *m1 = [CustomDBModel new] ; // 不需设置主键
     m1.age = arc4random() % 100 ;
     m1.floatVal = 3232.89f ;
     m1.tick = 666666666666 ;
@@ -263,37 +264,37 @@ static float const kBtHeight    = 35. ;
                  @"k2":@44,
                  @"k3":@"klkkdlslll"} ;
     
-    [m1 xt_insert] ;
+    [m1 insert] ;
     
     [self displayJump] ;
 }
 
 - (void)updateAction
 {
-    Model1 *m1 = [Model1 new] ;
-    m1.pkid = ((Model1 *)[[Model1 xt_selectAll] lastObject]).pkid ;
+    CustomDBModel *m1 = [CustomDBModel new] ;
+    m1.pkid = ((CustomDBModel *)[[CustomDBModel selectAll] lastObject]).pkid ;
     m1.age = 4444444 ;
     m1.floatVal = 44.4444 ;
     m1.tick = 666666666666 ;
     m1.title = [NSString stringWithFormat:@"我就改你,r%d",arc4random() % 99] ;
     m1.myArr = @[@11111111111] ;
     m1.myDic = @{@"key":@"daafafafafaa1111aaa"} ;
-    [m1 xt_update] ;
+    [m1 update] ;
     
     [self displayJump] ;
 }
 
 - (void)deleteAction
 {
-    NSString *titleDel = ((Model1 *)[[Model1 xt_selectAll] lastObject]).title ;
-    [Model1 xt_deleteModelWhere:[NSString stringWithFormat:@"title == '%@'",titleDel]] ;
+    NSString *titleDel = ((CustomDBModel *)[[CustomDBModel selectAll] lastObject]).title ;
+    [CustomDBModel deleteModelWhere:[NSString stringWithFormat:@"title == '%@'",titleDel]] ;
  
     [self displayJump] ;
 }
 
 - (void)dropAction
 {
-    [Model1 xt_dropTable] ;
+    [CustomDBModel dropTable] ;
     
     [self displayJump] ;
 }
@@ -303,7 +304,7 @@ static float const kBtHeight    = 35. ;
     NSMutableArray *list = [@[] mutableCopy] ;
     for (int i = 0 ; i < 10; i++)
     {
-        Model1 *m1 = [Model1 new] ; // 插入不需设置主键
+        CustomDBModel *m1 = [CustomDBModel new] ; // 插入不需设置主键
         m1.age = i + 1 ;
         m1.floatVal = i + 0.3 ;
         m1.tick = 666666666666 ;
@@ -318,7 +319,7 @@ static float const kBtHeight    = 35. ;
         
         [list addObject:m1] ;
     }
-    [Model1 xt_insertList:list] ;
+    [CustomDBModel insertList:list] ;
     
     
     [self displayJump] ;
@@ -326,32 +327,32 @@ static float const kBtHeight    = 35. ;
 
 - (void)updateListAction
 {
-    NSArray *getlist = [Model1 xt_selectWhere:@"age > 5"] ;
+    NSArray *getlist = [CustomDBModel selectWhere:@"age > 5"] ;
     NSMutableArray *tmplist = [@[] mutableCopy] ;
     for (int i = 0 ; i < getlist.count ; i++)
     {
-        Model1 *model = getlist[i] ;
+        CustomDBModel *model = getlist[i] ;
         model.title = [model.title stringByAppendingString:[NSString stringWithFormat:@"+%d",model.age]] ;
         model.myArr = @[@15] ;
         model.myDic = @{@"y":@"9339"} ;
 
         [tmplist addObject:model] ;
     }
-    [Model1 xt_updateList:tmplist] ;
+    [CustomDBModel updateList:tmplist] ;
     
     [self displayJump] ;
 }
 
 - (void)findFirstAction
 {
-    Model1 *model = [Model1 xt_findFirstWhere:@"pkid == 2"] ;
+    CustomDBModel *model = [CustomDBModel findFirstWhere:@"pkid == 2"] ;
     NSLog(@"m : %@",[model yy_modelToJSONObject]) ;
 }
 
 - (void)AlterAddAction
 {
-    [Model1 alterAddColumn:@"adddddddddd"
-                      type:@"INTEGER default 0 NOT NULL"] ;
+    [CustomDBModel alterAddColumn:@"adddddddddd"
+                             type:@"INTEGER default 0 NOT NULL"] ;
 }
 
 

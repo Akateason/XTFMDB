@@ -45,8 +45,8 @@
 
 #pragma mark - alter
 
-+ (BOOL)alterAddColumn:(NSString *)name
-                  type:(NSString *)type ;
++ (BOOL)xt_alterAddColumn:(NSString *)name
+                     type:(NSString *)type ;
 
 #pragma mark - Constraints
 //props Sqlite Keywords
