@@ -14,6 +14,11 @@
 // 6.批量操作支持实务. 支持失败后回滚. 且线程安全
 // 7.支持 每个字段自定义设置关键字. 已经集成默认关键字, 以下情况无需再写( NOT NULL, DEFAULT''字符类型默认值,DEFAULT'0'数字类型默认值 )
 // 8.指定哪些字段不参与建表.
+// 9. 支持各容器类存储. NSArray, NSDictionary
+// 10. 支持NSData类型
+// 11. 支持图片存储
+// 12. XTDBModel支持默认字段, createTime, updateTime, isDel
+//
 
 #import <Foundation/Foundation.h>
 

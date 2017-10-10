@@ -14,7 +14,7 @@
 9. 支持各容器类存储. NSArray, NSDictionary
 10. 支持NSData类型
 11. 支持图片存储
-
+12. XTDBModel支持默认字段, createTime, updateTime, isDel
 
 ## 使用方法
  

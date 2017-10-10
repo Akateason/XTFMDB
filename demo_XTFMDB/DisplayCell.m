@@ -7,8 +7,9 @@
 //
 
 #import "DisplayCell.h"
-#import "CustomDBModel.h"
 #import "NSObject+XTFMDB.h"
+#import "CustomDBModel.h"
+#import "AnyModel.h"
 
 
 @interface DisplayCell ()
@@ -27,15 +28,28 @@
 - (void)configure:(id)model
 {
     if (!model) return ;
-    CustomDBModel *m1 = model ;
     
-    self.lbPkid.text = [@"pkid" stringByAppendingString:[NSString stringWithFormat:@": %d",m1.pkid]] ;
-    self.lbAge.text = [@"age" stringByAppendingString:[NSString stringWithFormat:@": %d",m1.age]] ;
-    self.lbFloatVal.text = [@"floatVal" stringByAppendingString:[NSString stringWithFormat:@": %f",m1.floatVal]] ;
-    self.lbTitle.text = [@"title" stringByAppendingString:[NSString stringWithFormat:@": %@",m1.title]] ;
-    self.img.image = m1.image ;
-    self.lbArr.text = [NSString stringWithFormat:@"%@",m1.myArr] ;
-    self.lbDic.text = [NSString stringWithFormat:@"%@",m1.myDic] ;
+    if ([model isKindOfClass:[XTDBModel class]]) {
+        CustomDBModel *m1 = model ;
+        self.lbPkid.text = [@"pkid" stringByAppendingString:[NSString stringWithFormat:@": %d",m1.pkid]] ;
+        self.lbAge.text = [@"age" stringByAppendingString:[NSString stringWithFormat:@": %d",m1.age]] ;
+        self.lbFloatVal.text = [@"floatVal" stringByAppendingString:[NSString stringWithFormat:@": %f",m1.floatVal]] ;
+        self.lbTitle.text = [@"title" stringByAppendingString:[NSString stringWithFormat:@": %@",m1.title]] ;
+        self.img.image = m1.image ;
+        self.lbArr.text = [NSString stringWithFormat:@"%@",m1.myArr] ;
+        self.lbDic.text = [NSString stringWithFormat:@"%@",m1.myDic] ;
+    }
+    else if ([model isKindOfClass:[AnyModel class]]) {
+        AnyModel *m1 = model ;
+        self.lbPkid.text = [@"pkid" stringByAppendingString:[NSString stringWithFormat:@": %d",m1.pkid]] ;
+        self.lbAge.text = [@"age" stringByAppendingString:[NSString stringWithFormat:@": %d",m1.age]] ;
+        self.lbFloatVal.text = [@"floatVal" stringByAppendingString:[NSString stringWithFormat:@": %f",m1.floatVal]] ;
+        self.lbTitle.text = [@"title" stringByAppendingString:[NSString stringWithFormat:@": %@",m1.title]] ;
+        self.img.image = m1.image ;
+        self.lbArr.text = [NSString stringWithFormat:@"%@",m1.myArr] ;
+        self.lbDic.text = [NSString stringWithFormat:@"%@",m1.myDic] ;
+    }
+    
 }
 
 - (void)awakeFromNib {

@@ -30,14 +30,25 @@
 @property (strong, nonatomic) UIButton *btUpdateList ;
 @property (strong, nonatomic) UIButton *btFindFirst ;
 @property (strong, nonatomic) UIButton *btAlterAdd ;
+@property (weak, nonatomic) IBOutlet UISegmentedControl *segment;
+
+@property (nonatomic) BOOL dBModelOrCustom ; // default is dBModel
 
 @end
 
 @implementation ViewController
 
-
 static float const kBtFlex      = 2 ;
 static float const kBtHeight    = 35. ;
+
+- (IBAction)segmentValueChange:(UISegmentedControl *)sender {
+    
+}
+
+- (BOOL)dBModelOrCustom {
+    _dBModelOrCustom = self.segment.selectedSegmentIndex ;
+    return _dBModelOrCustom ;
+}
 
 - (void)viewDidLoad
 {
@@ -227,157 +238,259 @@ static float const kBtHeight    = 35. ;
 
 #pragma mark --
 #pragma mark - actions
+
 - (void)createAction
 {
-    NSLog(@"%s",__func__) ;
-    [CustomDBModel createTable] ;
+    if (!self.dBModelOrCustom) {
+        [CustomDBModel createTable] ;
+    }
+    else {
+        [AnyModel xt_createTable] ;
+    }
 }
 
 - (void)selectAction
 {
-    NSLog(@"%s",__func__) ;
-    NSArray *list = [CustomDBModel selectAll] ;
-    for (CustomDBModel *model in list) {
-        NSLog(@"%d",model.pkid) ;
+    if (!self.dBModelOrCustom) {
+        NSArray *list = [CustomDBModel selectAll] ;
+        for (CustomDBModel *model in list) {
+            NSLog(@"%d",model.pkid) ;
+        }
     }
+    else {
+        NSArray *list = [AnyModel xt_selectAll] ;
+        for (AnyModel *model in list) {
+            NSLog(@"%d",model.pkid) ;
+        }
+    }
+    
     [self displayJump] ;
 }
 
 - (void)selectWhereAction
 {
-    NSLog(@"%s",__func__) ;
-    NSArray *list = [CustomDBModel selectWhere:@"title = 'jk4j3j43' "] ;
-    NSLog(@"list : %@ \ncount:%@",list,@(list.count)) ;
+    if (!self.dBModelOrCustom) {
+        NSArray *list = [CustomDBModel selectWhere:@"title = 'jk4j3j43' "] ;
+        NSLog(@"list : %@ \ncount:%@",list,@(list.count)) ;
+    }
+    else {
+        NSArray *list = [AnyModel xt_selectWhere:@"title = 'jk4j3j43' "] ;
+        NSLog(@"list : %@ \ncount:%@",list,@(list.count)) ;
+    }
 }
 
 - (void)insertAction
 {
-    NSLog(@"%s",__func__) ;
-    CustomDBModel *m1 = [CustomDBModel new] ; // 不需设置主键
-    m1.age = arc4random() % 100 ;
-    m1.floatVal = 3232.89f ;
-    m1.tick = 666666666666 ;
-    m1.title = [NSString stringWithFormat:@"atitle%d",arc4random()%999] ;
-    m1.image = [UIImage imageNamed:@"kobe"] ;
-    m1.myArr = @[@"2342423423432",@"asfads",@"ddxxxxzzz",@33] ;
-    m1.myDic = @{@"k1":@"dafafadf",
-                 @"k2":@44,
-                 @"k3":@"klkkdlslll"} ;
-    
-    [m1 insert] ;
+    if (!self.dBModelOrCustom) {
+        CustomDBModel *m1 = [CustomDBModel new] ; // 不需设置主键
+        m1.age = arc4random() % 100 ;
+        m1.floatVal = 3232.89f ;
+        m1.tick = 666666666666 ;
+        m1.title = [NSString stringWithFormat:@"atitle%d",arc4random()%999] ;
+        m1.image = [UIImage imageNamed:@"kobe"] ;
+        m1.myArr = @[@"2342423423432",@"asfads",@"ddxxxxzzz",@33] ;
+        m1.myDic = @{@"k1":@"dafafadf",
+                     @"k2":@44,
+                     @"k3":@"klkkdlslll"} ;
+        [m1 insert] ;
+    }
+    else {
+        AnyModel *m1 = [AnyModel new] ; // 不需设置主键
+        m1.age = arc4random() % 100 ;
+        m1.floatVal = 3232.89f ;
+        m1.tick = 666666666666 ;
+        m1.title = [NSString stringWithFormat:@"atitle%d",arc4random()%999] ;
+        m1.image = [UIImage imageNamed:@"kobe"] ;
+        m1.myArr = @[@"2342423423432",@"asfads",@"ddxxxxzzz",@33] ;
+        m1.myDic = @{@"k1":@"dafafadf",
+                     @"k2":@44,
+                     @"k3":@"klkkdlslll"} ;
+        [m1 xt_insert] ;
+    }
     
     [self displayJump] ;
 }
 
 - (void)updateAction
 {
-    CustomDBModel *m1 = [CustomDBModel new] ;
-    m1.pkid = ((CustomDBModel *)[[CustomDBModel selectAll] lastObject]).pkid ;
-    m1.age = 4444444 ;
-    m1.floatVal = 44.4444 ;
-    m1.tick = 666666666666 ;
-    m1.title = [NSString stringWithFormat:@"我就改你,r%d",arc4random() % 99] ;
-    m1.myArr = @[@11111111111] ;
-    m1.myDic = @{@"key":@"daafafafafaa1111aaa"} ;
-    [m1 update] ;
+    if (!self.dBModelOrCustom) {
+        CustomDBModel *m1 = [[CustomDBModel selectAll] lastObject] ;
+        m1.image = nil ;
+        m1.age = 4444444 ;
+        m1.floatVal = 44.4444 ;
+        m1.tick = 666666666666 ;
+        m1.title = [NSString stringWithFormat:@"我就改你,r%d",arc4random() % 99] ;
+        m1.myArr = @[@11111111111] ;
+        m1.myDic = @{@"key":@"daafafafafaa1111aaa"} ;
+        [m1 update] ;
+    }
+    else {
+        AnyModel *m1 = [[AnyModel xt_selectAll] lastObject] ;
+        m1.image = nil ;
+        m1.age = 4444444 ;
+        m1.floatVal = 44.4444 ;
+        m1.tick = 666666666666 ;
+        m1.title = [NSString stringWithFormat:@"我就改你,r%d",arc4random() % 99] ;
+        m1.myArr = @[@11111111111] ;
+        m1.myDic = @{@"key":@"daafafafafaa1111aaa"} ;
+        [m1 xt_update] ;
+    }
     
     [self displayJump] ;
 }
 
 - (void)deleteAction
 {
-    NSString *titleDel = ((CustomDBModel *)[[CustomDBModel selectAll] lastObject]).title ;
-    [CustomDBModel deleteModelWhere:[NSString stringWithFormat:@"title == '%@'",titleDel]] ;
+    if (!self.dBModelOrCustom) {
+        NSString *titleDel = ((CustomDBModel *)[[CustomDBModel selectAll] lastObject]).title ;
+        [CustomDBModel deleteModelWhere:[NSString stringWithFormat:@"title == '%@'",titleDel]] ;
+    }
+    else {
+        NSString *titleDel = ((AnyModel *)[[AnyModel xt_selectAll] lastObject]).title ;
+        [AnyModel xt_deleteModelWhere:[NSString stringWithFormat:@"title == '%@'",titleDel]] ;
+    }
  
     [self displayJump] ;
 }
 
 - (void)dropAction
 {
-    [CustomDBModel dropTable] ;
+    if (!self.dBModelOrCustom) {
+        [CustomDBModel dropTable] ;
+    }
+    else {
+        [AnyModel xt_dropTable] ;
+    }
     
     [self displayJump] ;
 }
 
 - (void)insertListAction
 {
-    NSMutableArray *list = [@[] mutableCopy] ;
-    for (int i = 0 ; i < 10; i++)
-    {
-        CustomDBModel *m1 = [CustomDBModel new] ; // 插入不需设置主键
-        m1.age = i + 1 ;
-        m1.floatVal = i + 0.3 ;
-        m1.tick = 666666666666 ;
-        m1.title = [NSString stringWithFormat:@"title%d",i] ;
-        m1.image = [UIImage imageNamed:@"kobe"] ;
-        m1.myArr = @[@"2342423423432",
-                     @"asfads",
-                     @"ddxxxxzzz",@33] ;
-        m1.myDic = @{@"k1":@"dafafadf",
-                     @"k2":@44,
-                     @"k3":@"klkkdlslll"} ;
-        
-        [list addObject:m1] ;
+    if (!self.dBModelOrCustom) {
+        NSMutableArray *list = [@[] mutableCopy] ;
+        for (int i = 0 ; i < 10; i++)
+        {
+            CustomDBModel *m1 = [CustomDBModel new] ; // 插入不需设置主键
+            m1.age = i + 1 ;
+            m1.floatVal = i + 0.3 ;
+            m1.tick = 666666666666 ;
+            m1.title = [NSString stringWithFormat:@"title%d",i] ;
+            m1.image = [UIImage imageNamed:@"kobe"] ;
+            m1.myArr = @[@"2342423423432",
+                         @"asfads",
+                         @"ddxxxxzzz",@33] ;
+            m1.myDic = @{@"k1":@"dafafadf",
+                         @"k2":@44,
+                         @"k3":@"klkkdlslll"} ;
+            
+            [list addObject:m1] ;
+        }
+        [CustomDBModel insertList:list] ;
     }
-    [CustomDBModel insertList:list] ;
-    
+    else {
+        NSMutableArray *list = [@[] mutableCopy] ;
+        for (int i = 0 ; i < 10; i++)
+        {
+            AnyModel *m1 = [AnyModel new] ; // 插入不需设置主键
+            m1.age = i + 1 ;
+            m1.floatVal = i + 0.3 ;
+            m1.tick = 666666666666 ;
+            m1.title = [NSString stringWithFormat:@"title%d",i] ;
+            m1.image = [UIImage imageNamed:@"kobe"] ;
+            m1.myArr = @[@"2342423423432",
+                         @"asfads",
+                         @"ddxxxxzzz",@33] ;
+            m1.myDic = @{@"k1":@"dafafadf",
+                         @"k2":@44,
+                         @"k3":@"klkkdlslll"} ;
+            
+            [list addObject:m1] ;
+        }
+        [AnyModel xt_insertList:list] ;
+    }
     
     [self displayJump] ;
 }
 
 - (void)updateListAction
 {
-    NSArray *getlist = [CustomDBModel selectWhere:@"age > 5"] ;
-    NSMutableArray *tmplist = [@[] mutableCopy] ;
-    for (int i = 0 ; i < getlist.count ; i++)
-    {
-        CustomDBModel *model = getlist[i] ;
-        model.title = [model.title stringByAppendingString:[NSString stringWithFormat:@"+%d",model.age]] ;
-        model.myArr = @[@15] ;
-        model.myDic = @{@"y":@"9339"} ;
-
-        [tmplist addObject:model] ;
+    if (!self.dBModelOrCustom) {
+        NSArray *getlist = [CustomDBModel selectWhere:@"age > 5"] ;
+        NSMutableArray *tmplist = [@[] mutableCopy] ;
+        for (int i = 0 ; i < getlist.count ; i++)
+        {
+            CustomDBModel *model = getlist[i] ;
+            model.title = [model.title stringByAppendingString:[NSString stringWithFormat:@"+%d",model.age]] ;
+            model.myArr = @[@15] ;
+            model.myDic = @{@"y":@"9339"} ;
+            
+            [tmplist addObject:model] ;
+        }
+        [CustomDBModel updateList:tmplist] ;
     }
-    [CustomDBModel updateList:tmplist] ;
+    else {
+        NSArray *getlist = [AnyModel xt_selectWhere:@"age > 5"] ;
+        NSMutableArray *tmplist = [@[] mutableCopy] ;
+        for (int i = 0 ; i < getlist.count ; i++)
+        {
+            AnyModel *model = getlist[i] ;
+            model.title = [model.title stringByAppendingString:[NSString stringWithFormat:@"+%d",model.age]] ;
+            model.myArr = @[@15] ;
+            model.myDic = @{@"y":@"9339"} ;
+            
+            [tmplist addObject:model] ;
+        }
+        [AnyModel xt_updateList:tmplist] ;
+    }
     
     [self displayJump] ;
 }
 
 - (void)findFirstAction
 {
-    CustomDBModel *model = [CustomDBModel findFirstWhere:@"pkid == 2"] ;
-    NSLog(@"m : %@",[model yy_modelToJSONObject]) ;
+    if (!self.dBModelOrCustom) {
+        CustomDBModel *model = [CustomDBModel findFirstWhere:@"pkid == 2"] ;
+        NSLog(@"m : %@",[model yy_modelToJSONObject]) ;
+    }
+    else {
+        AnyModel *model = [AnyModel xt_findFirstWhere:@"pkid == 2"] ;
+        NSLog(@"m : %@",[model yy_modelToJSONObject]) ;
+    }
 }
 
 - (void)AlterAddAction
 {
-    [CustomDBModel alterAddColumn:@"adddddddddd"
-                             type:@"INTEGER default 0 NOT NULL"] ;
+    if (!self.dBModelOrCustom) {
+        [CustomDBModel alterAddColumn:@"adddddddddd"
+                                 type:@"INTEGER default 0 NOT NULL"] ;
+    }
+    else {
+        [AnyModel xt_alterAddColumn:@"adddddddddd"
+                               type:@"INTEGER default 0 NOT NULL"] ;
+    }
 }
-
 
 #pragma mark -
 
 - (void)displayJump
 {
-    [self performSegueWithIdentifier:@"root2display" sender:nil] ;
+    [self performSegueWithIdentifier:@"root2display"
+                              sender:@(self.dBModelOrCustom)] ;
 }
-
-
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
 
+#pragma mark -
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue
                  sender:(id)sender
 {
-
-    
+    DisplayViewController *displayVC = [segue destinationViewController] ;
+    displayVC.dbModelOrCustom = [sender boolValue] ;
 }
 
 @end

@@ -111,7 +111,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
         // ignore prop
         if ([self propIsIgnore:name class:[model class]]) continue ;
         // ignore nil prop
-        if (!dicModel[name]) continue ;
+        if ([self propIsNilOrNull:dicModel[name]]) continue ;
         
         // prop
         [strProperties appendString:[NSString stringWithFormat:@"%@ ,",name]] ;
@@ -139,12 +139,17 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
         // ignore prop
         if ([self propIsIgnore:name class:[model class]]) continue ;
         // ignore nil prop
-        if (!dicModel[name]) continue ;
+        if ([self propIsNilOrNull:dicModel[name]]) continue ;
+        
         // setstr
         NSString *tmpStr = [NSString stringWithFormat:@"%@ = '%@' ,",name,dicModel[name]] ;
         setsStr = [setsStr stringByAppendingString:tmpStr] ;
     }
     return setsStr ;
+}
+
++ (BOOL)propIsNilOrNull:(id)val {
+    return !val || [val isKindOfClass:[NSNull class]] || ([val isKindOfClass:[NSString class]] && [val isEqualToString:@"<null>"]) ;
 }
 
 + (NSString *)getSqlUseRecursiveQuery:(id)model
@@ -159,28 +164,6 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     
     // Recursive Query
     while ( 1 ) {
-        switch (type) {
-            case xt_type_create: {
-                [strProperties appendString:[self appendCreate:cls]] ;
-            }
-                break ;
-            case xt_type_insert: {
-                NSDictionary *resDic = [self appendInsert:cls
-                                                    model:model
-                                                 dicModel:dicModel] ;
-                [strProperties appendString:resDic[@"p"]] ;
-                [strQuestions appendString:resDic[@"q"]] ;
-            }
-                break ;
-            case xt_type_update: {
-                [strProperties appendString:[self appendUpdate:cls
-                                                         model:model
-                                                      dicModel:dicModel]] ;
-            }
-                break ;
-            default:
-                break ;
-        }
         
         // RETURN IF NEEDED .
         if ([cls isEqual:[XTDBModel class]] || [cls isEqual:[NSObject class]]) {
@@ -212,6 +195,30 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                 default:
                     break ;
             }
+        }
+        
+        // APPEND SQL STRING .
+        switch (type) {
+            case xt_type_create: {
+                [strProperties appendString:[self appendCreate:cls]] ;
+            }
+                break ;
+            case xt_type_insert: {
+                NSDictionary *resDic = [self appendInsert:cls
+                                                    model:model
+                                                 dicModel:dicModel] ;
+                [strProperties appendString:resDic[@"p"]] ;
+                [strQuestions appendString:resDic[@"q"]] ;
+            }
+                break ;
+            case xt_type_update: {
+                [strProperties appendString:[self appendUpdate:cls
+                                                         model:model
+                                                      dicModel:dicModel]] ;
+            }
+                break ;
+            default:
+                break ;
         }
         
         // NEXT LOOP IF NEEDED .
