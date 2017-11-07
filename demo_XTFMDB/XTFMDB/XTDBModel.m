@@ -222,7 +222,6 @@
         NSLog(@"sql :\n %@",sql) ;
         FMResultSet *rs = [db executeQuery:sql] ;
         while ([rs next]) {
-            
             NSDictionary *rstDic = [XTDBModel getResultDicFromClass:[self class]
                                                           resultSet:rs] ;
             [resultList addObject:[[self class] yy_modelWithDictionary:rstDic]] ;
@@ -236,6 +235,39 @@
 + (instancetype)findFirstWithSql:(NSString *)sql
 {
     return [[self findWithSql:sql] firstObject] ;
+}
+
++ (id)anyFuncWithSql:(NSString *)sql {
+    __block id val ;
+    [QUEUE inDatabase:^(FMDatabase *db) {
+        NSLog(@"sql :\n %@",sql) ;
+        [db executeStatements:sql
+              withResultBlock:^int(NSDictionary *resultsDictionary) {
+                  val = [resultsDictionary.allValues lastObject] ;
+                  return 0 ;
+        }] ;
+    }] ;
+    return val ;
+}
+
++ (int)count {
+    return [[self anyFuncWithSql:[NSString stringWithFormat:@"SELECT count(*) FROM %@",NSStringFromClass([self class])]] intValue] ;
+}
+
++ (double)maxOf:(NSString *)property {
+    return [[self anyFuncWithSql:[NSString stringWithFormat:@"SELECT max(%@) FROM %@",property,NSStringFromClass([self class])]] doubleValue] ;
+}
+
++ (double)minOf:(NSString *)property {
+    return [[self anyFuncWithSql:[NSString stringWithFormat:@"SELECT min(%@) FROM %@",property,NSStringFromClass([self class])]] doubleValue] ;
+}
+
++ (double)sumOf:(NSString *)property {
+    return [[self anyFuncWithSql:[NSString stringWithFormat:@"SELECT sum(%@) FROM %@",property,NSStringFromClass([self class])]] doubleValue] ;
+}
+
++ (double)avgOf:(NSString *)property {
+    return [[self anyFuncWithSql:[NSString stringWithFormat:@"SELECT avg(%@) FROM %@",property,NSStringFromClass([self class])]] doubleValue] ;
 }
 
 #pragma mark --

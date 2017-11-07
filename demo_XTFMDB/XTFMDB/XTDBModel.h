@@ -61,6 +61,14 @@ static NSString *const kPkid = @"pkid" ;
 + (NSArray *)findWithSql:(NSString *)sql ;
 + (instancetype)findFirstWithSql:(NSString *)sql ;
 
+// func
++ (id)anyFuncWithSql:(NSString *)sql ;
++ (int)count ;
++ (double)maxOf:(NSString *)property ;
++ (double)minOf:(NSString *)property ;
++ (double)sumOf:(NSString *)property ;
++ (double)avgOf:(NSString *)property ;
+
 #pragma mark - delete
 
 - (BOOL)deleteModel ;
