@@ -55,6 +55,12 @@
     return [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ %@",tableName,name,type] ;
 }
 
++ (NSString *)sqlAlterRenameOldTable:(NSString *)oldTableName
+                      toNewTableName:(NSString *)newTableName
+{
+    return [NSString stringWithFormat:@"ALTER TABLE %@ RENAME TO %@;",oldTableName,newTableName] ;
+}
+
 
 #pragma mark -- 
 #pragma mark - private

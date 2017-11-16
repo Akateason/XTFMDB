@@ -198,7 +198,7 @@
 
 + (BOOL)hasModelWhere:(NSString *)strWhere
 {
-    return [self selectWhere:strWhere].count > 0 ? TRUE : FALSE ;
+    return [self findFirstWhere:strWhere] != nil ;
 }
 
 + (NSArray *)selectWhere:(NSString *)strWhere
@@ -210,7 +210,7 @@
     return [self findWithSql:sql] ;
 }
 
-// any sql
+// any sql execute Query
 + (NSArray *)findWithSql:(NSString *)sql
 {
     NSString *tableName = NSStringFromClass([self class]) ;
@@ -237,6 +237,7 @@
     return [[self findWithSql:sql] firstObject] ;
 }
 
+// func execute Statements
 + (id)anyFuncWithSql:(NSString *)sql {
     __block id val ;
     [QUEUE inDatabase:^(FMDatabase *db) {
@@ -252,6 +253,11 @@
 
 + (int)count {
     return [[self anyFuncWithSql:[NSString stringWithFormat:@"SELECT count(*) FROM %@",NSStringFromClass([self class])]] intValue] ;
+}
+
++ (BOOL)isEmptyTable
+{
+    return ![self count] ;
 }
 
 + (double)maxOf:(NSString *)property {
@@ -337,6 +343,26 @@
         bSuccess = [db executeUpdate:[[XTDBModel class] sqlAlterAdd:name
                                                                type:type
                                                               table:tableName]] ;
+        if (bSuccess) {
+            NSLog(@"xt_db alter add success\n\n") ;
+        }
+        else {
+            NSLog(@"xt_db alter add fail\n\n") ;
+        }
+    }] ;
+    return bSuccess ;
+}
+
++ (BOOL)alterRenameToNewTableName:(NSString *)name
+{
+    NSString *tableName = NSStringFromClass([self class]) ;
+    if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
+    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
+    
+    __block BOOL bSuccess = FALSE ;
+    [QUEUE inDatabase:^(FMDatabase *db) {
+        bSuccess = [db executeUpdate:[[XTDBModel class] sqlAlterRenameOldTable:tableName
+                                                                toNewTableName:name]] ;
         if (bSuccess) {
             NSLog(@"xt_db alter add success\n\n") ;
         }

@@ -208,7 +208,7 @@ static void *key_pkid = &key_pkid;
 
 + (BOOL)xt_hasModelWhere:(NSString *)strWhere
 {
-    return [self xt_selectWhere:strWhere].count > 0 ? TRUE : FALSE ;
+    return [self xt_findFirstWhere:strWhere] != nil ;
 }
 
 + (NSArray *)xt_selectWhere:(NSString *)strWhere
@@ -246,6 +246,43 @@ static void *key_pkid = &key_pkid;
 + (instancetype)xt_findFirstWithSql:(NSString *)sql
 {
     return [[self xt_findWithSql:sql] firstObject] ;
+}
+
++ (id)xt_anyFuncWithSql:(NSString *)sql {
+    __block id val ;
+    [QUEUE inDatabase:^(FMDatabase *db) {
+        NSLog(@"sql :\n %@",sql) ;
+        [db executeStatements:sql
+              withResultBlock:^int(NSDictionary *resultsDictionary) {
+                  val = [resultsDictionary.allValues lastObject] ;
+                  return 0 ;
+              }] ;
+    }] ;
+    return val ;
+}
+
++ (int)xt_count {
+    return [[self xt_anyFuncWithSql:[NSString stringWithFormat:@"SELECT count(*) FROM %@",NSStringFromClass([self class])]] intValue] ;
+}
+
++ (BOOL)xt_isEmptyTable {
+    return ![self xt_count] ;
+}
+
++ (double)xt_maxOf:(NSString *)property {
+    return [[self xt_anyFuncWithSql:[NSString stringWithFormat:@"SELECT max(%@) FROM %@",property,NSStringFromClass([self class])]] doubleValue] ;
+}
+
++ (double)xt_minOf:(NSString *)property {
+    return [[self xt_anyFuncWithSql:[NSString stringWithFormat:@"SELECT min(%@) FROM %@",property,NSStringFromClass([self class])]] doubleValue] ;
+}
+
++ (double)xt_sumOf:(NSString *)property {
+    return [[self xt_anyFuncWithSql:[NSString stringWithFormat:@"SELECT sum(%@) FROM %@",property,NSStringFromClass([self class])]] doubleValue] ;
+}
+
++ (double)xt_avgOf:(NSString *)property {
+    return [[self xt_anyFuncWithSql:[NSString stringWithFormat:@"SELECT avg(%@) FROM %@",property,NSStringFromClass([self class])]] doubleValue] ;
 }
 
 #pragma mark --
@@ -315,6 +352,26 @@ static void *key_pkid = &key_pkid;
         bSuccess = [db executeUpdate:[[XTDBModel class] sqlAlterAdd:name
                                                                type:type
                                                               table:tableName]] ;
+        if (bSuccess) {
+            NSLog(@"xt_db alter add success\n\n") ;
+        }
+        else {
+            NSLog(@"xt_db alter add fail\n\n") ;
+        }
+    }] ;
+    return bSuccess ;
+}
+
++ (BOOL)xt_alterRenameToNewTableName:(NSString *)name
+{
+    NSString *tableName = NSStringFromClass([self class]) ;
+    if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
+    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
+    
+    __block BOOL bSuccess = FALSE ;
+    [QUEUE inDatabase:^(FMDatabase *db) {
+        bSuccess = [db executeUpdate:[[XTDBModel class] sqlAlterRenameOldTable:tableName
+                                                                toNewTableName:name]] ;
         if (bSuccess) {
             NSLog(@"xt_db alter add success\n\n") ;
         }

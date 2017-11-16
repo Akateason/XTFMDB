@@ -47,6 +47,7 @@
 
 + (BOOL)xt_alterAddColumn:(NSString *)name
                      type:(NSString *)type ;
++ (BOOL)xt_alterRenameToNewTableName:(NSString *)name ;
 
 #pragma mark - Constraints
 //props Sqlite Keywords

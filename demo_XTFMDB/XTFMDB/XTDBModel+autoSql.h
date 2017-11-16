@@ -26,6 +26,9 @@
                      type:(NSString *)type
                     table:(NSString *)tableName ;
 
++ (NSString *)sqlAlterRenameOldTable:(NSString *)oldTableName
+                      toNewTableName:(NSString *)newTableName ;
+
 + (NSDictionary *)getResultDicFromClass:(Class)cls
                               resultSet:(FMResultSet *)resultSet ;
 

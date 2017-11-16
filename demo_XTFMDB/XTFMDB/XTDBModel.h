@@ -57,13 +57,14 @@ static NSString *const kPkid = @"pkid" ;
 + (instancetype)findFirstWhere:(NSString *)strWhere ;
 + (BOOL)hasModelWhere:(NSString *)strWhere ;
 
-// any sql
+// any sql execute Query
 + (NSArray *)findWithSql:(NSString *)sql ;
 + (instancetype)findFirstWithSql:(NSString *)sql ;
 
-// func
+// func execute Statements
 + (id)anyFuncWithSql:(NSString *)sql ;
 + (int)count ;
++ (BOOL)isEmptyTable ;
 + (double)maxOf:(NSString *)property ;
 + (double)minOf:(NSString *)property ;
 + (double)sumOf:(NSString *)property ;
@@ -79,7 +80,7 @@ static NSString *const kPkid = @"pkid" ;
 
 + (BOOL)alterAddColumn:(NSString *)name
                   type:(NSString *)type ;
-
++ (BOOL)alterRenameToNewTableName:(NSString *)name ;
 
 #pragma mark - Constraints
 
