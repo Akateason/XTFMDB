@@ -53,12 +53,12 @@ static void *key_pkid = &key_pkid;
             // create table
             NSString *sql = [[XTDBModel class] sqlCreateTableWithClass:[self class]] ;
             bReturn = [db executeUpdate:sql] ;
-            if (bReturn) NSLog(@"xt_db create success") ;
-            else NSLog(@"xt_db create fail") ;
+            if (bReturn) NSLog(@"xt_db create %@ success",tableName) ;
+            else NSLog(@"xt_db create %@ fail",tableName) ;
         }] ;
     }
     else
-        NSLog(@"xt_db already exist") ;
+        NSLog(@"xt_db %@ already exist",tableName) ;
     
     return bReturn ;
 }
@@ -204,6 +204,11 @@ static void *key_pkid = &key_pkid;
 + (instancetype)xt_findFirstWhere:(NSString *)strWhere
 {
     return [[self xt_selectWhere:strWhere] firstObject] ;
+}
+
++ (instancetype)xt_findFirst
+{
+    return [[self xt_selectAll] firstObject] ;
 }
 
 + (BOOL)xt_hasModelWhere:(NSString *)strWhere

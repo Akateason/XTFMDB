@@ -22,6 +22,16 @@
     // 在这初始化数据库
     [[XTFMDBBase sharedInstance] configureDB:@"akateason"] ;
     
+//    [[XTFMDBBase sharedInstance] dbUpgradeTable:Model1.class
+//                                      paramsAdd:@[@"a1",@"a2",@"a3"]
+//                                        version:2] ;
+//
+//    [[XTFMDBBase sharedInstance] dbUpgradeTable:Model1.class
+//                                      paramsAdd:@[@"b1",@"b2",@"b3"]
+//                                        version:3] ;
+
+    
+    
     return YES;
 }
 

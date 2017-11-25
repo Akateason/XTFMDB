@@ -55,6 +55,7 @@ static NSString *const kPkid = @"pkid" ;
 + (NSArray *)selectAll ;
 + (NSArray *)selectWhere:(NSString *)strWhere ; // param e.g. @" pkid = '1' "
 + (instancetype)findFirstWhere:(NSString *)strWhere ;
++ (instancetype)findFirst ;
 + (BOOL)hasModelWhere:(NSString *)strWhere ;
 
 // any sql execute Query

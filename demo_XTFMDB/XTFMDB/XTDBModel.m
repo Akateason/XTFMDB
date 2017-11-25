@@ -45,12 +45,12 @@
             // create table
             NSString *sql = [[XTDBModel class] sqlCreateTableWithClass:[self class]] ;
             bReturn = [db executeUpdate:sql] ;
-            if (bReturn) NSLog(@"xt_db create success") ;
-            else NSLog(@"xt_db create fail") ;
+            if (bReturn) NSLog(@"xt_db create %@ success",tableName) ;
+            else NSLog(@"xt_db create %@ fail",tableName) ;
         }] ;
     }
     else
-        NSLog(@"xt_db already exist") ;
+        NSLog(@"xt_db %@ already exist",tableName) ;
     
     return bReturn ;
 }
@@ -194,6 +194,11 @@
 + (instancetype)findFirstWhere:(NSString *)strWhere
 {
     return [[self selectWhere:strWhere] firstObject] ;
+}
+
++ (instancetype)findFirst
+{
+    return [[self selectAll] firstObject] ;
 }
 
 + (BOOL)hasModelWhere:(NSString *)strWhere

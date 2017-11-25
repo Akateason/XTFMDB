@@ -30,13 +30,23 @@
 
 #pragma mark - select
 + (NSArray *)xt_selectAll ;
++ (NSArray *)xt_selectWhere:(NSString *)strWhere ; // param e.g. @" pkid = '1' "
 + (instancetype)xt_findFirstWhere:(NSString *)strWhere ;
++ (instancetype)xt_findFirst ;
 + (BOOL)xt_hasModelWhere:(NSString *)strWhere ;
-+ (NSArray *)xt_selectWhere:(NSString *)strWhere ;
 
-// any sql
+// any sql execute Query
 + (NSArray *)xt_findWithSql:(NSString *)sql ;
 + (instancetype)xt_findFirstWithSql:(NSString *)sql ;
+
+// func execute Statements
++ (id)xt_anyFuncWithSql:(NSString *)sql ;
++ (int)xt_count ;
++ (BOOL)xt_isEmptyTable ;
++ (double)xt_maxOf:(NSString *)property ;
++ (double)xt_minOf:(NSString *)property ;
++ (double)xt_sumOf:(NSString *)property ;
++ (double)xt_avgOf:(NSString *)property ;
 
 #pragma mark - delete
 - (BOOL)xt_deleteModel ;

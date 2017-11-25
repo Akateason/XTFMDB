@@ -32,4 +32,6 @@
 + (NSDictionary *)getResultDicFromClass:(Class)cls
                               resultSet:(FMResultSet *)resultSet ;
 
++ (NSString *)sqlTypeWithType:(NSString *)strType ;
+
 @end

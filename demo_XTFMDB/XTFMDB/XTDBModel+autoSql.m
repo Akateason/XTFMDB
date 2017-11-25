@@ -171,6 +171,30 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     // Recursive Query
     while ( 1 ) {
         
+        // APPEND SQL STRING .
+        switch (type) {
+            case xt_type_create: {
+                [strProperties appendString:[self appendCreate:cls]] ;
+            }
+                break ;
+            case xt_type_insert: {
+                NSDictionary *resDic = [self appendInsert:cls
+                                                    model:model
+                                                 dicModel:dicModel] ;
+                [strProperties appendString:resDic[@"p"]] ;
+                [strQuestions appendString:resDic[@"q"]] ;
+            }
+                break ;
+            case xt_type_update: {
+                [strProperties appendString:[self appendUpdate:cls
+                                                         model:model
+                                                      dicModel:dicModel]] ;
+            }
+                break ;
+            default:
+                break ;
+        }
+        
         // RETURN IF NEEDED .
         if ([cls isEqual:[XTDBModel class]] || [cls isEqual:[NSObject class]]) {
             switch (type) {
@@ -201,30 +225,6 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                 default:
                     break ;
             }
-        }
-        
-        // APPEND SQL STRING .
-        switch (type) {
-            case xt_type_create: {
-                [strProperties appendString:[self appendCreate:cls]] ;
-            }
-                break ;
-            case xt_type_insert: {
-                NSDictionary *resDic = [self appendInsert:cls
-                                                    model:model
-                                                 dicModel:dicModel] ;
-                [strProperties appendString:resDic[@"p"]] ;
-                [strQuestions appendString:resDic[@"q"]] ;
-            }
-                break ;
-            case xt_type_update: {
-                [strProperties appendString:[self appendUpdate:cls
-                                                         model:model
-                                                      dicModel:dicModel]] ;
-            }
-                break ;
-            default:
-                break ;
         }
         
         // NEXT LOOP IF NEEDED .
