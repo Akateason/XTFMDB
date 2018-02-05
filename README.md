@@ -15,6 +15,8 @@
 10. 支持NSData类型
 11. 支持图片存储
 12. XTDBModel支持默认字段, createTime, updateTime, isDel
+13. 一行代码完成数据库升级.
+14. 常规运算, 求和,最值等
 
 ## 使用方法
  
@@ -156,11 +158,25 @@ BOOL isDel = [Model1 xt_deleteModelWhere:@" title == 'aaa' "] ;
 BOOL isDel = [Model1 xt_dropTable] ;
 ```
 
-####更新版本
+#### 运算操作 求和,最值,平均值等
 ```
-加一个int类型的字段
-[Model1 alterAddColumn:@"adddddddddd"
-type:@"INTEGER default 0 NOT NULL"] ;
+// func execute Statements
++ (id)anyFuncWithSql:(NSString *)sql ;
++ (int)count ;
++ (BOOL)isEmptyTable ;
++ (double)maxOf:(NSString *)property ;
++ (double)minOf:(NSString *)property ;
++ (double)sumOf:(NSString *)property ;
++ (double)avgOf:(NSString *)property ;
+```
+
+#### 更新数据库版本 加字段 (一行代码)
+```
+将数据库版本更新为v2. 在Model1中加3个字段,只需要把字段名写入!
+    [[XTFMDBBase sharedInstance] dbUpgradeTable:Model1.class
+                                      paramsAdd:@[@"a1",@"a2",@"a3"]
+                                        version:2] ;
+
 ```
 
 ---

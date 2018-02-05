@@ -79,6 +79,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7D4B27B4202820DA001CA91B /* model */ = {
+			isa = PBXGroup;
+			children = (
+				8F0C1EDF1F8B7159009359AC /* CustomDBModel.h */,
+				8F0C1EE01F8B7159009359AC /* CustomDBModel.m */,
+				8F0C1EE21F8B7184009359AC /* AnyModel.h */,
+				8F0C1EE31F8B7184009359AC /* AnyModel.m */,
+			);
+			name = model;
+			sourceTree = "<group>";
+		};
 		8FFD73811EBB1C2C00148B83 = {
 			isa = PBXGroup;
 			children = (
@@ -103,10 +114,7 @@
 				8FFD73A91EBB1D8500148B83 /* XTFMDB */,
 				8FFD73901EBB1C2C00148B83 /* AppDelegate.h */,
 				8FFD73911EBB1C2C00148B83 /* AppDelegate.m */,
-				8F0C1EDF1F8B7159009359AC /* CustomDBModel.h */,
-				8F0C1EE01F8B7159009359AC /* CustomDBModel.m */,
-				8F0C1EE21F8B7184009359AC /* AnyModel.h */,
-				8F0C1EE31F8B7184009359AC /* AnyModel.m */,
+				7D4B27B4202820DA001CA91B /* model */,
 				8FFD73931EBB1C2C00148B83 /* ViewController.h */,
 				8FFD73941EBB1C2C00148B83 /* ViewController.m */,
 				8FFD73A41EBB1CAE00148B83 /* DisplayViewController.h */,
