@@ -10,18 +10,40 @@
 
 @interface NSObject (Reflection)
 
+- (NSString *)className;
++ (NSString *)className;
+
+- (NSString *)superClassName;
++ (NSString *)superClassName;
+
 - (NSDictionary *)propertyDictionary;
 
-//属性名称列表
 - (NSArray*)propertyKeys;
 + (NSArray *)propertyKeys;
 
-//属性详细信息列表
 - (NSArray *)propertiesInfo;
 + (NSArray *)propertiesInfo;
++ (NSDictionary *)propertiesInfoDict ;
++ (NSString *)iosTypeWithPropName:(NSString *)name ;
 
-//格式化后的属性列表
 + (NSArray *)propertiesWithCodeFormat;
+
+- (NSArray*)methodList;
++ (NSArray*)methodList;
+
+- (NSArray*)methodListInfo;
+
+//创建并返回一个指向所有已注册类的指针列表
++ (NSArray *)registedClassList;
+//实例变量
++ (NSArray *)instanceVariable;
+
+- (NSDictionary *)protocolList;
++ (NSDictionary *)protocolList;
+
+
+- (BOOL)hasPropertyForKey:(NSString*)key;
+- (BOOL)hasIvarForKey:(NSString*)key;
 
 + (NSString *)decodeType:(const char *)cString ;
 

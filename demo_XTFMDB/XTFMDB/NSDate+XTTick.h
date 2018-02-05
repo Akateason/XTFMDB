@@ -29,6 +29,9 @@ static const float  kSecond                  = 1.0      ;
 
 - (long long)xt_getTick ;
 
++ (long long)xt_getTickWithDateStr:(NSString *)dateStr
+                            format:(NSString *)format ;
+
 /**
  compare tick
  */

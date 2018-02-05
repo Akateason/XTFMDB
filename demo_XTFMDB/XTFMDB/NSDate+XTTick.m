@@ -26,6 +26,12 @@
     return time ;
 }
 
++ (long long)xt_getTickWithDateStr:(NSString *)dateStr
+                            format:(NSString *)format
+{
+    return [[self xt_getDateWithStr:dateStr format:format] xt_getTick] ;
+}
+
 /**
  compare tick
  */

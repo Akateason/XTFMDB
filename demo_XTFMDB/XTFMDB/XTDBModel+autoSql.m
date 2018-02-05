@@ -9,7 +9,7 @@
 #import "XTDBModel+autoSql.h"
 #import "NSObject+Reflection.h"
 #import "XTFMDBConst.h"
-#import "FMDB.h"
+#import <FMDB/FMDB.h>
 #import "XTDBModel.h"
 #import <UIKit/UIKit.h>
 
@@ -196,7 +196,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
         }
         
         // RETURN IF NEEDED .
-        if ([cls isEqual:[XTDBModel class]] || [cls isEqual:[NSObject class]]) {
+        if ([cls isEqual:[XTDBModel class]] || [cls.superclass isEqual:[NSObject class]]) {
             switch (type) {
                 case xt_type_create: {
                     NSString *resultSql = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ ( %@ )",

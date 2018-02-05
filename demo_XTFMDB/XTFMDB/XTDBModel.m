@@ -85,6 +85,7 @@
 
 + (BOOL)insertList:(NSArray *)modelList
 {
+    if (!modelList || !modelList.count) return FALSE ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:NSStringFromClass([[modelList firstObject] class])]) return FALSE ;
     
@@ -148,6 +149,7 @@
 
 + (BOOL)updateList:(NSArray *)modelList
 {
+    if (!modelList || !modelList.count) return FALSE ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:NSStringFromClass([[modelList firstObject] class])]) return FALSE ;
     

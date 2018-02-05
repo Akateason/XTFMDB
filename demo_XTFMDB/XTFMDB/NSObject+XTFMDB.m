@@ -93,6 +93,7 @@ static void *key_pkid = &key_pkid;
 
 + (BOOL)xt_insertList:(NSArray *)modelList
 {
+    if (!modelList || !modelList.count) FALSE ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:NSStringFromClass([[modelList firstObject] class])]) return FALSE ;
     
@@ -157,6 +158,7 @@ static void *key_pkid = &key_pkid;
 
 + (BOOL)xt_updateList:(NSArray *)modelList
 {
+    if (!modelList || !modelList.count) return FALSE ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:NSStringFromClass([[modelList firstObject] class])]) return FALSE ;
     
