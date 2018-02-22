@@ -7,11 +7,11 @@
 //
 
 #import "NSObject+XTFMDB.h"
+#import "XTFMDBConst.h"
 #import "XTFMDBBase.h"
 #import "XTDBModel+autoSql.h"
-#import "YYModel.h"
+#import <YYModel/YYModel.h>
 #import <objc/runtime.h>
-#import "XTFMDBConst.h"
 
 static void *key_pkid = &key_pkid;
 

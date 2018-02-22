@@ -9,8 +9,8 @@
 #import "XTDBModel+autoSql.h"
 #import "NSObject+XTFMDB_Reflection.h"
 #import "XTFMDBConst.h"
-#import <FMDB/FMDB.h>
 #import "XTDBModel.h"
+#import <FMDB/FMDB.h>
 #import <UIKit/UIKit.h>
 
 @implementation XTDBModel (autoSql)

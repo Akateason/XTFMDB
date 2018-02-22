@@ -9,7 +9,7 @@
 #import "XTDBModel.h"
 #import "XTFMDBBase.h"
 #import "XTDBModel+autoSql.h"
-#import "YYModel.h"
+#import <YYModel/YYModel.h>
 #import "XTFMDBConst.h"
 #import "NSDate+XTFMDB_Tick.h"
 
