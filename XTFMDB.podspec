@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "XTFMDB"
-  s.version      = "1.1.6"
+  s.version      = "1.1.7"
   s.summary      = "XTFMDB."
 
   # This description is used to generate tags and improve search results.
@@ -38,7 +38,7 @@ Pod::Spec.new do |s|
   #
 
 
-  s.license      = { :type => "MIT", :file => "FILE_LICENSE" }
+  s.license      = { :type => "MIT", :file => "LICENSE" }
 
 
   # ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -89,10 +89,10 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "XTFMDB"
+  s.source_files  = "XTFMDB/demo_XTFMDB/XTFMDB"
   s.exclude_files = "Classes/Exclude"
 
-  s.public_header_files = "XTFMDB"
+  s.public_header_files = "XTFMDB/demo_XTFMDB/XTFMDB"
 
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
