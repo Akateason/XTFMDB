@@ -1,6 +1,7 @@
 
 
-#XTFMDB
+# XTFMDB
+pod 'XTFMDB'
 
 ### 特性
 1. Model直接存储.获取. 无需再转换
