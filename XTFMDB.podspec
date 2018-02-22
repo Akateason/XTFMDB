@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "XTFMDB"
-  s.version      = "1.1.2"
+  s.version      = "1.1.3"
   s.summary      = "An FMDB based package. Rapid development framework."
 
   # This description is used to generate tags and improve search results.
@@ -90,7 +90,7 @@ Pod::Spec.new do |s|
   #  Not including the public_header_files will make all headers public.
   #
 
-  s.source_files  = "XTFMDB”, "XTFMDB/**/*.{h,m}"
+  s.source_files  = "XTFMDB", "XTFMDB/**/*.{h,m}"
   s.exclude_files = "Classes/Exclude"
 
   s.public_header_files = "XTFMDB/**/*.h"
