@@ -16,7 +16,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "XTFMDB"
-  s.version      = “1.1.1”
+  s.version      = "1.1.2"
   s.summary      = "An FMDB based package. Rapid development framework."
 
   # This description is used to generate tags and improve search results.
@@ -64,7 +64,7 @@ Pod::Spec.new do |s|
   #
 
 
-  s.platform     = :ios, “8.0”
+  s.platform     = :ios, "8.0"
 
   #  When using multiple platforms
   # s.ios.deployment_target = "5.0"
@@ -93,7 +93,7 @@ Pod::Spec.new do |s|
   s.source_files  = "XTFMDB”, "XTFMDB/**/*.{h,m}"
   s.exclude_files = "Classes/Exclude"
 
-  # s.public_header_files = "Classes/**/*.h"
+  s.public_header_files = "XTFMDB/**/*.h"
 
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -132,8 +132,8 @@ Pod::Spec.new do |s|
   # s.requires_arc = true
 
   # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
-  s.dependency “FMDB”
-  s.dependency “YYModel”
+  s.dependency "FMDB"
+  s.dependency "YYModel"
 
 
 end
