@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "FMDB.h"
+#import <FMDB/FMDB.h>
 
 #define QUEUE                         [XTFMDBBase sharedInstance].queue
 #define DB                            [XTFMDBBase sharedInstance].database
