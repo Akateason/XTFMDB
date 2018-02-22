@@ -7,7 +7,7 @@
 //
 
 #import "XTDBModel+autoSql.h"
-#import "NSObject+Reflection.h"
+#import "NSObject+XTFMDB_Reflection.h"
 #import "XTFMDBConst.h"
 #import <FMDB/FMDB.h>
 #import "XTDBModel.h"

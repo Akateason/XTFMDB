@@ -1,9 +1,9 @@
 //
-//  NSDate+XTTick.h
-//  XTkit
+//  NSDate+XTFMDB_Tick.h
+//  demo_XTFMDB
 //
-//  Created by teason23 on 2017/5/9.
-//  Copyright © 2017年 teason. All rights reserved.
+//  Created by teason23 on 2018/2/22.
+//  Copyright © 2018年 teaason. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -20,7 +20,9 @@ static const float  kMillisecond             = 1000.0   ;
 static const float  kSecond                  = 1.0      ;
 #define kUnitConversion                      kSecond
 
-@interface NSDate (XTTick)
+
+@interface NSDate (XTFMDB_Tick)
+
 
 /**
  get Tick
@@ -67,10 +69,5 @@ static const float  kSecond                  = 1.0      ;
                        format:(NSString *)format ;
 
 
+
 @end
-
-
-
-
-
-

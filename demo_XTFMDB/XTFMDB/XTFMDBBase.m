@@ -10,7 +10,7 @@
 #import "XTFMDBConst.h"
 #import "XTDBVersion.h"
 #import "XTDBModel+autoSql.h"
-#import "NSObject+Reflection.h"
+#import "NSObject+XTFMDB_Reflection.h"
 
 #define SQLITE_NAME( _name_ )   [name stringByAppendingString:@".sqlite"]
 

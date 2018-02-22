@@ -11,7 +11,7 @@
 #import "XTDBModel+autoSql.h"
 #import "YYModel.h"
 #import "XTFMDBConst.h"
-#import "NSDate+XTTick.h"
+#import "NSDate+XTFMDB_Tick.h"
 
 @interface XTDBModel ()
 

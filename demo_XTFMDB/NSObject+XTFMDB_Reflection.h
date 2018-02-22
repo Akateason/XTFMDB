@@ -1,14 +1,14 @@
 //
-//  NSObject+Reflection.h
-//  NSObject-Reflection
+//  NSObject+XTFMDB_Reflection.h
+//  demo_XTFMDB
 //
-//  Created by teason on 15/12/22.
-//  Copyright © 2015年 teason. All rights reserved.
+//  Created by teason23 on 2018/2/22.
+//  Copyright © 2018年 teaason. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
-@interface NSObject (Reflection)
+@interface NSObject (XTFMDB_Reflection)
 
 - (NSString *)className;
 + (NSString *)className;

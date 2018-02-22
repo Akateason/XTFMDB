@@ -1,15 +1,15 @@
 //
-//  NSObject+Reflection.m
-//  NSObject-Reflection
+//  NSObject+XTFMDB_Reflection.m
+//  demo_XTFMDB
 //
-//  Created by teason on 15/12/22.
-//  Copyright © 2015年 teason. All rights reserved.
+//  Created by teason23 on 2018/2/22.
+//  Copyright © 2018年 teaason. All rights reserved.
 //
 
-#import "NSObject+Reflection.h"
+#import "NSObject+XTFMDB_Reflection.h"
 #import <objc/runtime.h>
 
-@implementation NSObject (Reflection)
+@implementation NSObject (XTFMDB_Reflection)
 
 - (NSString *)className
 {
@@ -187,7 +187,7 @@
         NSMutableDictionary *info = [NSMutableDictionary dictionary];
         
         Method method = methods[i];
-//        IMP imp = method_getImplementation(method);
+        //        IMP imp = method_getImplementation(method);
         SEL name = method_getName(method);
         // 返回方法的参数的个数
         int argumentsCount = method_getNumberOfArguments(method);
@@ -195,26 +195,26 @@
         const char *encoding =method_getTypeEncoding(method);
         //取方法的返回值类型的字符串
         const char *returnType =method_copyReturnType(method);
-       
+        
         NSMutableArray *arguments = [NSMutableArray array];
         for (int index=0; index<argumentsCount; index++) {
             // 获取方法的指定位置参数的类型字符串
-          char *arg =   method_copyArgumentType(method,index);
-//            NSString *argString = [NSString stringWithCString:arg encoding:NSUTF8StringEncoding];
+            char *arg =   method_copyArgumentType(method,index);
+            //            NSString *argString = [NSString stringWithCString:arg encoding:NSUTF8StringEncoding];
             [arguments addObject:[[self class] decodeType:arg]];
         }
         
         NSString *returnTypeString =[[self class] decodeType:returnType];
         NSString *encodeString = [[self class] decodeType:encoding];
         NSString *nameString = [NSString  stringWithCString:sel_getName(name) encoding:NSUTF8StringEncoding];
-
+        
         [info setObject:arguments forKey:@"arguments"];
         [info setObject:[NSString stringWithFormat:@"%d",argumentsCount] forKey:@"argumentsCount"];
         [info setObject:returnTypeString forKey:@"returnType"];
         [info setObject:encodeString forKey:@"encode"];
         [info setObject:nameString forKey:@"name"];
-//        [info setObject:imp_f forKey:@"imp"];
-         [methodList addObject:info];
+        //        [info setObject:imp_f forKey:@"imp"];
+        [methodList addObject:info];
     }
     free(methods);
     return methodList;
@@ -231,7 +231,7 @@
         [methodList addObject:strName];
     }
     free(methods);
-
+    
     return methodList;
 }
 
@@ -549,13 +549,13 @@
         return @"SEL";
     if (!strcmp(cString, @encode(BOOL)))
         return @"BOOL";
-     
+    
     
     //@TODO: do handle bitmasks
     NSString *result = [NSString stringWithCString:cString encoding:NSUTF8StringEncoding] ;
-//    if ([typeDic objectForKey:result]) {
-//        return [typeDic objectForKey:result];
-//    }
+    //    if ([typeDic objectForKey:result]) {
+    //        return [typeDic objectForKey:result];
+    //    }
     if ([[result substringToIndex:1] isEqualToString:@"@"] && [result rangeOfString:@"?"].location == NSNotFound) {
         result = [[result substringWithRange:NSMakeRange(2, result.length - 3)] stringByAppendingString:@"*"];
     } else
@@ -569,6 +569,3 @@
 }
 
 @end
-
-
-

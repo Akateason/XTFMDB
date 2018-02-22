@@ -1,14 +1,14 @@
 //
-//  NSDate+XTTick.m
-//  XTkit
+//  NSDate+XTFMDB_Tick.m
+//  demo_XTFMDB
 //
-//  Created by teason23 on 2017/5/9.
-//  Copyright © 2017年 teason. All rights reserved.
+//  Created by teason23 on 2018/2/22.
+//  Copyright © 2018年 teaason. All rights reserved.
 //
 
-#import "NSDate+XTTick.h"
+#import "NSDate+XTFMDB_Tick.h"
 
-@implementation NSDate (XTTick)
+@implementation NSDate (XTFMDB_Tick)
 
 /**
  get Tick
@@ -22,7 +22,7 @@
 {
     NSTimeInterval timeInterval2 = [self timeIntervalSince1970] ;
     long long time = (long long)((double)timeInterval2 * kUnitConversion) ;
-//    NSLog(@"xt_tick :%lld",time) ;
+    //    NSLog(@"xt_tick :%lld",time) ;
     return time ;
 }
 
@@ -216,19 +216,9 @@
                        format:(NSString *)format
 {
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init] ;
-//    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]] ;
+    //    [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]] ;
     dateFormatter.dateFormat = format ;
     return [dateFormatter dateFromString:dateStr] ;
 }
 
-
 @end
-
-
-
-
-
-
-
-
-
