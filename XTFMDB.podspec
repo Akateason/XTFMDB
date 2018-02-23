@@ -16,15 +16,15 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "XTFMDB"
-  s.version      = "1.1.11"
-  s.summary      = "XTFMDB."
+  s.version      = "1.2.0"
+  s.summary      = "An FMDB based package. Rapid development framework."
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
   #   * Try to keep it short, snappy and to the point.
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
-  s.description  = "An FMDB based package. Rapid development framework."
+  s.description  = "对FMDB再封装,一行调用,模型制表,属性关键字,线程安全,事务回滚,主键自增,容器图片,一行升级"
 
   s.homepage     = "https://github.com/Akateason/XTFMDB"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
