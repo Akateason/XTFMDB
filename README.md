@@ -264,7 +264,4 @@ type:(NSString *)type ;
 ```
 
 
-
-你的star是我的动力
-
-有任何疑问或建议. 欢迎在github或博客里issue我. 
+有任何疑问或建议. 请issue于我.
