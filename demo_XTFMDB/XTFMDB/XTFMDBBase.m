@@ -59,8 +59,8 @@
 - (void)configureDB:(NSString *)name
                path:(NSString *)path
 {
-    NSLog(@"xt_db path :\n%@", path) ;
-    NSLog(@"xt_db sqlName  : %@",name) ;
+    XTFMDBLog(@"xt_db path :\n%@", path) ;
+    XTFMDBLog(@"xt_db sqlName  : %@",name) ;
     NSString *finalPath = [path stringByAppendingPathComponent:SQLITE_NAME(name)] ;
     
     DB = [FMDatabase databaseWithPath:finalPath] ;
@@ -81,11 +81,11 @@
 - (BOOL)verify
 {
     if (!DB) {
-        NSLog(@"xt_db not exist") ;
+        XTFMDBLog(@"xt_db not exist") ;
         return FALSE;
     }
     if (![DB open]) {
-        NSLog(@"xt_db open failed") ;
+        XTFMDBLog(@"xt_db open failed") ;
         return FALSE;
     }
     
@@ -95,7 +95,7 @@
 - (BOOL)isTableExist:(NSString *)tableName
 {
     BOOL bExist = [DB tableExists:tableName] ;
-    if (!bExist) NSLog(@"xt_db table not created") ;
+    if (!bExist) XTFMDBLog(@"xt_db table not created") ;
     return bExist ;
 }
 
@@ -108,21 +108,21 @@
     NSString *tableName = NSStringFromClass(tableCls) ;
     int dbVersion = self.version ;
     if (version <= dbVersion) {
-        NSLog(@"xt_db already Upgraded. v%d",version) ;
+        XTFMDBLog(@"xt_db already Upgraded. v%d",version) ;
         return ;
     }
     if (![self isTableExist:tableName]) {
         return ;
     }
     
-    NSLog(@"xt_db upgrade start \ntable : %@ \nparamsAdd : %@\ndbversion : %d",tableName,paramsAdd,version) ;
-
+    XTFMDBLog(@"xt_db upgrade start \ntable : %@ \nparamsAdd : %@\ndbversion : %d",tableName,paramsAdd,version) ;
+    
     __block BOOL isError = NO ;
     [paramsAdd enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL * _Nonnull stop) {
         NSString *iosType = [tableCls iosTypeWithPropName:key] ;
         NSString *sqlType = [XTDBModel sqlTypeWithType:iosType] ;
         if (!iosType) {
-            NSLog(@"xt_db Upgraded fail no prop in %@",tableName) ;
+            XTFMDBLog(@"xt_db Upgraded fail no prop in %@",tableName) ;
             isError = YES ;
             *stop = YES ;
         }
@@ -135,7 +135,7 @@
     if (isError) return ;
     
     self.version = version ;
-    NSLog(@"xt_db Upgraded v%d complete",version) ;
+    XTFMDBLog(@"xt_db Upgraded v%d complete",version) ;
 }
 
 

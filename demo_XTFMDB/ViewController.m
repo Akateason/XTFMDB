@@ -16,33 +16,19 @@
 #import "YYModel.h"
 #import "DisplayViewController.h"
 #import "XTFMDB.h"
+#import "MainVCell.h"
 
-@interface ViewController ()
-
-@property (strong, nonatomic) UIButton *btCreate ;
-@property (strong, nonatomic) UIButton *btSelect ;
-@property (strong, nonatomic) UIButton *btSelectWhere ;
-@property (strong, nonatomic) UIButton *btInsert ;
-@property (strong, nonatomic) UIButton *btUpdate ;
-@property (strong, nonatomic) UIButton *btDelete ;
-@property (strong, nonatomic) UIButton *btDrop ;
-@property (strong, nonatomic) UIButton *btInsertList ;
-@property (strong, nonatomic) UIButton *btUpdateList ;
-@property (strong, nonatomic) UIButton *btFindFirst ;
-@property (strong, nonatomic) UIButton *btAlterAdd ;
+@interface ViewController () <UITableViewDelegate,UITableViewDataSource>
+@property (weak, nonatomic) IBOutlet UITableView *table;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *segment;
-
 @property (nonatomic) BOOL dBModelOrCustom ; // default is dBModel
-
+@property (copy,nonatomic) NSArray *datasource ;
 @end
 
 @implementation ViewController
 
-static float const kBtFlex      = 2 ;
-static float const kBtHeight    = 35. ;
-
 - (IBAction)segmentValueChange:(UISegmentedControl *)sender {
-    
+    NSLog(@"%ld",(long)sender.selectedSegmentIndex) ;
 }
 
 - (BOOL)dBModelOrCustom {
@@ -56,187 +42,50 @@ static float const kBtHeight    = 35. ;
     // Do any additional setup after loading the view.
     self.edgesForExtendedLayout = UIRectEdgeNone ;
     self.title = @"XTFMDB" ;
-    [self layoutUI] ;
+    self.datasource = @[
+                        @"create" ,
+                        @"select" ,
+                        @"selectWhere" ,
+                        @"insert" ,
+                        @"update" ,
+                        @"delete" ,
+                        @"drop",
+                        @"insertList",
+                        @"updateList",
+                        @"findFirst",
+                        @"AlterAdd",
+                        @"sum" ,
+                        ] ;
 }
 
-- (void)layoutUI
-{
-    self.btCreate = ({
-        UIButton *bt = [UIButton new] ;
-        [bt setTitle:@"create" forState:0] ;
-        bt.backgroundColor = [UIColor grayColor] ;
-        bt.titleLabel.textColor = [UIColor whiteColor] ;
-        [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
-        [self.view addSubview:bt] ;
-        [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
-            make.centerX.equalTo(self.view) ;
-            make.top.mas_equalTo(kBtFlex) ;
-        }] ;
-        bt ;
-    }) ;
-    
-    self.btSelect = ({
-        UIButton *bt = [UIButton new] ;
-        [bt setTitle:@"select" forState:0] ;
-        bt.backgroundColor = [UIColor grayColor] ;
-        bt.titleLabel.textColor = [UIColor whiteColor] ;
-        [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
-        [self.view addSubview:bt] ;
-        [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
-            make.centerX.equalTo(self.view) ;
-            make.top.equalTo(self.btCreate.mas_bottom).offset(kBtFlex) ;
-        }] ;
-        bt ;
-    }) ;
-    
-    self.btSelectWhere = ({
-        UIButton *bt = [UIButton new] ;
-        [bt setTitle:@"selectWhere" forState:0] ;
-        bt.backgroundColor = [UIColor grayColor] ;
-        bt.titleLabel.textColor = [UIColor whiteColor] ;
-        [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
-        [self.view addSubview:bt] ;
-        [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
-            make.centerX.equalTo(self.view) ;
-            make.top.equalTo(self.btSelect.mas_bottom).offset(kBtFlex) ;
-        }] ;
-        bt ;
-    }) ;
-    
-    self.btInsert = ({
-        UIButton *bt = [UIButton new] ;
-        [bt setTitle:@"insert" forState:0] ;
-        bt.backgroundColor = [UIColor grayColor] ;
-        bt.titleLabel.textColor = [UIColor whiteColor] ;
-        [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
-        [self.view addSubview:bt] ;
-        [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
-            make.centerX.equalTo(self.view) ;
-            make.top.equalTo(self.btSelectWhere.mas_bottom).offset(kBtFlex) ;
-        }] ;
-        bt ;
-    }) ;
-    
-    self.btUpdate = ({
-        UIButton *bt = [UIButton new] ;
-        [bt setTitle:@"update" forState:0] ;
-        bt.backgroundColor = [UIColor grayColor] ;
-        bt.titleLabel.textColor = [UIColor whiteColor] ;
-        [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
-        [self.view addSubview:bt] ;
-        [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
-            make.centerX.equalTo(self.view) ;
-            make.top.equalTo(self.btInsert.mas_bottom).offset(kBtFlex) ;
-        }] ;
-        bt ;
-    }) ;
-    
-    self.btDelete = ({
-        UIButton *bt = [UIButton new] ;
-        [bt setTitle:@"delete" forState:0] ;
-        bt.backgroundColor = [UIColor grayColor] ;
-        bt.titleLabel.textColor = [UIColor whiteColor] ;
-        [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
-        [self.view addSubview:bt] ;
-        [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
-            make.centerX.equalTo(self.view) ;
-            make.top.equalTo(self.btUpdate.mas_bottom).offset(kBtFlex) ;
-        }] ;
-        bt ;
-    }) ;
-    
-    self.btDrop = ({
-        UIButton *bt = [UIButton new] ;
-        [bt setTitle:@"drop" forState:0] ;
-        bt.backgroundColor = [UIColor grayColor] ;
-        bt.titleLabel.textColor = [UIColor whiteColor] ;
-        [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
-        [self.view addSubview:bt] ;
-        [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
-            make.centerX.equalTo(self.view) ;
-            make.top.equalTo(self.btDelete.mas_bottom).offset(kBtFlex) ;
-        }] ;
-        bt ;
-    }) ;
-    
-    self.btInsertList = ({
-        UIButton *bt = [UIButton new] ;
-        [bt setTitle:@"insertList" forState:0] ;
-        bt.backgroundColor = [UIColor grayColor] ;
-        bt.titleLabel.textColor = [UIColor whiteColor] ;
-        [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
-        [self.view addSubview:bt] ;
-        [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
-            make.centerX.equalTo(self.view) ;
-            make.top.equalTo(self.btDrop.mas_bottom).offset(kBtFlex) ;
-        }] ;
-        bt ;
-    }) ;
-    
-    self.btUpdateList = ({
-        UIButton *bt = [UIButton new] ;
-        [bt setTitle:@"updateList" forState:0] ;
-        bt.backgroundColor = [UIColor grayColor] ;
-        bt.titleLabel.textColor = [UIColor whiteColor] ;
-        [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
-        [self.view addSubview:bt] ;
-        [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
-            make.centerX.equalTo(self.view) ;
-            make.top.equalTo(self.btInsertList.mas_bottom).offset(kBtFlex) ;
-        }] ;
-        bt ;
-    }) ;
-    
-    self.btFindFirst = ({
-        UIButton *bt = [UIButton new] ;
-        [bt setTitle:@"findFirst" forState:0] ;
-        bt.backgroundColor = [UIColor grayColor] ;
-        bt.titleLabel.textColor = [UIColor whiteColor] ;
-        [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
-        [self.view addSubview:bt] ;
-        [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
-            make.centerX.equalTo(self.view) ;
-            make.top.equalTo(self.btUpdateList.mas_bottom).offset(kBtFlex) ;
-        }] ;
-        bt ;
-    }) ;
-    
-    self.btAlterAdd = ({
-        UIButton *bt = [UIButton new] ;
-        [bt setTitle:@"AlterAdd" forState:0] ;
-        bt.backgroundColor = [UIColor grayColor] ;
-        bt.titleLabel.textColor = [UIColor whiteColor] ;
-        [bt addTarget:self action:@selector(btOnClick:) forControlEvents:UIControlEventTouchUpInside] ;
-        [self.view addSubview:bt] ;
-        [bt mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.size.mas_equalTo(CGSizeMake(200, kBtHeight)) ;
-            make.centerX.equalTo(self.view) ;
-            make.top.equalTo(self.btFindFirst.mas_bottom).offset(kBtFlex) ;
-        }] ;
-        bt ;
-    }) ;
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
 }
 
-- (void)btOnClick:(UIButton *)sender
+#pragma mark - table
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSString *strButtonName = [sender.titleLabel.text stringByAppendingString:@"Action"] ;
+    return self.datasource.count ;
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    MainVCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MainVCell"] ;
+    cell.textLabel.text = self.datasource[indexPath.row] ;
+    return cell ;
+}
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 40 ;
+}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSString *strButtonName = [self.datasource[indexPath.row] stringByAppendingString:@"Action"] ;
     SEL methodSel = NSSelectorFromString(strButtonName) ;
     ((void (*)(id, SEL, id))objc_msgSend)(self, methodSel, nil) ;
 }
 
 
-
-#pragma mark --
 #pragma mark - actions
 
 - (void)createAction
@@ -471,20 +320,26 @@ static float const kBtHeight    = 35. ;
     }
 }
 
+- (void)sumAction {
+    if (!self.dBModelOrCustom) {
+        double sumOfAges = [CustomDBModel sumOf:@"age"] ;
+        NSLog(@"sum of ages : %lf",sumOfAges) ;
+    }
+    else {
+        double sumOfAges = [AnyModel xt_sumOf:@"age"] ;
+        NSLog(@"sum of ages : %lf",sumOfAges) ;
+    }
+}
+
 #pragma mark -
 
-- (void)displayJump
-{
+- (void)displayJump {
     [self performSegueWithIdentifier:@"root2display"
                               sender:@(self.dBModelOrCustom)] ;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
-#pragma mark -
+#pragma mark - storyboard
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue
                  sender:(id)sender

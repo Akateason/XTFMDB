@@ -1,6 +1,6 @@
 //
 //  XTDBModel+autoSql.m
-//  XTkit
+//  XTlib
 //
 //  Created by teason23 on 2017/5/4.
 //  Copyright © 2017年 teason. All rights reserved.
@@ -202,7 +202,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                     NSString *resultSql = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ ( %@ )",
                                            tableName,
                                            [strProperties substringToIndex:strProperties.length - 1]] ;
-                    NSLog(@"xt_db sql create : \n%@\n\n",resultSql) ;
+                    XTFMDBLog(@"xt_db sql create : \n%@\n\n",resultSql) ;
                     return resultSql ;
                 }
                     break ;
@@ -210,7 +210,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                     strProperties = [[strProperties substringToIndex:strProperties.length - 1] mutableCopy] ;
                     strQuestions = [[strQuestions substringToIndex:strQuestions.length - 1] mutableCopy] ;
                     NSString *strResult = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@ ( %@ ) VALUES ( %@ )",tableName,strProperties,strQuestions] ;
-                    NSLog(@"xt_db sql insert : \n%@\n\n",strResult) ;
+                    XTFMDBLog(@"xt_db sql insert : \n%@\n\n",strResult) ;
                     return strResult ;
                 }
                     break ;
@@ -218,7 +218,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                     strProperties = [[strProperties substringToIndex:strProperties.length - 1] mutableCopy] ;
                     NSString *whereStr = [NSString stringWithFormat:@"%@ = %@",kPkid,dicModel[kPkid]] ;
                     NSString *strResult = [NSString stringWithFormat:@"UPDATE %@ SET %@ WHERE %@",tableName,strProperties,whereStr] ;
-                    NSLog(@"xt_db sql update : \n%@",strResult) ;
+                    XTFMDBLog(@"xt_db sql update : \n%@",strResult) ;
                     return strResult ;
                 }
                     break ;
@@ -267,7 +267,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     else if ([strType containsString:@"UIImage"]) {
         return @"TEXT" ;
     }
-    NSLog(@"xt_db no type to transform !!") ;
+    XTFMDBLog(@"xt_db no type to transform !!") ;
     return nil ;
 }
 
@@ -328,12 +328,16 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
 
 + (NSDictionary *)getResultDicFromClass:(Class)cls resultSet:(FMResultSet *)resultSet {
     NSMutableDictionary *tmpDic = [[resultSet resultDictionary] mutableCopy] ;
+    if (!tmpDic) return nil ;
+    
     NSArray *propInfoList = [cls propertiesInfo] ;
     for (int i = 0; i < propInfoList.count; i++) {
         NSDictionary *dic   = propInfoList[i] ;
         NSString *name      = dic[@"name"] ;
         NSString *type      = dic[@"type"] ;
         NSString *valFromFMDB = tmpDic[name] ;
+        if (!valFromFMDB || [valFromFMDB isKindOfClass:[NSNull class]]) continue ;
+        
         if ([type containsString:@"NSData"]) {
             NSData *tmpData = [[NSData alloc] initWithBase64EncodedString:valFromFMDB   options:NSDataBase64DecodingIgnoreUnknownCharacters] ;
             [tmpDic setObject:tmpData

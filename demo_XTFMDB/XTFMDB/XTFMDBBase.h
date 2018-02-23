@@ -20,8 +20,6 @@
 @property (nonatomic,strong)          FMDatabaseQueue    *queue      ;
 @property (nonatomic)                 int                version     ;
 
-#pragma mark --
-
 /**
  db prepare config db in - [(AppDelegate *) AppDidLaunchFinish]
  also create table of dbVersion .
@@ -32,10 +30,6 @@
 - (void)configureDB:(NSString *)name
                path:(NSString *)path ;
 - (void)configureDB:(NSString *)name ;
-
-- (BOOL)verify ;
-
-- (BOOL)isTableExist:(NSString *)tableName ;
 
 /**
  DB Version Upgrade
@@ -51,5 +45,11 @@
 - (void)dbUpgradeTable:(Class)tableCls
              paramsAdd:(NSArray *)paramsAdd
                version:(int)version ;
+
+/**
+ util
+ */
+- (BOOL)verify ;
+- (BOOL)isTableExist:(NSString *)tableName ;
 
 @end

@@ -12,6 +12,7 @@
 		8F0C1EE41F8B7184009359AC /* AnyModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F0C1EE31F8B7184009359AC /* AnyModel.m */; };
 		8F108F52203E718400217B87 /* NSDate+XTFMDB_Tick.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F108F51203E718400217B87 /* NSDate+XTFMDB_Tick.m */; };
 		8F108F58203E943100217B87 /* NSObject+XTFMDB_Reflection.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F108F57203E943100217B87 /* NSObject+XTFMDB_Reflection.m */; };
+		8F2BFFCD204016C90013394D /* MainVCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F2BFFCC204016C90013394D /* MainVCell.m */; };
 		8FFD738F1EBB1C2C00148B83 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FFD738E1EBB1C2C00148B83 /* main.m */; };
 		8FFD73921EBB1C2C00148B83 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FFD73911EBB1C2C00148B83 /* AppDelegate.m */; };
 		8FFD73951EBB1C2C00148B83 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FFD73941EBB1C2C00148B83 /* ViewController.m */; };
@@ -42,6 +43,8 @@
 		8F108F56203E943100217B87 /* NSObject+XTFMDB_Reflection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSObject+XTFMDB_Reflection.h"; path = "XTFMDB/NSObject+XTFMDB_Reflection.h"; sourceTree = "<group>"; };
 		8F108F57203E943100217B87 /* NSObject+XTFMDB_Reflection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSObject+XTFMDB_Reflection.m"; path = "XTFMDB/NSObject+XTFMDB_Reflection.m"; sourceTree = "<group>"; };
 		8F16B9AE1F25EE750049CEE1 /* XTFMDBConst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XTFMDBConst.h; path = XTFMDB/XTFMDBConst.h; sourceTree = "<group>"; };
+		8F2BFFCB204016C90013394D /* MainVCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainVCell.h; sourceTree = "<group>"; };
+		8F2BFFCC204016C90013394D /* MainVCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainVCell.m; sourceTree = "<group>"; };
 		8FFD738A1EBB1C2C00148B83 /* demo_XTFMDB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = demo_XTFMDB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FFD738E1EBB1C2C00148B83 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8FFD73901EBB1C2C00148B83 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -114,13 +117,15 @@
 				8FFD73A91EBB1D8500148B83 /* XTFMDB */,
 				8FFD73901EBB1C2C00148B83 /* AppDelegate.h */,
 				8FFD73911EBB1C2C00148B83 /* AppDelegate.m */,
-				7D4B27B4202820DA001CA91B /* model */,
 				8FFD73931EBB1C2C00148B83 /* ViewController.h */,
 				8FFD73941EBB1C2C00148B83 /* ViewController.m */,
+				8F2BFFCB204016C90013394D /* MainVCell.h */,
+				8F2BFFCC204016C90013394D /* MainVCell.m */,
 				8FFD73A41EBB1CAE00148B83 /* DisplayViewController.h */,
 				8FFD73A51EBB1CAE00148B83 /* DisplayViewController.m */,
 				8FFD73F71EBB249500148B83 /* DisplayCell.h */,
 				8FFD73F81EBB249500148B83 /* DisplayCell.m */,
+				7D4B27B4202820DA001CA91B /* model */,
 				8FFD73961EBB1C2C00148B83 /* Main.storyboard */,
 				8FFD73991EBB1C2C00148B83 /* Assets.xcassets */,
 				8FFD739B1EBB1C2C00148B83 /* LaunchScreen.storyboard */,
@@ -314,6 +319,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8FFD73951EBB1C2C00148B83 /* ViewController.m in Sources */,
+				8F2BFFCD204016C90013394D /* MainVCell.m in Sources */,
 				8FFD73921EBB1C2C00148B83 /* AppDelegate.m in Sources */,
 				8F0C1EE41F8B7184009359AC /* AnyModel.m in Sources */,
 				8F108F58203E943100217B87 /* NSObject+XTFMDB_Reflection.m in Sources */,
