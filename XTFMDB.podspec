@@ -24,7 +24,7 @@ Pod::Spec.new do |s|
   #   * Try to keep it short, snappy and to the point.
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
-  s.description  = "对FMDB再封装,一行调用,模型制表,属性关键字,线程安全,事务回滚,主键自增,容器图片,一行升级"
+  # s.description  = "对FMDB再封装,一行调用,模型制表,属性关键字,线程安全,事务回滚,主键自增,容器图片,一行升级"
 
   s.homepage     = "https://github.com/Akateason/XTFMDB"
   # s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"
