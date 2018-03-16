@@ -255,7 +255,7 @@
                   return 0 ;
         }] ;
     }] ;
-    return val ;
+    return !((NSNull *)val == [NSNull null]) ? val : nil ;
 }
 
 + (int)count {

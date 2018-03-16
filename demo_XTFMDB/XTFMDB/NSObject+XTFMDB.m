@@ -265,7 +265,7 @@ static void *key_pkid = &key_pkid;
                   return 0 ;
               }] ;
     }] ;
-    return val ;
+    return !((NSNull *)val == [NSNull null]) ? val : nil ;
 }
 
 + (int)xt_count {
