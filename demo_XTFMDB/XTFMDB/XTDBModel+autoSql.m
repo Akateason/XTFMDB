@@ -290,9 +290,13 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
 + (BOOL)propIsIgnore:(NSString *)name
                class:(Class)cls
 {
-    id list = [cls ignoreProperties] ;
+    id list = [[self defaultIgnoreProps] arrayByAddingObjectsFromArray:[cls ignoreProperties]] ;
     if (!list) return FALSE ;
     return [list containsObject:name] ;
+}
+
++ (NSMutableArray *)defaultIgnoreProps {
+    return [@[@"hash",@"superclass",@"description",@"debugDescription"] mutableCopy] ;
 }
 
 + (NSDictionary *)changeSpecifiedValToUTF8StringVal:(NSDictionary *)dic {
