@@ -21,5 +21,6 @@
 @property (nonatomic,strong)    UIImage         *image      ;
 @property (nonatomic,copy)      NSArray         *myArr      ;
 @property (nonatomic,copy)      NSDictionary    *myDic      ;
+@property (strong, nonatomic)   NSDate          *today      ;
 
 @end

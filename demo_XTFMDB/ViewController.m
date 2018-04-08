@@ -154,6 +154,8 @@
         m1.myDic = @{@"k1":@"dafafadf",
                      @"k2":@44,
                      @"k3":@"klkkdlslll"} ;
+        m1.today = [NSDate date] ;
+        
         [m1 xt_insert] ;
     }
     
@@ -253,6 +255,7 @@
             m1.myDic = @{@"k1":@"dafafadf",
                          @"k2":@44,
                          @"k3":@"klkkdlslll"} ;
+            m1.today = [NSDate date] ;
             
             [list addObject:m1] ;
         }
@@ -287,7 +290,8 @@
             model.title = [model.title stringByAppendingString:[NSString stringWithFormat:@"+%d",model.age]] ;
             model.myArr = @[@15] ;
             model.myDic = @{@"y":@"9339"} ;
-            
+            model.today = [NSDate date] ;
+
             [tmplist addObject:model] ;
         }
         [AnyModel xt_updateList:tmplist] ;

@@ -10,7 +10,7 @@
 #import "NSObject+XTFMDB.h"
 #import "CustomDBModel.h"
 #import "AnyModel.h"
-
+#import "NSDate+XTFMDB_Tick.h"
 
 @interface DisplayCell ()
 @property (weak, nonatomic) IBOutlet UILabel *lbPkid;
@@ -20,6 +20,8 @@
 @property (weak, nonatomic) IBOutlet UIImageView *img;
 @property (weak, nonatomic) IBOutlet UILabel *lbArr;
 @property (weak, nonatomic) IBOutlet UILabel *lbDic;
+@property (weak, nonatomic) IBOutlet UILabel *lbDate;
+
 @end
 
 @implementation DisplayCell
@@ -48,6 +50,7 @@
         self.img.image = m1.image ;
         self.lbArr.text = [NSString stringWithFormat:@"%@",m1.myArr] ;
         self.lbDic.text = [NSString stringWithFormat:@"%@",m1.myDic] ;
+        self.lbDate.text = @([m1.today xt_getTick]).stringValue ;
     }
     
 }

@@ -12,6 +12,7 @@
 #import "XTDBModel.h"
 #import <FMDB/FMDB.h>
 #import <UIKit/UIKit.h>
+#import "NSDate+XTFMDB_Tick.h"
 
 @implementation XTDBModel (autoSql)
 
@@ -252,9 +253,6 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     else if ([strType containsString:@"BOOL"] || [strType containsString:@"bool"]) {
         return @"BOOLEAN" ;
     }
-    else if ([strType containsString:@"NSData"]) {
-        return @"TEXT" ;
-    }
     else if ([strType containsString:@"NSArray"]) {
         return @"TEXT" ;
     }
@@ -266,6 +264,9 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     }
     else if ([strType containsString:@"UIImage"]) {
         return @"TEXT" ;
+    }
+    else if ([strType containsString:@"NSDate"]) {
+        return @"BIGINT" ;
     }
     XTFMDBLog(@"xt_db no type to transform !!") ;
     return nil ;
@@ -322,6 +323,10 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
             [tmpDic setObject:[self encodingB64String:data]
                        forKey:key] ;
         }
+        else if ([val isKindOfClass:[NSDate class]]) {
+            [tmpDic setObject:@( [(NSDate *)val xt_getTick] )
+                       forKey:key] ;
+        }
     }
     return tmpDic ;
 }
@@ -366,6 +371,13 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
             UIImage *image = [UIImage imageWithData:tmpData] ;
             if (!image) continue ;
             [tmpDic setObject:image
+                       forKey:name] ;
+        }
+        else if ([type containsString:@"NSDate"]) {
+            long long tmpTick = [valFromFMDB longLongValue] ;
+            NSDate *tmpDate = [NSDate xt_getDateWithTick:tmpTick] ;
+            if (!tmpDate) continue ;
+            [tmpDic setObject:tmpDate
                        forKey:name] ;
         }
     }

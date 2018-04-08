@@ -148,6 +148,12 @@
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ptj-7A-zJa">
+                                                    <rect key="frame" x="325" y="147" width="35" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstItem="V8K-Da-oUJ" firstAttribute="top" secondItem="Rio-na-Ma1" secondAttribute="bottom" constant="8" id="1Ju-ZV-5vC"/>
@@ -156,9 +162,11 @@
                                                 <constraint firstAttribute="trailing" secondItem="b6R-DD-lVC" secondAttribute="trailing" id="Axo-IW-nRd"/>
                                                 <constraint firstItem="QBb-fK-rX6" firstAttribute="top" secondItem="V8K-Da-oUJ" secondAttribute="bottom" constant="8" id="Bqv-6Y-fCq"/>
                                                 <constraint firstItem="Dkp-vw-P9Y" firstAttribute="leading" secondItem="lXz-RY-hgi" secondAttribute="leading" id="C6U-gW-PQS"/>
+                                                <constraint firstItem="Ptj-7A-zJa" firstAttribute="top" secondItem="lXz-RY-hgi" secondAttribute="top" constant="147" id="Gze-eX-HCo"/>
                                                 <constraint firstAttribute="bottom" secondItem="b6R-DD-lVC" secondAttribute="bottom" constant="-0.5" id="H90-WB-bAQ"/>
                                                 <constraint firstItem="Rio-na-Ma1" firstAttribute="top" secondItem="Dkp-vw-P9Y" secondAttribute="bottom" constant="4" id="Lqb-ft-78Y"/>
                                                 <constraint firstItem="iDZ-oc-3oi" firstAttribute="top" secondItem="lXz-RY-hgi" secondAttribute="top" constant="189" id="MRA-Pt-Z7a"/>
+                                                <constraint firstAttribute="trailing" secondItem="Ptj-7A-zJa" secondAttribute="trailing" constant="15" id="Qt0-uP-PPf"/>
                                                 <constraint firstItem="iDZ-oc-3oi" firstAttribute="width" secondItem="lXz-RY-hgi" secondAttribute="width" multiplier="1:2" id="WL2-2j-0sW"/>
                                                 <constraint firstItem="Kx2-dc-wUJ" firstAttribute="top" secondItem="QBb-fK-rX6" secondAttribute="bottom" constant="8" id="dir-Ch-fKV"/>
                                                 <constraint firstItem="Rxp-if-mvC" firstAttribute="leading" secondItem="lXz-RY-hgi" secondAttribute="leading" id="jwl-L0-1xP"/>
@@ -175,6 +183,7 @@
                                             <outlet property="img" destination="Kx2-dc-wUJ" id="zHR-XF-eDe"/>
                                             <outlet property="lbAge" destination="Rio-na-Ma1" id="yJN-ao-6Gb"/>
                                             <outlet property="lbArr" destination="Rxp-if-mvC" id="KyS-8c-Ln6"/>
+                                            <outlet property="lbDate" destination="Ptj-7A-zJa" id="UrF-sr-k3o"/>
                                             <outlet property="lbDic" destination="iDZ-oc-3oi" id="fnP-xd-uGW"/>
                                             <outlet property="lbFloatVal" destination="QBb-fK-rX6" id="ZUH-j8-38m"/>
                                             <outlet property="lbPkid" destination="Dkp-vw-P9Y" id="UXG-8h-70h"/>
