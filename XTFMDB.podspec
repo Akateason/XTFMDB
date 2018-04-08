@@ -1,4 +1,3 @@
-#
 #  Be sure to run `pod spec lint XTFMDB.podspec' to ensure this is a
 #  valid spec and to remove all comments including this before submitting the spec.
 #
@@ -16,7 +15,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "XTFMDB"
-  s.version      = "1.2.4"
+  s.version      = "1.2.5"
   s.summary      = "An FMDB based package. Rapid development framework."
 
   # This description is used to generate tags and improve search results.
