@@ -9,7 +9,6 @@
 #import "NSObject+XTFMDB.h"
 #import "XTFMDBConst.h"
 #import "XTFMDBBase.h"
-#import "XTDBModel+autoSql.h"
 #import <YYModel/YYModel.h>
 #import <objc/runtime.h>
 
@@ -18,6 +17,7 @@ static void *key_pkid = &key_pkid;
 @implementation NSObject (XTFMDB)
 
 #pragma mark --
+
 - (void)setPkid:(int)pkid
 {
     objc_setAssociatedObject(self, &key_pkid, @(pkid), OBJC_ASSOCIATION_ASSIGN) ;
@@ -51,7 +51,7 @@ static void *key_pkid = &key_pkid;
     {
         [QUEUE inDatabase:^(FMDatabase *db) {
             // create table
-            NSString *sql = [[XTDBModel class] sqlCreateTableWithClass:[self class]] ;
+            NSString *sql = [sqlUTIL sqlCreateTableWithClass:[self class]] ;
             bReturn = [db executeUpdate:sql] ;
             if (bReturn) XTFMDBLog(@"xt_db create %@ success",tableName) ;
             else XTFMDBLog(@"xt_db create %@ fail",tableName) ;
@@ -75,7 +75,7 @@ static void *key_pkid = &key_pkid;
     __block int lastRowId = 0 ;
     
     [QUEUE inDatabase:^(FMDatabase *db) {
-        BOOL bSuccess = [db executeUpdate:[[XTDBModel class] sqlInsertWithModel:self]] ;
+        BOOL bSuccess = [db executeUpdate:[sqlUTIL sqlInsertWithModel:self]] ;
         if (bSuccess)
         {
             lastRowId = (int)[db lastInsertRowId] ;
@@ -103,7 +103,7 @@ static void *key_pkid = &key_pkid;
         for (int i = 0; i < [modelList count]; i++)
         {
             id model = [modelList objectAtIndex:i] ;
-            BOOL bSuccess = [db executeUpdate:[[XTDBModel class] sqlInsertWithModel:model]] ;
+            BOOL bSuccess = [db executeUpdate:[sqlUTIL sqlInsertWithModel:model]] ;
             if (bSuccess)
             {
                 XTFMDBLog(@"xt_db transaction insert Successfrom index :%d",i) ;
@@ -142,7 +142,7 @@ static void *key_pkid = &key_pkid;
     __block BOOL bSuccess ;
     [QUEUE inDatabase:^(FMDatabase *db) {
         
-        bSuccess = [db executeUpdate:[[XTDBModel class] sqlUpdateWithModel:self]] ;
+        bSuccess = [db executeUpdate:[sqlUTIL sqlUpdateWithModel:self]] ;
         if (bSuccess)
         {
             XTFMDBLog(@"xt_db update success\n\n") ;
@@ -168,7 +168,7 @@ static void *key_pkid = &key_pkid;
         for (int i = 0; i < [modelList count]; i++)
         {
             id model = [modelList objectAtIndex:i] ;
-            BOOL bSuccess = [db executeUpdate:[[XTDBModel class] sqlUpdateWithModel:model]] ;
+            BOOL bSuccess = [db executeUpdate:[sqlUTIL sqlUpdateWithModel:model]] ;
             if (bSuccess)
             {
                 XTFMDBLog(@"xt_db transaction update Successfrom index :%d",i) ;
@@ -240,7 +240,7 @@ static void *key_pkid = &key_pkid;
         FMResultSet *rs = [db executeQuery:sql] ;
         while ([rs next])
         {
-            NSDictionary *rstDic = [XTDBModel getResultDicFromClass:[self class]
+            NSDictionary *rstDic = [sqlUTIL getResultDicFromClass:[self class]
                                                           resultSet:rs] ;
             [resultList addObject:[[self class] yy_modelWithDictionary:rstDic]] ;
         }
@@ -308,7 +308,7 @@ static void *key_pkid = &key_pkid;
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {
         
-        bSuccess = [db executeUpdate:[[XTDBModel class] sqlDeleteWithTableName:tableName where:strWhere]] ;
+        bSuccess = [db executeUpdate:[sqlUTIL sqlDeleteWithTableName:tableName where:strWhere]] ;
         if (bSuccess)
         {
             XTFMDBLog(@"xt_db delete model success\n\n") ;
@@ -330,7 +330,7 @@ static void *key_pkid = &key_pkid;
     
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {
-        bSuccess = [db executeUpdate:[[XTDBModel class] sqlDrop:tableName]] ;
+        bSuccess = [db executeUpdate:[sqlUTIL sqlDrop:tableName]] ;
         if (bSuccess)
         {
             XTFMDBLog(@"xt_db drop success\n\n") ;
@@ -356,7 +356,7 @@ static void *key_pkid = &key_pkid;
     
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {
-        bSuccess = [db executeUpdate:[[XTDBModel class] sqlAlterAdd:name
+        bSuccess = [db executeUpdate:[sqlUTIL sqlAlterAdd:name
                                                                type:type
                                                               table:tableName]] ;
         if (bSuccess) {
@@ -377,8 +377,8 @@ static void *key_pkid = &key_pkid;
     
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {
-        bSuccess = [db executeUpdate:[[XTDBModel class] sqlAlterRenameOldTable:tableName
-                                                                toNewTableName:name]] ;
+        bSuccess = [db executeUpdate:[sqlUTIL sqlAlterRenameOldTable:tableName
+                                                      toNewTableName:name]] ;
         if (bSuccess) {
             XTFMDBLog(@"xt_db alter add success\n\n") ;
         }

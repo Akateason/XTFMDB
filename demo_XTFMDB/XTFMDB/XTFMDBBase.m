@@ -9,7 +9,6 @@
 #import "XTFMDBBase.h"
 #import "XTFMDBConst.h"
 #import "XTDBVersion.h"
-#import "XTDBModel+autoSql.h"
 #import "NSObject+XTFMDB_Reflection.h"
 
 #define SQLITE_NAME( _name_ )   [name stringByAppendingString:@".sqlite"]
@@ -65,7 +64,10 @@
     
     DB = [FMDatabase databaseWithPath:finalPath] ;
     [DB open] ;
+    
     QUEUE = [FMDatabaseQueue databaseQueueWithPath:finalPath] ;
+    
+    sqlUTIL = [[XTAutoSqlUtil alloc] init] ;
     
     [XTDBVersion createTable] ;
     
@@ -120,7 +122,7 @@
     __block BOOL isError = NO ;
     [paramsAdd enumerateObjectsUsingBlock:^(NSString *key, NSUInteger idx, BOOL * _Nonnull stop) {
         NSString *iosType = [tableCls iosTypeWithPropName:key] ;
-        NSString *sqlType = [XTDBModel sqlTypeWithType:iosType] ;
+        NSString *sqlType = [sqlUTIL sqlTypeWithType:iosType] ;
         if (!iosType) {
             XTFMDBLog(@"xt_db Upgraded fail no prop in %@",tableName) ;
             isError = YES ;

@@ -8,9 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import <FMDB/FMDB.h>
+#import "XTAutoSqlUtil.h"
 
 #define QUEUE                         [XTFMDBBase sharedInstance].queue
 #define DB                            [XTFMDBBase sharedInstance].database
+#define sqlUTIL                       [XTFMDBBase sharedInstance].sqlUtil
 
 @interface XTFMDBBase : NSObject
 
@@ -19,6 +21,7 @@
 @property (nonatomic,strong,readonly) FMDatabase         *database   ;
 @property (nonatomic,strong)          FMDatabaseQueue    *queue      ;
 @property (nonatomic)                 int                version     ;
+@property (strong, nonatomic)         XTAutoSqlUtil      *sqlUtil    ;
 
 /**
  db prepare config db in - [(AppDelegate *) AppDidLaunchFinish]

@@ -1,69 +1,79 @@
 //
-//  XTDBModel+autoSql.m
-//  XTlib
+//  XTAutoSqlUtil.m
+//  demo_XTFMDB
 //
-//  Created by teason23 on 2017/5/4.
-//  Copyright © 2017年 teason. All rights reserved.
+//  Created by teason23 on 2018/4/8.
+//  Copyright © 2018年 teaason. All rights reserved.
 //
 
-#import "XTDBModel+autoSql.h"
+#import "XTAutoSqlUtil.h"
 #import "NSObject+XTFMDB_Reflection.h"
 #import "XTFMDBConst.h"
 #import "XTDBModel.h"
 #import <FMDB/FMDB.h>
 #import <UIKit/UIKit.h>
 #import "NSDate+XTFMDB_Tick.h"
+#import "XTDBModel.h"
 
-@implementation XTDBModel (autoSql)
-
-+ (NSString *)sqlCreateTableWithClass:(Class)cls
+@interface XTAutoSqlUtil ()
 {
+    Class m_orginCls ;
+}
+@end
+
+@implementation XTAutoSqlUtil
+
+- (NSString *)sqlCreateTableWithClass:(Class)cls
+{
+    m_orginCls = cls ;
     return [self getSqlUseRecursiveQuery:nil
                                    class:cls
                                     type:xt_type_create] ;
 }
 
-+ (NSString *)sqlInsertWithModel:(id)model
+- (NSString *)sqlInsertWithModel:(id)model
 {
+    m_orginCls = [model class] ;
     return [self getSqlUseRecursiveQuery:model
                                    class:nil
                                     type:xt_type_insert] ;
 }
 
-+ (NSString *)sqlUpdateWithModel:(id)model
+- (NSString *)sqlUpdateWithModel:(id)model
 {
+    m_orginCls = [model class] ;
     return [self getSqlUseRecursiveQuery:model
                                    class:nil
                                     type:xt_type_update] ;
 }
 
-+ (NSString *)sqlDeleteWithTableName:(NSString *)tableName
+- (NSString *)sqlDeleteWithTableName:(NSString *)tableName
                                where:(NSString *)strWhere
 {
     return [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@",tableName,strWhere] ;
 }
 
 
-+ (NSString *)sqlDrop:(NSString *)tableName
+- (NSString *)sqlDrop:(NSString *)tableName
 {
     return [NSString stringWithFormat:@"DROP TABLE %@",tableName] ;
 }
 
-+ (NSString *)sqlAlterAdd:(NSString *)name
+- (NSString *)sqlAlterAdd:(NSString *)name
                      type:(NSString *)type
                     table:(NSString *)tableName
 {
     return [NSString stringWithFormat:@"ALTER TABLE %@ ADD %@ %@",tableName,name,type] ;
 }
 
-+ (NSString *)sqlAlterRenameOldTable:(NSString *)oldTableName
+- (NSString *)sqlAlterRenameOldTable:(NSString *)oldTableName
                       toNewTableName:(NSString *)newTableName
 {
     return [NSString stringWithFormat:@"ALTER TABLE %@ RENAME TO %@;",oldTableName,newTableName] ;
 }
 
 
-#pragma mark -- 
+#pragma mark --
 #pragma mark - private
 
 typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
@@ -72,7 +82,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     xt_type_update ,
 } ;
 
-+ (NSString *)appendCreate:(Class)cls {
+- (NSString *)appendCreate:(Class)cls {
     NSMutableString *strProperties = [@"" mutableCopy] ;
     NSArray *propInfoList = [cls propertiesInfo] ;
     for (int i = 0; i < propInfoList.count; i++) {
@@ -89,13 +99,13 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
         }
         else {
             // ignore prop
-            if ([self propIsIgnore:name class:cls]) continue ;
+            if ([self propIsIgnore:name]) continue ;
             // default prop
             strTmp = [NSString stringWithFormat:@"%@ %@ NOT NULL %@ %@,",
                       name,
                       sqlType,
                       [self defaultValWithSqlType:sqlType],
-                      [self keywordsWithName:name class:cls]
+                      [self keywordsWithName:name]
                       ] ;
             [strProperties appendString:strTmp] ;
         }
@@ -103,7 +113,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     return strProperties ;
 }
 
-+ (NSDictionary *)appendInsert:(Class)cls
+- (NSDictionary *)appendInsert:(Class)cls
                          model:(id)model
                       dicModel:(NSDictionary *)dicModel
 {
@@ -116,7 +126,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
         // dont insert primary key
         if ([name containsString:kPkid]) continue ;
         // ignore prop
-        if ([self propIsIgnore:name class:[model class]]) continue ;
+        if ([self propIsIgnore:name]) continue ;
         // ignore nil prop
         if ([self propIsNilOrNull:dicModel[name]]) continue ;
         
@@ -131,7 +141,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
              } ;
 }
 
-+ (NSString *)appendUpdate:(Class)cls
+- (NSString *)appendUpdate:(Class)cls
                      model:(id)model
                   dicModel:(NSDictionary *)dicModel
 {
@@ -144,7 +154,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
         // dont update primary key
         if ([name containsString:kPkid]) continue ;
         // ignore prop
-        if ([self propIsIgnore:name class:[model class]]) continue ;
+        if ([self propIsIgnore:name]) continue ;
         // ignore nil prop
         if ([self propIsNilOrNull:dicModel[name]]) continue ;
         
@@ -155,11 +165,11 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     return setsStr ;
 }
 
-+ (BOOL)propIsNilOrNull:(id)val {
+- (BOOL)propIsNilOrNull:(id)val {
     return !val || [val isKindOfClass:[NSNull class]] || ([val isKindOfClass:[NSString class]] && [val isEqualToString:@"<null>"]) ;
 }
 
-+ (NSString *)getSqlUseRecursiveQuery:(id)model
+- (NSString *)getSqlUseRecursiveQuery:(id)model
                                 class:(Class)class
                                  type:(TypeOfAutoSql)type
 {
@@ -233,7 +243,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     }
 }
 
-+ (NSString *)sqlTypeWithType:(NSString *)strType
+- (NSString *)sqlTypeWithType:(NSString *)strType
 {
     if ([strType containsString:@"int"] || [strType containsString:@"Integer"]) {
         return @"INTEGER" ;
@@ -272,35 +282,33 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     return nil ;
 }
 
-+ (NSString *)defaultValWithSqlType:(NSString *)sqlType
+- (NSString *)defaultValWithSqlType:(NSString *)sqlType
 {
     if ([sqlType containsString:@"TEXT"] || [sqlType containsString:@"char"]) {
         return @" DEFAULT ''" ;
-    }    
+    }
     else return @" DEFAULT '0'" ;
 }
 
-+ (NSString *)keywordsWithName:(NSString *)name
-                         class:(Class)cls
+- (NSString *)keywordsWithName:(NSString *)name
 {
-    id dic = [cls modelPropertiesSqliteKeywords] ;
+    id dic = [m_orginCls modelPropertiesSqliteKeywords] ;
     if ( !dic || !dic[name] ) return @"" ;
     return dic[name] ;
 }
 
-+ (BOOL)propIsIgnore:(NSString *)name
-               class:(Class)cls
+- (BOOL)propIsIgnore:(NSString *)name
 {
-    id list = [[self defaultIgnoreProps] arrayByAddingObjectsFromArray:[cls ignoreProperties]] ;
+    id list = [[self defaultIgnoreProps] arrayByAddingObjectsFromArray:[m_orginCls ignoreProperties]] ;
     if (!list) return FALSE ;
     return [list containsObject:name] ;
 }
 
-+ (NSMutableArray *)defaultIgnoreProps {
+- (NSMutableArray *)defaultIgnoreProps {
     return [@[@"hash",@"superclass",@"description",@"debugDescription"] mutableCopy] ;
 }
 
-+ (NSDictionary *)changeSpecifiedValToUTF8StringVal:(NSDictionary *)dic {
+- (NSDictionary *)changeSpecifiedValToUTF8StringVal:(NSDictionary *)dic {
     NSMutableDictionary *tmpDic = [dic mutableCopy] ;
     for (NSString *key in dic) {
         id val = dic[key] ;
@@ -331,11 +339,11 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     return tmpDic ;
 }
 
-+ (NSString *)encodingB64String:(NSData *)data {
+- (NSString *)encodingB64String:(NSData *)data {
     return [data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength] ;
 }
 
-+ (NSDictionary *)getResultDicFromClass:(Class)cls resultSet:(FMResultSet *)resultSet {
+- (NSDictionary *)getResultDicFromClass:(Class)cls resultSet:(FMResultSet *)resultSet {
     NSMutableDictionary *tmpDic = [[resultSet resultDictionary] mutableCopy] ;
     if (!tmpDic) return nil ;
     
