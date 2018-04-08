@@ -390,17 +390,22 @@ static void *key_pkid = &key_pkid;
 }
 
 #pragma mark --
-#pragma mark -
-// rewrite in subClass if Needed .
+#pragma mark - rewrite in subClass if Needed .
+
 // set constraints of properties
 + (NSDictionary *)modelPropertiesSqliteKeywords
 {
     return nil ;
 }
 
-// rewrite in subClass if Needed .
 // ignore Properties
 + (NSArray *)ignoreProperties
+{
+    return nil ;
+}
+
+// Container property , value should be Class or Class name. Same as yymodel .
++ (NSDictionary *)modelContainerPropertyGenericClass
 {
     return nil ;
 }

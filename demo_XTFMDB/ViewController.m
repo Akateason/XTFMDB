@@ -17,6 +17,8 @@
 #import "DisplayViewController.h"
 #import "XTFMDB.h"
 #import "MainVCell.h"
+#import "SomeInfo.h"
+#import "AccessObj.h"
 
 @interface ViewController () <UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *table;
@@ -150,11 +152,28 @@
         m1.tick = 666666666666 ;
         m1.title = [NSString stringWithFormat:@"atitle%d",arc4random()%999] ;
         m1.image = [UIImage imageNamed:@"kobe"] ;
-        m1.myArr = @[@"2342423423432",@"asfads",@"ddxxxxzzz",@33] ;
-        m1.myDic = @{@"k1":@"dafafadf",
-                     @"k2":@44,
-                     @"k3":@"klkkdlslll"} ;
+        
+        NSMutableArray *tmplist = [@[] mutableCopy] ;
+        for (int i = 0; i<4; i++) {
+            SomeInfo *info = [SomeInfo new] ;
+            info.infoID = i+330 ;
+            info.infoStr = @"fffff3333" ;
+            [tmplist addObject:info] ;
+        }
+        m1.myArr = tmplist;
+        
+        AccessObj *access = [AccessObj new] ;
+        access.accessStr = @"acce333" ;
+        m1.myDic = @{@"k1":access,
+                     @"k2":access,
+                     @"k3":access} ;
+        
         m1.today = [NSDate date] ;
+        
+        SomeInfo *info = [SomeInfo new] ;
+        info.infoStr = @"test.dddddr" ;
+        info.infoID = 884 ;
+        m1.sInfo = info ;
         
         [m1 xt_insert] ;
     }

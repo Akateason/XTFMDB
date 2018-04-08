@@ -14,6 +14,10 @@
 #import <UIKit/UIKit.h>
 #import "NSDate+XTFMDB_Tick.h"
 #import "XTDBModel.h"
+#import <YYModel/YYModel.h>
+#import <objc/runtime.h>
+#import <objc/message.h>
+#import "SomeInfo.h"
 
 @interface XTAutoSqlUtil ()
 {
@@ -279,7 +283,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
         return @"BIGINT" ;
     }
     XTFMDBLog(@"xt_db no type to transform !!") ;
-    return nil ;
+    return @"TEXT" ; // custom Cls or default
 }
 
 - (NSString *)defaultValWithSqlType:(NSString *)sqlType
@@ -312,18 +316,21 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     NSMutableDictionary *tmpDic = [dic mutableCopy] ;
     for (NSString *key in dic) {
         id val = dic[key] ;
-        if ([val isKindOfClass:[NSData class]]) {
+        if ([val isKindOfClass:[NSNull class]] || !val) {
+            continue ;
+        }
+        else if ([val isKindOfClass:[NSData class]]) {
             [tmpDic setObject:[self encodingB64String:val]
                        forKey:key] ;
         }
         else if ([val isKindOfClass:[NSArray class]]) {
-            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:(NSArray *)val] ;
-            [tmpDic setObject:[self encodingB64String:data]
+            NSString *json = [val yy_modelToJSONString] ;
+            [tmpDic setObject:json
                        forKey:key] ;
         }
         else if ([val isKindOfClass:[NSDictionary class]]) {
-            NSData *data = [NSKeyedArchiver archivedDataWithRootObject:(NSDictionary *)val] ;
-            [tmpDic setObject:[self encodingB64String:data]
+            NSString *json = [val yy_modelToJSONString] ;
+            [tmpDic setObject:json
                        forKey:key] ;
         }
         else if ([val isKindOfClass:[UIImage class]]) {
@@ -335,8 +342,47 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
             [tmpDic setObject:@( [(NSDate *)val xt_getTick] )
                        forKey:key] ;
         }
+        else if ([self isAbnormalType:val]) { // custom Cls
+            [tmpDic setObject:[val yy_modelToJSONString]
+                       forKey:key] ;
+        }
     }
     return tmpDic ;
+}
+
+- (BOOL)isAbnormalType:(id)val {
+    if (
+        [val isKindOfClass:[NSNumber class]] ||
+        [val isKindOfClass:[NSString class]] ||
+        [val isKindOfClass:[NSData class]] ||
+        [val isKindOfClass:[NSArray class]] ||
+        [val isKindOfClass:[NSDictionary class]] ||
+        [val isKindOfClass:[NSSet class]] ||
+        [val isKindOfClass:[UIImage class]] ||
+        [val isKindOfClass:[NSDate class]]
+        ) {
+        return NO ;
+    }
+    return YES ;
+}
+
+- (BOOL)isAbnormalTypeString:(NSString *)strType {
+    if (
+        [strType containsString:@"int"] || [strType containsString:@"Integer"] ||
+        [strType containsString:@"float"] || [strType containsString:@"double"] ||
+        [strType containsString:@"long"] ||
+        [strType containsString:@"NSString"] || [strType containsString:@"char"] ||
+        [strType containsString:@"NSData"] ||
+        [strType containsString:@"BOOL"] || [strType containsString:@"bool"] ||
+        [strType containsString:@"NSArray"] ||
+        [strType containsString:@"NSDictionary"] ||
+        [strType containsString:@"NSSet"] ||
+        [strType containsString:@"UIImage"] ||
+        [strType containsString:@"NSDate"]
+        ) {
+        return NO ;
+    }
+    return YES ;
 }
 
 - (NSString *)encodingB64String:(NSData *)data {
@@ -361,15 +407,13 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                        forKey:name] ;
         }
         else if ([type containsString:@"NSArray"]) {
-            NSData *tmpData = [[NSData alloc] initWithBase64EncodedString:valFromFMDB   options:NSDataBase64DecodingIgnoreUnknownCharacters] ;
-            NSArray *resultArr = [NSKeyedUnarchiver unarchiveObjectWithData:tmpData] ;
+            NSArray *resultArr = [NSArray yy_modelArrayWithClass:cls json:valFromFMDB] ;
             if (!resultArr) continue ;
             [tmpDic setObject:resultArr
                        forKey:name] ;
         }
         else if ([type containsString:@"NSDictionary"]) {
-            NSData *tmpData = [[NSData alloc] initWithBase64EncodedString:valFromFMDB   options:NSDataBase64DecodingIgnoreUnknownCharacters] ;
-            NSDictionary *resultDic = [NSKeyedUnarchiver unarchiveObjectWithData:tmpData] ;
+            NSDictionary *resultDic = [NSDictionary yy_modelDictionaryWithClass:cls json:valFromFMDB] ;
             if (!resultDic) continue ;
             [tmpDic setObject:resultDic
                        forKey:name] ;
@@ -386,6 +430,13 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
             NSDate *tmpDate = [NSDate xt_getDateWithTick:tmpTick] ;
             if (!tmpDate) continue ;
             [tmpDic setObject:tmpDate
+                       forKey:name] ;
+        }
+        else if ([self isAbnormalTypeString:type]) { // custom cls
+            Class cls = NSClassFromString([type substringToIndex:type.length - 1]) ;
+            SEL testFunc = NSSelectorFromString(@"yy_modelWithJSON:");
+            id obj = ((id(*)(id,SEL,id))objc_msgSend)(cls, testFunc, valFromFMDB) ;
+            [tmpDic setObject:obj
                        forKey:name] ;
         }
     }

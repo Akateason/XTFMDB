@@ -11,6 +11,8 @@
 #import "CustomDBModel.h"
 #import "AnyModel.h"
 #import "NSDate+XTFMDB_Tick.h"
+#import <YYModel/YYModel.h>
+#import "SomeInfo.h"
 
 @interface DisplayCell ()
 @property (weak, nonatomic) IBOutlet UILabel *lbPkid;
@@ -21,6 +23,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *lbArr;
 @property (weak, nonatomic) IBOutlet UILabel *lbDic;
 @property (weak, nonatomic) IBOutlet UILabel *lbDate;
+@property (weak, nonatomic) IBOutlet UILabel *lbObj;
 
 @end
 
@@ -50,7 +53,8 @@
         self.img.image = m1.image ;
         self.lbArr.text = [NSString stringWithFormat:@"%@",m1.myArr] ;
         self.lbDic.text = [NSString stringWithFormat:@"%@",m1.myDic] ;
-        self.lbDate.text = @([m1.today xt_getTick]).stringValue ;
+        self.lbDate.text = [NSDate xt_getStrWithTick:[m1.today xt_getTick]] ;
+        self.lbObj.text = [m1.sInfo yy_modelToJSONString] ;
     }
     
 }
