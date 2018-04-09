@@ -13,6 +13,7 @@
 		8F108F52203E718400217B87 /* NSDate+XTFMDB_Tick.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F108F51203E718400217B87 /* NSDate+XTFMDB_Tick.m */; };
 		8F108F58203E943100217B87 /* NSObject+XTFMDB_Reflection.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F108F57203E943100217B87 /* NSObject+XTFMDB_Reflection.m */; };
 		8F2BFFCD204016C90013394D /* MainVCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F2BFFCC204016C90013394D /* MainVCell.m */; };
+		8F664CDB207B6E41006BC485 /* Father.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F664CDA207B6E41006BC485 /* Father.m */; };
 		8F9357B3207A146D003F5522 /* SomeInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9357B2207A146D003F5522 /* SomeInfo.m */; };
 		8F9357B7207A15C6003F5522 /* AccessObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9357B6207A15C6003F5522 /* AccessObj.m */; };
 		8F9357BD207B04C2003F5522 /* XTAutoSqlUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9357BC207B04C2003F5522 /* XTAutoSqlUtil.m */; };
@@ -47,6 +48,8 @@
 		8F16B9AE1F25EE750049CEE1 /* XTFMDBConst.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = XTFMDBConst.h; path = XTFMDB/XTFMDBConst.h; sourceTree = "<group>"; };
 		8F2BFFCB204016C90013394D /* MainVCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainVCell.h; sourceTree = "<group>"; };
 		8F2BFFCC204016C90013394D /* MainVCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainVCell.m; sourceTree = "<group>"; };
+		8F664CD9207B6E41006BC485 /* Father.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Father.h; sourceTree = "<group>"; };
+		8F664CDA207B6E41006BC485 /* Father.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Father.m; sourceTree = "<group>"; };
 		8F9357B1207A146D003F5522 /* SomeInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SomeInfo.h; sourceTree = "<group>"; };
 		8F9357B2207A146D003F5522 /* SomeInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SomeInfo.m; sourceTree = "<group>"; };
 		8F9357B5207A15C6003F5522 /* AccessObj.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AccessObj.h; sourceTree = "<group>"; };
@@ -107,6 +110,8 @@
 				8F9357B2207A146D003F5522 /* SomeInfo.m */,
 				8F9357B5207A15C6003F5522 /* AccessObj.h */,
 				8F9357B6207A15C6003F5522 /* AccessObj.m */,
+				8F664CD9207B6E41006BC485 /* Father.h */,
+				8F664CDA207B6E41006BC485 /* Father.m */,
 			);
 			name = subCls;
 			sourceTree = "<group>";
@@ -343,6 +348,7 @@
 				8F0C1EE41F8B7184009359AC /* AnyModel.m in Sources */,
 				8F108F58203E943100217B87 /* NSObject+XTFMDB_Reflection.m in Sources */,
 				8F9357B3207A146D003F5522 /* SomeInfo.m in Sources */,
+				8F664CDB207B6E41006BC485 /* Father.m in Sources */,
 				8F0C1EE11F8B7159009359AC /* CustomDBModel.m in Sources */,
 				8FFD738F1EBB1C2C00148B83 /* main.m in Sources */,
 				7DBF8FCF2023080A0030C3D5 /* XTDBVersion.m in Sources */,

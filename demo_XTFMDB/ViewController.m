@@ -121,11 +121,11 @@
 - (void)selectWhereAction
 {
     if (!self.dBModelOrCustom) {
-        NSArray *list = [CustomDBModel selectWhere:@"title = 'jk4j3j43' "] ;
+        NSArray *list = [CustomDBModel selectWhere:@"age > 10 "] ;
         NSLog(@"list : %@ \ncount:%@",list,@(list.count)) ;
     }
     else {
-        NSArray *list = [AnyModel xt_selectWhere:@"title = 'jk4j3j43' "] ;
+        NSArray *list = [AnyModel xt_selectWhere:@"age > 10 "] ;
         NSLog(@"list : %@ \ncount:%@",list,@(list.count)) ;
     }
 }
@@ -174,6 +174,10 @@
         info.infoStr = @"test.dddddr" ;
         info.infoID = 884 ;
         m1.sInfo = info ;
+        
+        // super cls
+        m1.fatherName = @"wo shi ni die" ;
+        m1.fatherList = @[info] ;
         
         [m1 xt_insert] ;
     }

@@ -11,8 +11,9 @@
 //@class SomeInfo,AccessObj ;
 #import "SomeInfo.h"
 #import "AccessObj.h"
+#import "Father.h"
 
-@interface AnyModel : NSObject
+@interface AnyModel : Father
 
 @property (nonatomic)           int             pkid        ;
 

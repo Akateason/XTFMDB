@@ -394,55 +394,67 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     NSMutableDictionary *tmpDic = [[resultSet resultDictionary] mutableCopy] ;
     if (!tmpDic) return nil ;
     
-    NSArray *propInfoList = [cls propertiesInfo] ;
-    for (int i = 0; i < propInfoList.count; i++) {
-        NSDictionary *dic   = propInfoList[i] ;
-        NSString *name      = dic[@"name"] ;
-        NSString *type      = dic[@"type"] ;
-        NSString *valFromFMDB = tmpDic[name] ;
-        if (!valFromFMDB || [valFromFMDB isKindOfClass:[NSNull class]]) continue ;
+    while ( 1 ) {
+        NSArray *propInfoList = [cls propertiesInfo] ;
+        for (int i = 0; i < propInfoList.count; i++) {
+            NSDictionary *dic   = propInfoList[i] ;
+            NSString *name      = dic[@"name"] ;
+            NSString *type      = dic[@"type"] ;
+            NSString *valFromFMDB = tmpDic[name] ;
+            if (!valFromFMDB || [valFromFMDB isKindOfClass:[NSNull class]]) continue ;
+            if ([valFromFMDB isKindOfClass:[NSString class]] && !valFromFMDB.length) continue ;
+                            
+            
+            if ([type containsString:@"NSData"]) {
+                NSData *tmpData = [[NSData alloc] initWithBase64EncodedString:valFromFMDB options:NSDataBase64DecodingIgnoreUnknownCharacters] ;
+                [tmpDic setObject:tmpData
+                           forKey:name] ;
+            }
+            else if ([type containsString:@"NSArray"]) {
+                Class containerCls = [m_orginCls modelContainerPropertyGenericClass][name] ;
+                NSArray *resultArr = [NSArray yy_modelArrayWithClass:containerCls json:valFromFMDB] ;
+                if (!resultArr) continue ;
+                [tmpDic setObject:resultArr
+                           forKey:name] ;
+            }
+            else if ([type containsString:@"NSDictionary"]) {
+                Class containerCls = [m_orginCls modelContainerPropertyGenericClass][name] ;
+                NSDictionary *resultDic = [NSDictionary yy_modelDictionaryWithClass:containerCls json:valFromFMDB] ;
+                if (!resultDic) continue ;
+                [tmpDic setObject:resultDic
+                           forKey:name] ;
+            }
+            else if ([type containsString:@"UIImage"]) {
+                NSData *tmpData = [[NSData alloc] initWithBase64EncodedString:valFromFMDB options:NSDataBase64DecodingIgnoreUnknownCharacters] ;
+                UIImage *image = [UIImage imageWithData:tmpData] ;
+                if (!image) continue ;
+                [tmpDic setObject:image
+                           forKey:name] ;
+            }
+            else if ([type containsString:@"NSDate"]) {
+                long long tmpTick = [valFromFMDB longLongValue] ;
+                NSDate *tmpDate = [NSDate xt_getDateWithTick:tmpTick] ;
+                if (!tmpDate) continue ;
+                [tmpDic setObject:tmpDate
+                           forKey:name] ;
+            }
+            else if ([self isAbnormalTypeString:type]) { // custom cls
+                Class cls = NSClassFromString([type substringToIndex:type.length - 1]) ;
+                SEL testFunc = NSSelectorFromString(@"yy_modelWithJSON:");
+                id obj = ((id(*)(id,SEL,id))objc_msgSend)(cls, testFunc, valFromFMDB) ;
+                [tmpDic setObject:obj
+                           forKey:name] ;
+            }
+        }
         
-        if ([type containsString:@"NSData"]) {
-            NSData *tmpData = [[NSData alloc] initWithBase64EncodedString:valFromFMDB options:NSDataBase64DecodingIgnoreUnknownCharacters] ;
-            [tmpDic setObject:tmpData
-                       forKey:name] ;
+        
+        if ([cls isEqual:[XTDBModel class]] || [cls.superclass isEqual:[NSObject class]]) {
+            break ;
         }
-        else if ([type containsString:@"NSArray"]) {
-            Class containerCls = [m_orginCls modelContainerPropertyGenericClass][name] ;
-            NSArray *resultArr = [NSArray yy_modelArrayWithClass:containerCls json:valFromFMDB] ;
-            if (!resultArr) continue ;
-            [tmpDic setObject:resultArr
-                       forKey:name] ;
-        }
-        else if ([type containsString:@"NSDictionary"]) {
-            Class containerCls = [m_orginCls modelContainerPropertyGenericClass][name] ;
-            NSDictionary *resultDic = [NSDictionary yy_modelDictionaryWithClass:containerCls json:valFromFMDB] ;
-            if (!resultDic) continue ;
-            [tmpDic setObject:resultDic
-                       forKey:name] ;
-        }
-        else if ([type containsString:@"UIImage"]) {
-            NSData *tmpData = [[NSData alloc] initWithBase64EncodedString:valFromFMDB options:NSDataBase64DecodingIgnoreUnknownCharacters] ;
-            UIImage *image = [UIImage imageWithData:tmpData] ;
-            if (!image) continue ;
-            [tmpDic setObject:image
-                       forKey:name] ;
-        }
-        else if ([type containsString:@"NSDate"]) {
-            long long tmpTick = [valFromFMDB longLongValue] ;
-            NSDate *tmpDate = [NSDate xt_getDateWithTick:tmpTick] ;
-            if (!tmpDate) continue ;
-            [tmpDic setObject:tmpDate
-                       forKey:name] ;
-        }
-        else if ([self isAbnormalTypeString:type]) { // custom cls
-            Class cls = NSClassFromString([type substringToIndex:type.length - 1]) ;
-            SEL testFunc = NSSelectorFromString(@"yy_modelWithJSON:");
-            id obj = ((id(*)(id,SEL,id))objc_msgSend)(cls, testFunc, valFromFMDB) ;
-            [tmpDic setObject:obj
-                       forKey:name] ;
-        }
+        // NEXT LOOP IF NEEDED .
+        cls = [cls superclass] ;
     }
+    
     return tmpDic ;
 }
 

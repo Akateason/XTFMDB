@@ -14,7 +14,8 @@
 + (NSDictionary *)modelContainerPropertyGenericClass {
     return @{
                 @"myArr" : [SomeInfo class]    ,
-                @"myDic" : [AccessObj class]
+                @"myDic" : [AccessObj class]   ,
+                @"fatherList" : [SomeInfo class] ,
              } ;
 }
 
