@@ -96,8 +96,13 @@
 
 - (BOOL)isTableExist:(NSString *)tableName
 {
-    BOOL bExist = [DB tableExists:tableName] ;
-    if (!bExist) XTFMDBLog(@"xt_db table not created") ;
+    __block BOOL bExist ;
+    [QUEUE inDatabase:^(FMDatabase *db) {
+        bExist = [db tableExists:tableName] ;
+        if (!bExist) {
+            XTFMDBLog(@"xt_db %@ table not created",tableName) ;
+        }
+    }] ;
     return bExist ;
 }
 
