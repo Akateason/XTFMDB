@@ -20,7 +20,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "demo_XTFMDB/XTFMDB/XTAutoSqlUtil.m"
-            timestampString = "544961656.365509"
+            timestampString = "544962904.295387"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "329"
@@ -36,7 +36,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "demo_XTFMDB/XTFMDB/XTAutoSqlUtil.m"
-            timestampString = "544961656.365993"
+            timestampString = "544962904.295766"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "334"
@@ -84,23 +84,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "demo_XTFMDB/XTFMDB/XTAutoSqlUtil.m"
-            timestampString = "544961656.3664269"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "399"
-            endingLineNumber = "399"
-            landmarkName = "-getResultDicFromClass:resultSet:"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "demo_XTFMDB/XTFMDB/XTAutoSqlUtil.m"
-            timestampString = "544961656.366681"
+            timestampString = "544962904.29607"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "451"

@@ -223,7 +223,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                 case xt_type_insert: {
                     strProperties = [[strProperties substringToIndex:strProperties.length - 1] mutableCopy] ;
                     strQuestions = [[strQuestions substringToIndex:strQuestions.length - 1] mutableCopy] ;
-                    NSString *strResult = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@ ( %@ ) VALUES ( %@ )",tableName,strProperties,strQuestions] ;
+                    NSString *strResult = [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@ ( %@ ) VALUES ( %@ )",tableName,strProperties,strQuestions] ;
                     XTFMDBLog(@"xt_db sql insert : \n%@\n\n",strResult) ;
                     return strResult ;
                 }
