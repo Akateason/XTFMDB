@@ -391,6 +391,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
 }
 
 - (NSDictionary *)getResultDicFromClass:(Class)cls resultSet:(FMResultSet *)resultSet {
+    m_orginCls = cls ;
     NSMutableDictionary *tmpDic = [[resultSet resultDictionary] mutableCopy] ;
     if (!tmpDic) return nil ;
     
