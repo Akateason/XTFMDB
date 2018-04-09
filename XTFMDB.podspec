@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "XTFMDB"
-  s.version      = "1.2.6"
+  s.version      = "1.2.7"
   s.summary      = "An FMDB based package. Rapid development framework."
 
   # This description is used to generate tags and improve search results.
