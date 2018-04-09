@@ -92,5 +92,7 @@ static NSString *const kPkid = @"pkid" ;
 + (NSDictionary *)modelPropertiesSqliteKeywords ; // set Constraints of property
 // ignore Properties
 + (NSArray *)ignoreProperties ;
+// Container property , value should be Class or Class name. Same as YYmodel .
++ (NSDictionary *)modelContainerPropertyGenericClass ;
 
 @end

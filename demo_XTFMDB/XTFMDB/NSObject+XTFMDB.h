@@ -14,12 +14,13 @@
 //6. 批量操作支持实务. 支持操作失败事务回滚. 且线程安全
 //7. 支持 每个字段自定义设置关键字. 已经集成默认关键字, 以下情况无需再写( NOT NULL, DEFAULT''字符类型默认值,DEFAULT'0'数字类型默认值 )
 //8. 可指定哪些字段不参与建表.
-//9. 支持各容器类存储. NSArray, NSDictionary
-//10. 支持NSData类型
-//11. 支持图片存储
-//12. XTDBModel支持默认字段, createTime, updateTime, isDel
-//13. 一行代码完成数据库升级.
-//14. 常规运算, 求和,最值等
+//9. 支持各容器类存储. NSArray<Obj *>, NSDictionary
+//10. 支持NSData,UIImage,NSDate
+//11. 支持自定义类作为属性
+//12. 支持图片存储
+//13. XTDBModel支持默认字段, createTime, updateTime, isDel
+//14. 一行代码完成数据库升级.
+//15. 常规运算, 求和,最值等
 
 
 #import <Foundation/Foundation.h>
@@ -80,5 +81,7 @@
 + (NSDictionary *)modelPropertiesSqliteKeywords ; // set Constraints of property
 //ignore Properties
 + (NSArray *)ignoreProperties ;
+// Container property , value should be Class or Class name. Same as YYmodel .
++ (NSDictionary *)modelContainerPropertyGenericClass ;
 
 @end

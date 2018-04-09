@@ -15,7 +15,7 @@
 		8F2BFFCD204016C90013394D /* MainVCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F2BFFCC204016C90013394D /* MainVCell.m */; };
 		8F9357B3207A146D003F5522 /* SomeInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9357B2207A146D003F5522 /* SomeInfo.m */; };
 		8F9357B7207A15C6003F5522 /* AccessObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9357B6207A15C6003F5522 /* AccessObj.m */; };
-		8F9357BA207A168A003F5522 /* XTAutoSqlUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9357B9207A168A003F5522 /* XTAutoSqlUtil.m */; };
+		8F9357BD207B04C2003F5522 /* XTAutoSqlUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9357BC207B04C2003F5522 /* XTAutoSqlUtil.m */; };
 		8FFD738F1EBB1C2C00148B83 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FFD738E1EBB1C2C00148B83 /* main.m */; };
 		8FFD73921EBB1C2C00148B83 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FFD73911EBB1C2C00148B83 /* AppDelegate.m */; };
 		8FFD73951EBB1C2C00148B83 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FFD73941EBB1C2C00148B83 /* ViewController.m */; };
@@ -51,8 +51,8 @@
 		8F9357B2207A146D003F5522 /* SomeInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SomeInfo.m; sourceTree = "<group>"; };
 		8F9357B5207A15C6003F5522 /* AccessObj.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AccessObj.h; sourceTree = "<group>"; };
 		8F9357B6207A15C6003F5522 /* AccessObj.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AccessObj.m; sourceTree = "<group>"; };
-		8F9357B8207A168A003F5522 /* XTAutoSqlUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XTAutoSqlUtil.h; sourceTree = "<group>"; };
-		8F9357B9207A168A003F5522 /* XTAutoSqlUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XTAutoSqlUtil.m; sourceTree = "<group>"; };
+		8F9357BB207B04C2003F5522 /* XTAutoSqlUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XTAutoSqlUtil.h; path = XTFMDB/XTAutoSqlUtil.h; sourceTree = "<group>"; };
+		8F9357BC207B04C2003F5522 /* XTAutoSqlUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XTAutoSqlUtil.m; path = XTFMDB/XTAutoSqlUtil.m; sourceTree = "<group>"; };
 		8FFD738A1EBB1C2C00148B83 /* demo_XTFMDB.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = demo_XTFMDB.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8FFD738E1EBB1C2C00148B83 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		8FFD73901EBB1C2C00148B83 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -164,6 +164,8 @@
 		8FFD73A91EBB1D8500148B83 /* XTFMDB */ = {
 			isa = PBXGroup;
 			children = (
+				8F9357BB207B04C2003F5522 /* XTAutoSqlUtil.h */,
+				8F9357BC207B04C2003F5522 /* XTAutoSqlUtil.m */,
 				8F108F56203E943100217B87 /* NSObject+XTFMDB_Reflection.h */,
 				8F108F57203E943100217B87 /* NSObject+XTFMDB_Reflection.m */,
 				7DBF8FCD202308080030C3D5 /* XTDBVersion.h */,
@@ -174,8 +176,6 @@
 				8FFD74001EC0479C00148B83 /* XTFMDB.h */,
 				8FFD73AA1EBB1D8F00148B83 /* XTDBModel.h */,
 				8FFD73AB1EBB1D8F00148B83 /* XTDBModel.m */,
-				8F9357B8207A168A003F5522 /* XTAutoSqlUtil.h */,
-				8F9357B9207A168A003F5522 /* XTAutoSqlUtil.m */,
 				8FFD73FD1EC0464D00148B83 /* XTFMDBBase.h */,
 				8FFD73FE1EC0464D00148B83 /* XTFMDBBase.m */,
 				8FFD73FA1EC0397000148B83 /* NSObject+XTFMDB.h */,
@@ -339,9 +339,9 @@
 				8FFD73951EBB1C2C00148B83 /* ViewController.m in Sources */,
 				8F2BFFCD204016C90013394D /* MainVCell.m in Sources */,
 				8FFD73921EBB1C2C00148B83 /* AppDelegate.m in Sources */,
+				8F9357BD207B04C2003F5522 /* XTAutoSqlUtil.m in Sources */,
 				8F0C1EE41F8B7184009359AC /* AnyModel.m in Sources */,
 				8F108F58203E943100217B87 /* NSObject+XTFMDB_Reflection.m in Sources */,
-				8F9357BA207A168A003F5522 /* XTAutoSqlUtil.m in Sources */,
 				8F9357B3207A146D003F5522 /* SomeInfo.m in Sources */,
 				8F0C1EE11F8B7159009359AC /* CustomDBModel.m in Sources */,
 				8FFD738F1EBB1C2C00148B83 /* main.m in Sources */,

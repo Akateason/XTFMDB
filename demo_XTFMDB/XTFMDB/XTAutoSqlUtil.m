@@ -17,7 +17,6 @@
 #import <YYModel/YYModel.h>
 #import <objc/runtime.h>
 #import <objc/message.h>
-#import "SomeInfo.h"
 
 @interface XTAutoSqlUtil ()
 {
@@ -181,7 +180,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     NSString *tableName = NSStringFromClass(cls) ;
     NSMutableString *strProperties = [@"" mutableCopy] ;
     NSMutableString *strQuestions  = [@"" mutableCopy] ;
-    NSDictionary *dicModel = [self changeSpecifiedValToUTF8StringVal:[model propertyDictionary]] ;
+    NSDictionary *dicModel = [self changeSpecifiedValToUTF8StringVal:model] ;
     
     // Recursive Query
     while ( 1 ) {
@@ -312,7 +311,9 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     return [@[@"hash",@"superclass",@"description",@"debugDescription"] mutableCopy] ;
 }
 
-- (NSDictionary *)changeSpecifiedValToUTF8StringVal:(NSDictionary *)dic {
+- (NSDictionary *)changeSpecifiedValToUTF8StringVal:(id)model {
+    NSDictionary *dic = [model propertyDictionary] ; // propModel
+    
     NSMutableDictionary *tmpDic = [dic mutableCopy] ;
     for (NSString *key in dic) {
         id val = dic[key] ;
@@ -402,24 +403,26 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
         if (!valFromFMDB || [valFromFMDB isKindOfClass:[NSNull class]]) continue ;
         
         if ([type containsString:@"NSData"]) {
-            NSData *tmpData = [[NSData alloc] initWithBase64EncodedString:valFromFMDB   options:NSDataBase64DecodingIgnoreUnknownCharacters] ;
+            NSData *tmpData = [[NSData alloc] initWithBase64EncodedString:valFromFMDB options:NSDataBase64DecodingIgnoreUnknownCharacters] ;
             [tmpDic setObject:tmpData
                        forKey:name] ;
         }
         else if ([type containsString:@"NSArray"]) {
-            NSArray *resultArr = [NSArray yy_modelArrayWithClass:cls json:valFromFMDB] ;
+            Class containerCls = [m_orginCls modelContainerPropertyGenericClass][name] ;
+            NSArray *resultArr = [NSArray yy_modelArrayWithClass:containerCls json:valFromFMDB] ;
             if (!resultArr) continue ;
             [tmpDic setObject:resultArr
                        forKey:name] ;
         }
         else if ([type containsString:@"NSDictionary"]) {
-            NSDictionary *resultDic = [NSDictionary yy_modelDictionaryWithClass:cls json:valFromFMDB] ;
+            Class containerCls = [m_orginCls modelContainerPropertyGenericClass][name] ;
+            NSDictionary *resultDic = [NSDictionary yy_modelDictionaryWithClass:containerCls json:valFromFMDB] ;
             if (!resultDic) continue ;
             [tmpDic setObject:resultDic
                        forKey:name] ;
         }
         else if ([type containsString:@"UIImage"]) {
-            NSData *tmpData = [[NSData alloc] initWithBase64EncodedString:valFromFMDB   options:NSDataBase64DecodingIgnoreUnknownCharacters] ;
+            NSData *tmpData = [[NSData alloc] initWithBase64EncodedString:valFromFMDB options:NSDataBase64DecodingIgnoreUnknownCharacters] ;
             UIImage *image = [UIImage imageWithData:tmpData] ;
             if (!image) continue ;
             [tmpDic setObject:image
@@ -442,5 +445,6 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     }
     return tmpDic ;
 }
+
 
 @end

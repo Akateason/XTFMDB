@@ -20,11 +20,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "demo_XTFMDB/ViewController.m"
-            timestampString = "544885019.268252"
+            timestampString = "544937831.014882"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "172"
-            endingLineNumber = "172"
+            startingLineNumber = "177"
+            endingLineNumber = "177"
             landmarkName = "-insertAction"
             landmarkType = "7">
          </BreakpointContent>
@@ -32,16 +32,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "demo_XTFMDB/ViewController.m"
-            timestampString = "544885019.269212"
+            filePath = "demo_XTFMDB/XTFMDB/XTAutoSqlUtil.m"
+            timestampString = "544937831.014984"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "177"
-            endingLineNumber = "177"
-            landmarkName = "-insertAction"
+            startingLineNumber = "329"
+            endingLineNumber = "329"
+            landmarkName = "-changeSpecifiedValToUTF8StringVal:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "demo_XTFMDB/XTFMDB/XTAutoSqlUtil.m"
+            timestampString = "544937831.015175"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "334"
+            endingLineNumber = "334"
+            landmarkName = "-changeSpecifiedValToUTF8StringVal:"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

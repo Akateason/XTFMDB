@@ -241,8 +241,9 @@ static void *key_pkid = &key_pkid;
         while ([rs next])
         {
             NSDictionary *rstDic = [sqlUTIL getResultDicFromClass:[self class]
-                                                          resultSet:rs] ;
-            [resultList addObject:[[self class] yy_modelWithDictionary:rstDic]] ;
+                                                        resultSet:rs] ;
+            id resultItem = [[self class] yy_modelWithJSON:rstDic] ;
+            [resultList addObject:resultItem] ;
         }
         [rs close] ;
     }] ;
@@ -404,7 +405,7 @@ static void *key_pkid = &key_pkid;
     return nil ;
 }
 
-// Container property , value should be Class or Class name. Same as yymodel .
+// Container property , value should be Class or Class name. Same as YYmodel .
 + (NSDictionary *)modelContainerPropertyGenericClass
 {
     return nil ;

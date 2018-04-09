@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-@class SomeInfo,AccessObj ;
+//@class SomeInfo,AccessObj ;
+#import "SomeInfo.h"
+#import "AccessObj.h"
 
 @interface AnyModel : NSObject
 
@@ -21,8 +23,8 @@
 @property (nonatomic,copy)      NSString        *abcabc     ;
 @property (nonatomic,strong)    UIImage         *image      ;
 
-@property (nonatomic,copy)      NSArray<SomeInfo *> *myArr  ;//Array<SomeInfo>
-@property (nonatomic,copy)      NSDictionary    *myDic      ;//Dict <NSString,AccessObj>
+@property (nonatomic,copy)      NSArray<SomeInfo *>                  *myArr      ;//Array<SomeInfo>
+@property (nonatomic,copy)      NSDictionary<NSString *,AccessObj *> *myDic      ;//Dict <NSString,AccessObj>
 @property (strong, nonatomic)   NSDate          *today      ;
 @property (strong, nonatomic)   SomeInfo        *sInfo      ;//什么都不用做
 

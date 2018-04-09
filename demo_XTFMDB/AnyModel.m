@@ -10,4 +10,12 @@
 
 @implementation AnyModel
 
+// yymodel
++ (NSDictionary *)modelContainerPropertyGenericClass {
+    return @{
+                @"myArr" : [SomeInfo class]    ,
+                @"myDic" : [AccessObj class]
+             } ;
+}
+
 @end
