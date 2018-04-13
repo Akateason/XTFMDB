@@ -171,12 +171,12 @@
         m1.today = [NSDate date] ;
         
         SomeInfo *info = [SomeInfo new] ;
-        info.infoStr = @"test.dddddr" ;
+        info.infoStr = @"test3232311111.dddddr" ;
         info.infoID = 884 ;
         m1.sInfo = info ;
         
         // super cls
-        m1.fatherName = @"wo shi ni die" ;
+        m1.fatherName = @"this prop is from super class" ;
         m1.fatherList = @[info] ;
         
         [m1 xt_insert] ;
