@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "XTFMDBBase.h"
 #import "CustomDBModel.h"
+#import "AnyModel.h"
+#import <YYModel/YYModel.h>
 
 @interface AppDelegate ()
 
@@ -29,6 +31,11 @@
 //    [[XTFMDBBase sharedInstance] dbUpgradeTable:Model1.class
 //                                      paramsAdd:@[@"b1",@"b2",@"b3"]
 //                                        version:3] ;
+    
+    
+   
+    
+    
     
     return YES;
 }

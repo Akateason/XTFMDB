@@ -232,7 +232,9 @@
         while ([rs next]) {
             NSDictionary *rstDic = [sqlUTIL getResultDicFromClass:[self class]
                                                         resultSet:rs] ;
-            [resultList addObject:[[self class] yy_modelWithDictionary:rstDic]] ;
+            id result = [[self class] yy_modelWithDictionary:rstDic] ;
+            result = [sqlUTIL resetDictionaryFromDBModel:rstDic resultItem:result] ;            
+            [resultList addObject:result] ;
         }
         [rs close] ;
     }] ;

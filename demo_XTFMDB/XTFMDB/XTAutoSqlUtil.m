@@ -257,7 +257,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     else if ([strType containsString:@"long"]) {
         return @"BIGINT" ;
     }
-    else if ([strType containsString:@"NSString"] || [strType containsString:@"char"]) {
+    else if ([strType containsString:@"NSString"] || [strType containsString:@"char"] || [strType containsString:@"NSMutableString"]) {
         return @"TEXT" ;
     }
     else if ([strType containsString:@"NSData"]) {
@@ -266,10 +266,10 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     else if ([strType containsString:@"BOOL"] || [strType containsString:@"bool"]) {
         return @"BOOLEAN" ;
     }
-    else if ([strType containsString:@"NSArray"]) {
+    else if ([strType containsString:@"NSArray"] || [strType containsString:@"NSMutableArray"]) {
         return @"TEXT" ;
     }
-    else if ([strType containsString:@"NSDictionary"]) {
+    else if ([strType containsString:@"NSDictionary"] || [strType containsString:@"NSMutableDictionary"]) {
         return @"TEXT" ;
     }
     else if ([strType containsString:@"NSSet"]) {
@@ -324,12 +324,12 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
             [tmpDic setObject:[self encodingB64String:val]
                        forKey:key] ;
         }
-        else if ([val isKindOfClass:[NSArray class]]) {
+        else if ([val isKindOfClass:[NSArray class]] || [val isKindOfClass:[NSMutableArray class]]) {
             NSString *json = [val yy_modelToJSONString] ;
             [tmpDic setObject:json
                        forKey:key] ;
         }
-        else if ([val isKindOfClass:[NSDictionary class]]) {
+        else if ([val isKindOfClass:[NSDictionary class]] || [val isKindOfClass:[NSDictionary class]]) {
             NSString *json = [val yy_modelToJSONString] ;
             [tmpDic setObject:json
                        forKey:key] ;
@@ -357,7 +357,9 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
         [val isKindOfClass:[NSString class]] ||
         [val isKindOfClass:[NSData class]] ||
         [val isKindOfClass:[NSArray class]] ||
+        [val isKindOfClass:[NSMutableArray class]] ||
         [val isKindOfClass:[NSDictionary class]] ||
+        [val isKindOfClass:[NSMutableDictionary class]] ||
         [val isKindOfClass:[NSSet class]] ||
         [val isKindOfClass:[UIImage class]] ||
         [val isKindOfClass:[NSDate class]]
@@ -375,8 +377,8 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
         [strType containsString:@"NSString"] || [strType containsString:@"char"] ||
         [strType containsString:@"NSData"] ||
         [strType containsString:@"BOOL"] || [strType containsString:@"bool"] ||
-        [strType containsString:@"NSArray"] ||
-        [strType containsString:@"NSDictionary"] ||
+        [strType containsString:@"NSArray"] || [strType containsString:@"NSMutableArray"] ||
+        [strType containsString:@"NSDictionary"] || [strType containsString:@"NSMutableDictionary"] ||
         [strType containsString:@"NSSet"] ||
         [strType containsString:@"UIImage"] ||
         [strType containsString:@"NSDate"]
@@ -411,14 +413,14 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                 [tmpDic setObject:tmpData
                            forKey:name] ;
             }
-            else if ([type containsString:@"NSArray"]) {
+            else if ([type containsString:@"NSArray"] || [type containsString:@"NSMutableArray"]) {
                 Class containerCls = [m_orginCls modelContainerPropertyGenericClass][name] ;
                 NSArray *resultArr = [NSArray yy_modelArrayWithClass:containerCls json:valFromFMDB] ;
                 if (!resultArr) continue ;
                 [tmpDic setObject:resultArr
                            forKey:name] ;
             }
-            else if ([type containsString:@"NSDictionary"]) {
+            else if ([type containsString:@"NSDictionary"] || [type containsString:@"NSMutableDictionary"]) {
                 Class containerCls = [m_orginCls modelContainerPropertyGenericClass][name] ;
                 NSDictionary *resultDic = [NSDictionary yy_modelDictionaryWithClass:containerCls json:valFromFMDB] ;
                 if (!resultDic) continue ;
@@ -459,5 +461,45 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     return tmpDic ;
 }
 
+// 处理yymodel无法解析嵌套对象的字典的问题.
+- (id)resetDictionaryFromDBModel:(NSDictionary *)dbModel
+                      resultItem:(id)item
+{
+    m_orginCls = [item class] ;
+    Class cls = m_orginCls ;
+
+    while ( 1 ) {
+        NSArray *propInfoList = [cls propertiesInfo] ;
+        for (int i = 0; i < propInfoList.count; i++) {
+            NSDictionary *dic   = propInfoList[i] ;
+            NSString *name      = dic[@"name"] ;
+            NSString *type      = dic[@"type"] ;
+            id valFromFMDB = dbModel[name] ;
+            if (!valFromFMDB || [valFromFMDB isKindOfClass:[NSNull class]]) continue ;
+            if ([valFromFMDB isKindOfClass:[NSString class]] && !((NSString *)valFromFMDB).length) continue ;
+            
+            if ([type containsString:@"NSDictionary"] || [type containsString:@"NSMutableDictionary"]) {
+                SEL selector = NSSelectorFromString([[@"set" stringByAppendingString:[self myCapitalizedString:name]] stringByAppendingString:@":"]) ;
+                IMP imp = [item methodForSelector:selector] ;
+                void (*func)(id, SEL, id) = (void *)imp ;
+                func(item, selector, valFromFMDB) ;
+            }
+        }
+        
+        if ([cls isEqual:[XTDBModel class]] || [cls.superclass isEqual:[NSObject class]]) {
+            break ;
+        }
+        // NEXT LOOP IF NEEDED .
+        cls = [cls superclass] ;
+    }
+
+    return item ;
+}
+
+- (NSString *)myCapitalizedString:(NSString *)orgString {
+    NSString *prefix = [orgString substringToIndex:1] ;
+    prefix = [prefix uppercaseString] ;
+    return [orgString stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:prefix] ;
+}
 
 @end

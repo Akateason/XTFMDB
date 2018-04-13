@@ -25,7 +25,8 @@
 @property (nonatomic,strong)    UIImage         *image      ;
 
 @property (nonatomic,copy)      NSArray<SomeInfo *>                  *myArr      ;//Array<SomeInfo>
-@property (nonatomic,copy)      NSDictionary<NSString *,AccessObj *> *myDic      ;//Dict <NSString,AccessObj>
+//@property (nonatomic,strong)    NSMutableDictionary         *myDic      ;//Dict <NSString,AccessObj> 可变
+@property (nonatomic,copy)    NSDictionary         *myDic      ;//Dict <NSString,AccessObj> 不可变, 都可以
 @property (strong, nonatomic)   NSDate          *today      ;
 @property (strong, nonatomic)   SomeInfo        *sInfo      ;//什么都不用做
 

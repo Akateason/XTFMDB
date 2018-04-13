@@ -243,6 +243,7 @@ static void *key_pkid = &key_pkid;
             NSDictionary *rstDic = [sqlUTIL getResultDicFromClass:[self class]
                                                         resultSet:rs] ;
             id resultItem = [[self class] yy_modelWithJSON:rstDic] ;
+            resultItem = [sqlUTIL resetDictionaryFromDBModel:rstDic resultItem:resultItem] ;
             [resultList addObject:resultItem] ;
         }
         [rs close] ;

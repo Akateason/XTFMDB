@@ -35,4 +35,7 @@
 
 - (NSString *)sqlTypeWithType:(NSString *)strType ;
 
+- (id)resetDictionaryFromDBModel:(NSDictionary *)dbModel
+                      resultItem:(id)item ;
+
 @end
