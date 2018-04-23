@@ -18,37 +18,32 @@ static void *key_pkid = &key_pkid;
 
 #pragma mark --
 
-- (void)setPkid:(int)pkid
-{
+- (void)setPkid:(int)pkid {
     objc_setAssociatedObject(self, &key_pkid, @(pkid), OBJC_ASSOCIATION_ASSIGN) ;
 }
 
-- (int)pkid
-{
+- (int)pkid {
     return [objc_getAssociatedObject(self, &key_pkid) intValue] ;
 }
 
 
 #pragma mark --
 #pragma mark - tableIsExist
-+ (BOOL)xt_tableIsExist
-{
++ (BOOL)xt_tableIsExist {
     NSString *tableName = NSStringFromClass([self class]) ;
     return [[XTFMDBBase sharedInstance] isTableExist:tableName] ;
 }
 
 #pragma mark --
 #pragma mark - create
-+ (BOOL)xt_createTable
-{
++ (BOOL)xt_createTable {
     NSString *tableName = NSStringFromClass([self class]) ;
     
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     
     __block BOOL bReturn = FALSE ;
     
-    if(![[XTFMDBBase sharedInstance] isTableExist:tableName])
-    {
+    if(![[XTFMDBBase sharedInstance] isTableExist:tableName]) {
         [QUEUE inDatabase:^(FMDatabase *db) {
             // create table
             NSString *sql = [sqlUTIL sqlCreateTableWithClass:[self class]] ;
@@ -66,24 +61,20 @@ static void *key_pkid = &key_pkid;
 #pragma mark --
 #pragma mark - insert
 
-- (int)xt_insert
-{
+- (int)xt_insert {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return -1 ;
     if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return -2 ;
     
     __block int lastRowId = 0 ;
-    
     [QUEUE inDatabase:^(FMDatabase *db) {
         BOOL bSuccess = [db executeUpdate:[sqlUTIL sqlInsertWithModel:self]] ;
-        if (bSuccess)
-        {
+        if (bSuccess) {
             lastRowId = (int)[db lastInsertRowId] ;
-            XTFMDBLog(@"xt_db insert success lastRowID : %d \n\n",lastRowId) ;
+            XTFMDBLog(@"xt_db insert success lastRowID : %d fromTB %@ \n\n",lastRowId,tableName) ;
         }
-        else
-        {
-            XTFMDBLog(@"xt_db insert fail\n\n") ;
+        else {
+            XTFMDBLog(@"xt_db insert fail fromTB %@\n\n",tableName) ;
             lastRowId = -3 ;
         }
     }] ;
@@ -91,8 +82,7 @@ static void *key_pkid = &key_pkid;
     return lastRowId ;
 }
 
-+ (BOOL)xt_insertList:(NSArray *)modelList
-{
++ (BOOL)xt_insertList:(NSArray *)modelList {
     if (!modelList || !modelList.count) FALSE ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:NSStringFromClass([[modelList firstObject] class])]) return FALSE ;
@@ -100,16 +90,13 @@ static void *key_pkid = &key_pkid;
     __block BOOL bAllSuccess = TRUE ;
     [QUEUE inTransaction:^(FMDatabase *db, BOOL *rollback) {
         
-        for (int i = 0; i < [modelList count]; i++)
-        {
+        for (int i = 0; i < [modelList count]; i++) {
             id model = [modelList objectAtIndex:i] ;
             BOOL bSuccess = [db executeUpdate:[sqlUTIL sqlInsertWithModel:model]] ;
-            if (bSuccess)
-            {
+            if (bSuccess) {
                 XTFMDBLog(@"xt_db transaction insert Successfrom index :%d",i) ;
             }
-            else
-            {  // error
+            else {  // error
                 XTFMDBLog(@"xt_db transaction insert Failure from index :%d",i) ;
                 *rollback = TRUE ;
                 bAllSuccess = FALSE ;
@@ -117,13 +104,10 @@ static void *key_pkid = &key_pkid;
             }
         }
         
-        if (bAllSuccess) {
-            XTFMDBLog(@"xt_db transaction insert all complete\n\n") ;
-        }
-        else {
-            XTFMDBLog(@"xt_db transaction insert all fail\n\n") ;
-        }
-        
+        if (bAllSuccess)
+            XTFMDBLog(@"xt_db transaction insert all complete in %@\n\n",NSStringFromClass([self class])) ;
+        else
+            XTFMDBLog(@"xt_db transaction insert all fail in %@\n\n",NSStringFromClass([self class])) ;
     }] ;
     
     return bAllSuccess ;
@@ -133,8 +117,7 @@ static void *key_pkid = &key_pkid;
 
 #pragma mark --
 #pragma mark - update
-- (BOOL)xt_update
-{
+- (BOOL)xt_update {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
@@ -144,20 +127,16 @@ static void *key_pkid = &key_pkid;
         
         bSuccess = [db executeUpdate:[sqlUTIL sqlUpdateWithModel:self]] ;
         if (bSuccess)
-        {
-            XTFMDBLog(@"xt_db update success\n\n") ;
-        }
+            XTFMDBLog(@"xt_db update success from tb %@\n\n",tableName) ;
         else
-        {
-            XTFMDBLog(@"xt_db update fail\n\n") ;
-        }
+            XTFMDBLog(@"xt_db update fail from tb%@ \n\n",tableName) ;
+        
     }] ;
     
     return bSuccess ;
 }
 
-+ (BOOL)xt_updateList:(NSArray *)modelList
-{
++ (BOOL)xt_updateList:(NSArray *)modelList {
     if (!modelList || !modelList.count) return FALSE ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:NSStringFromClass([[modelList firstObject] class])]) return FALSE ;
@@ -165,17 +144,13 @@ static void *key_pkid = &key_pkid;
     __block BOOL bAllSuccess = TRUE ;
     [QUEUE inTransaction:^(FMDatabase *db, BOOL *rollback) {
         
-        for (int i = 0; i < [modelList count]; i++)
-        {
+        for (int i = 0; i < [modelList count]; i++) {
             id model = [modelList objectAtIndex:i] ;
             BOOL bSuccess = [db executeUpdate:[sqlUTIL sqlUpdateWithModel:model]] ;
-            if (bSuccess)
-            {
+            if (bSuccess) {
                 XTFMDBLog(@"xt_db transaction update Successfrom index :%d",i) ;
             }
-            else
-            {
-                // error
+            else { // error
                 XTFMDBLog(@"xt_db transaction update Failure from index :%d",i) ;
                 *rollback = TRUE ;
                 bAllSuccess = FALSE ;
@@ -183,12 +158,10 @@ static void *key_pkid = &key_pkid;
             }
         }
         
-        if (bAllSuccess) {
-            XTFMDBLog(@"xt_db transaction update all complete\n\n") ;
-        }
-        else {
-            XTFMDBLog(@"xt_db transaction update all fail\n\n") ;
-        }
+        if (bAllSuccess)
+            XTFMDBLog(@"xt_db transaction update all complete in tb %@\n\n",NSStringFromClass([self class])) ;
+        else
+            XTFMDBLog(@"xt_db transaction update all fail in tb %@\n\n",NSStringFromClass([self class])) ;
         
     }] ;
     
@@ -198,28 +171,23 @@ static void *key_pkid = &key_pkid;
 #pragma mark --
 #pragma mark - select
 
-+ (NSArray *)xt_selectAll
-{
++ (NSArray *)xt_selectAll {
     return [self xt_selectWhere:nil] ;
 }
 
-+ (instancetype)xt_findFirstWhere:(NSString *)strWhere
-{
++ (instancetype)xt_findFirstWhere:(NSString *)strWhere {
     return [[self xt_selectWhere:strWhere] firstObject] ;
 }
 
-+ (instancetype)xt_findFirst
-{
++ (instancetype)xt_findFirst {
     return [[self xt_selectAll] firstObject] ;
 }
 
-+ (BOOL)xt_hasModelWhere:(NSString *)strWhere
-{
++ (BOOL)xt_hasModelWhere:(NSString *)strWhere {
     return [self xt_findFirstWhere:strWhere] != nil ;
 }
 
-+ (NSArray *)xt_selectWhere:(NSString *)strWhere
-{
++ (NSArray *)xt_selectWhere:(NSString *)strWhere {
     NSString *tableName = NSStringFromClass([self class]) ;
     NSString *sql = !strWhere
     ? [NSString stringWithFormat:@"SELECT * FROM %@",tableName]
@@ -228,8 +196,7 @@ static void *key_pkid = &key_pkid;
 }
 
 // any sql
-+ (NSArray *)xt_findWithSql:(NSString *)sql
-{
++ (NSArray *)xt_findWithSql:(NSString *)sql {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return nil ;
     if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return nil ;
@@ -238,8 +205,7 @@ static void *key_pkid = &key_pkid;
     [QUEUE inDatabase:^(FMDatabase *db) {
         XTFMDBLog(@"sql :\n %@",sql) ;
         FMResultSet *rs = [db executeQuery:sql] ;
-        while ([rs next])
-        {
+        while ([rs next]) {
             NSDictionary *rstDic = [sqlUTIL getResultDicFromClass:[self class]
                                                         resultSet:rs] ;
             id resultItem = [[self class] yy_modelWithJSON:rstDic] ;
@@ -252,8 +218,7 @@ static void *key_pkid = &key_pkid;
     return resultList ;
 }
 
-+ (instancetype)xt_findFirstWithSql:(NSString *)sql
-{
++ (instancetype)xt_findFirstWithSql:(NSString *)sql {
     return [[self xt_findWithSql:sql] firstObject] ;
 }
 
@@ -296,36 +261,28 @@ static void *key_pkid = &key_pkid;
 
 #pragma mark --
 #pragma mark - delete
-- (BOOL)xt_deleteModel
-{
+- (BOOL)xt_deleteModel {
     return [[self class] xt_deleteModelWhere:[NSString stringWithFormat:@"pkid = '%d'",self.pkid]] ;
 }
 
-+ (BOOL)xt_deleteModelWhere:(NSString *)strWhere
-{
++ (BOOL)xt_deleteModelWhere:(NSString *)strWhere {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
     
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {
-        
         bSuccess = [db executeUpdate:[sqlUTIL sqlDeleteWithTableName:tableName where:strWhere]] ;
         if (bSuccess)
-        {
-            XTFMDBLog(@"xt_db delete model success\n\n") ;
-        }
+            XTFMDBLog(@"xt_db delete model success in %@\n\n",tableName) ;
         else
-        {
-            XTFMDBLog(@"xt_db delete model fail\n\n") ;
-        }
+            XTFMDBLog(@"xt_db delete model fail in %@\n\n",tableName) ;
     }] ;
     
     return bSuccess ;
 }
 
-+ (BOOL)xt_dropTable
-{
++ (BOOL)xt_dropTable {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
@@ -334,13 +291,9 @@ static void *key_pkid = &key_pkid;
     [QUEUE inDatabase:^(FMDatabase *db) {
         bSuccess = [db executeUpdate:[sqlUTIL sqlDrop:tableName]] ;
         if (bSuccess)
-        {
-            XTFMDBLog(@"xt_db drop success\n\n") ;
-        }
+            XTFMDBLog(@"xt_db drop %@ success\n\n",tableName) ;
         else
-        {
-            XTFMDBLog(@"xt_db drop fail\n\n") ;
-        }
+            XTFMDBLog(@"xt_db drop %@ fail\n\n",tableName) ;
     }] ;
     
     return bSuccess ;
@@ -361,18 +314,15 @@ static void *key_pkid = &key_pkid;
         bSuccess = [db executeUpdate:[sqlUTIL sqlAlterAdd:name
                                                                type:type
                                                               table:tableName]] ;
-        if (bSuccess) {
-            XTFMDBLog(@"xt_db alter add success\n\n") ;
-        }
-        else {
-            XTFMDBLog(@"xt_db alter add fail\n\n") ;
-        }
+        if (bSuccess)
+            XTFMDBLog(@"xt_db alter add success in %@\n\n",tableName) ;
+        else
+            XTFMDBLog(@"xt_db alter add fail in %@\n\n",tableName) ;
     }] ;
     return bSuccess ;
 }
 
-+ (BOOL)xt_alterRenameToNewTableName:(NSString *)name
-{
++ (BOOL)xt_alterRenameToNewTableName:(NSString *)name {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
@@ -381,12 +331,10 @@ static void *key_pkid = &key_pkid;
     [QUEUE inDatabase:^(FMDatabase *db) {
         bSuccess = [db executeUpdate:[sqlUTIL sqlAlterRenameOldTable:tableName
                                                       toNewTableName:name]] ;
-        if (bSuccess) {
-            XTFMDBLog(@"xt_db alter add success\n\n") ;
-        }
-        else {
-            XTFMDBLog(@"xt_db alter add fail\n\n") ;
-        }
+        if (bSuccess)
+            XTFMDBLog(@"xt_db alter rename success in %@\n\n",tableName) ;
+        else
+            XTFMDBLog(@"xt_db alter rename fail in %@\n\n",tableName) ;
     }] ;
     return bSuccess ;
 }

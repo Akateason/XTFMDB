@@ -224,7 +224,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                     strProperties = [[strProperties substringToIndex:strProperties.length - 1] mutableCopy] ;
                     strQuestions = [[strQuestions substringToIndex:strQuestions.length - 1] mutableCopy] ;
                     NSString *strResult = [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@ ( %@ ) VALUES ( %@ )",tableName,strProperties,strQuestions] ;
-                    XTFMDBLog(@"xt_db sql insert : \n%@\n\n",strResult) ;
+                    XTFMDBLog(@"xt_db sql insert : \n%@\n\n",model) ;
                     return strResult ;
                 }
                     break ;
@@ -232,7 +232,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                     strProperties = [[strProperties substringToIndex:strProperties.length - 1] mutableCopy] ;
                     NSString *whereStr = [NSString stringWithFormat:@"%@ = %@",kPkid,dicModel[kPkid]] ;
                     NSString *strResult = [NSString stringWithFormat:@"UPDATE %@ SET %@ WHERE %@",tableName,strProperties,whereStr] ;
-                    XTFMDBLog(@"xt_db sql update : \n%@",strResult) ;
+                    XTFMDBLog(@"xt_db sql update : \n%@",model) ;
                     return strResult ;
                 }
                     break ;

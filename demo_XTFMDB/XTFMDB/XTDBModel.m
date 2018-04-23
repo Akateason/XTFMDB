@@ -23,8 +23,7 @@
 #pragma mark --
 #pragma mark - tableIsExist
 
-+ (BOOL)tableIsExist
-{
++ (BOOL)tableIsExist {
     NSString *tableName = NSStringFromClass([self class]) ;
     return [[XTFMDBBase sharedInstance] isTableExist:tableName] ;
 }
@@ -32,16 +31,13 @@
 #pragma mark --
 #pragma mark - create
 
-+ (BOOL)createTable
-{
++ (BOOL)createTable {
     NSString *tableName = NSStringFromClass([self class]) ;
     
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     
     __block BOOL bReturn = FALSE ;
-    
-    if(![[XTFMDBBase sharedInstance] isTableExist:tableName])
-    {
+    if(![[XTFMDBBase sharedInstance] isTableExist:tableName]) {
         [QUEUE inDatabase:^(FMDatabase *db) {
             // create table
             NSString *sql = [sqlUTIL sqlCreateTableWithClass:[self class]] ;
@@ -50,8 +46,7 @@
             else XTFMDBLog(@"xt_db create %@ fail",tableName) ;
         }] ;
     }
-    else
-        XTFMDBLog(@"xt_db %@ already exist",tableName) ;
+    else XTFMDBLog(@"xt_db %@ already exist",tableName) ;
     
     return bReturn ;
 }
@@ -59,14 +54,12 @@
 #pragma mark --
 #pragma mark - insert
 
-- (int)insert
-{
+- (int)insert {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return -1 ;
     if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return -2 ;
     
     __block int lastRowId = 0 ;
-    
     [QUEUE inDatabase:^(FMDatabase *db) {
         self.createTime = [NSDate xt_getNowTick] ;
         self.updateTime = [NSDate xt_getNowTick] ;
@@ -84,8 +77,7 @@
     return lastRowId ;
 }
 
-+ (BOOL)insertList:(NSArray *)modelList
-{
++ (BOOL)insertList:(NSArray *)modelList {
     if (!modelList || !modelList.count) return FALSE ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:NSStringFromClass([[modelList firstObject] class])]) return FALSE ;
@@ -93,8 +85,7 @@
     __block BOOL bAllSuccess = TRUE ;
     [QUEUE inTransaction:^(FMDatabase *db, BOOL *rollback) {
         
-        for (int i = 0; i < [modelList count]; i++)
-        {
+        for (int i = 0; i < [modelList count]; i++) {
             XTDBModel *model = [modelList objectAtIndex:i] ;
             model.createTime = [NSDate xt_getNowTick] ;
             model.updateTime = [NSDate xt_getNowTick] ;
@@ -111,10 +102,10 @@
         }
         
         if (bAllSuccess) {
-            XTFMDBLog(@"xt_db transaction insert all complete\n\n") ;
+            XTFMDBLog(@"xt_db transaction insert %@ all complete\n\n",NSStringFromClass([self class])) ;
         }
         else {
-            XTFMDBLog(@"xt_db transaction insert all fail\n\n") ;
+            XTFMDBLog(@"xt_db transaction insert %@ all fail\n\n",NSStringFromClass([self class])) ;
         }
         
     }] ;
@@ -127,8 +118,7 @@
 #pragma mark --
 #pragma mark - update
 
-- (BOOL)update
-{
+- (BOOL)update {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
@@ -138,18 +128,17 @@
         self.updateTime = [NSDate xt_getNowTick] ;
         bSuccess = [db executeUpdate:[sqlUTIL sqlUpdateWithModel:self]] ;
         if (bSuccess) {
-            XTFMDBLog(@"xt_db update success\n\n") ;
+            XTFMDBLog(@"xt_db update success from tb %@ \n\n",tableName) ;
         }
         else {
-            XTFMDBLog(@"xt_db update fail\n\n") ;
+            XTFMDBLog(@"xt_db update fail from tb %@ \n\n",tableName) ;
         }
     }] ;
     
     return bSuccess ;
 }
 
-+ (BOOL)updateList:(NSArray *)modelList
-{
++ (BOOL)updateList:(NSArray *)modelList {
     if (!modelList || !modelList.count) return FALSE ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:NSStringFromClass([[modelList firstObject] class])]) return FALSE ;
@@ -186,31 +175,31 @@
     return bAllSuccess ;
 }
 
+//- (BOOL)updateByKey:(NSString *)key {}
+//+ (BOOL)updateList:(NSArray *)modelList byKey:(NSString *)key {}
+//+ (BOOL)updateList:(NSArray *)modelList byKey:(NSString *)key ignoreKeys:(NSString *)ignores {}
+
+
 #pragma mark --
 #pragma mark - select
 
-+ (NSArray *)selectAll
-{
++ (NSArray *)selectAll {
     return [self selectWhere:nil] ;
 }
 
-+ (instancetype)findFirstWhere:(NSString *)strWhere
-{
++ (instancetype)findFirstWhere:(NSString *)strWhere {
     return [[self selectWhere:strWhere] firstObject] ;
 }
 
-+ (instancetype)findFirst
-{
++ (instancetype)findFirst {
     return [[self selectAll] firstObject] ;
 }
 
-+ (BOOL)hasModelWhere:(NSString *)strWhere
-{
++ (BOOL)hasModelWhere:(NSString *)strWhere {
     return [self findFirstWhere:strWhere] != nil ;
 }
 
-+ (NSArray *)selectWhere:(NSString *)strWhere
-{
++ (NSArray *)selectWhere:(NSString *)strWhere {
     NSString *tableName = NSStringFromClass([self class]) ;
     NSString *sql = !strWhere
     ? [NSString stringWithFormat:@"SELECT * FROM %@",tableName]
@@ -219,8 +208,7 @@
 }
 
 // any sql execute Query
-+ (NSArray *)findWithSql:(NSString *)sql
-{
++ (NSArray *)findWithSql:(NSString *)sql {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return nil ;
     if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return nil ;
@@ -242,8 +230,7 @@
     return resultList ;
 }
 
-+ (instancetype)findFirstWithSql:(NSString *)sql
-{
++ (instancetype)findFirstWithSql:(NSString *)sql {
     return [[self findWithSql:sql] firstObject] ;
 }
 
@@ -289,13 +276,11 @@
 #pragma mark --
 #pragma mark - delete
 
-- (BOOL)deleteModel
-{
+- (BOOL)deleteModel {
     return [[self class] deleteModelWhere:[NSString stringWithFormat:@"pkid = '%d'",self.pkid]] ;
 }
 
-+ (BOOL)deleteModelWhere:(NSString *)strWhere
-{
++ (BOOL)deleteModelWhere:(NSString *)strWhere {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
@@ -304,21 +289,18 @@
     [QUEUE inDatabase:^(FMDatabase *db) {
         
         bSuccess = [db executeUpdate:[sqlUTIL sqlDeleteWithTableName:tableName where:strWhere]] ;
-        if (bSuccess)
-        {
-            XTFMDBLog(@"xt_db delete model success\n\n") ;
+        if (bSuccess) {
+            XTFMDBLog(@"xt_db delete model success from tb %@\n\n",tableName) ;
         }
-        else
-        {
-            XTFMDBLog(@"xt_db delete model fail\n\n") ;
+        else {
+            XTFMDBLog(@"xt_db delete model fail from tb %@\n\n",tableName) ;
         }
     }] ;
     
     return bSuccess ;
 }
 
-+ (BOOL)dropTable
-{
++ (BOOL)dropTable {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
@@ -326,16 +308,9 @@
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {
         bSuccess = [db executeUpdate:[sqlUTIL sqlDrop:tableName]] ;
-        if (bSuccess)
-        {
-            XTFMDBLog(@"xt_db drop success\n\n") ;
-        }
-        else
-        {
-            XTFMDBLog(@"xt_db drop fail\n\n") ;
-        }
+        if (bSuccess) XTFMDBLog(@"xt_db drop %@ success\n\n",tableName) ;
+        else XTFMDBLog(@"xt_db drop %@ fail\n\n",tableName) ;
     }] ;
-    
     return bSuccess ;
 }
 
@@ -353,18 +328,15 @@
         bSuccess = [db executeUpdate:[sqlUTIL sqlAlterAdd:name
                                                      type:type
                                                     table:tableName]] ;
-        if (bSuccess) {
-            XTFMDBLog(@"xt_db alter add success\n\n") ;
-        }
-        else {
-            XTFMDBLog(@"xt_db alter add fail\n\n") ;
-        }
+        if (bSuccess)
+            XTFMDBLog(@"xt_db alter add %@ success\n\n",tableName) ;
+        else
+            XTFMDBLog(@"xt_db alter add %@fail\n\n",tableName) ;
     }] ;
     return bSuccess ;
 }
 
-+ (BOOL)alterRenameToNewTableName:(NSString *)name
-{
++ (BOOL)alterRenameToNewTableName:(NSString *)name {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
@@ -374,10 +346,10 @@
         bSuccess = [db executeUpdate:[sqlUTIL sqlAlterRenameOldTable:tableName
                                                       toNewTableName:name]] ;
         if (bSuccess) {
-            XTFMDBLog(@"xt_db alter add success\n\n") ;
+            XTFMDBLog(@"xt_db alter rename %@ success\n\n",tableName) ;
         }
         else {
-            XTFMDBLog(@"xt_db alter add fail\n\n") ;
+            XTFMDBLog(@"xt_db alter rename %@ fail\n\n",tableName) ;
         }
     }] ;
     return bSuccess ;

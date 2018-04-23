@@ -49,9 +49,12 @@ static NSString *const kPkid = @"pkid" ;
 + (BOOL)insertList:(NSArray *)modelList ;
 
 #pragma mark - update
-
+// update by pkid .
 - (BOOL)update ;
 + (BOOL)updateList:(NSArray *)modelList ;
+// update by custom key .
+- (BOOL)updateWhere:(NSString *)strWhere ;
++ (BOOL)updateListWhere:(NSString *)strWhere ;
 
 #pragma mark - select
 

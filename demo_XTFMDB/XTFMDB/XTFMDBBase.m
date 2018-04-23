@@ -115,7 +115,7 @@
     NSString *tableName = NSStringFromClass(tableCls) ;
     int dbVersion = self.version ;
     if (version <= dbVersion) {
-        XTFMDBLog(@"xt_db already Upgraded. v%d",version) ;
+        XTFMDBLog(@"xt_db already Upgraded. v%d for table %@",version,tableName) ;
         return ;
     }
     if (![self isTableExist:tableName]) {
