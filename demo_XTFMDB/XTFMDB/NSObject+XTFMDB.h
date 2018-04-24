@@ -42,8 +42,14 @@
 + (BOOL)xt_insertList:(NSArray *)modelList ;
 
 #pragma mark - update
+// update by pkid .
 - (BOOL)xt_update ;
 + (BOOL)xt_updateList:(NSArray *)modelList ;
+
+// update by custom key . 
+- (BOOL)xt_updateWhereByProp:(NSString *)propName ;
++ (BOOL)xt_updateList:(NSArray *)modelList
+          whereByProp:(NSString *)propName ;
 
 #pragma mark - select
 + (NSArray *)xt_selectAll ;
@@ -78,8 +84,8 @@
 
 #pragma mark - Constraints
 //props Sqlite Keywords
-+ (NSDictionary *)modelPropertiesSqliteKeywords ; // set Constraints of property
-//ignore Properties
++ (NSDictionary *)modelPropertiesSqliteKeywords ; // set sqlite Constraints of property
+// ignore Properties . these properties will not join db CURD .
 + (NSArray *)ignoreProperties ;
 // Container property , value should be Class or Class name. Same as YYmodel .
 + (NSDictionary *)modelContainerPropertyGenericClass ;

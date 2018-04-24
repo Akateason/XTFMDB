@@ -105,7 +105,7 @@
     if (!self.dBModelOrCustom) {
         NSArray *list = [CustomDBModel selectAll] ;
         for (CustomDBModel *model in list) {
-            NSLog(@"%d",model.pkid) ;
+            NSLog(@"%lu",(unsigned long)model.pkid) ;
         }
     }
     else {

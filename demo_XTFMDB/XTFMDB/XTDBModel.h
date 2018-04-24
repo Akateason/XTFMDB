@@ -25,7 +25,7 @@
 
 #import <Foundation/Foundation.h>
 
-static NSString *const kPkid = @"pkid" ;
+extern NSString *const kPkid ;
 
 @interface XTDBModel : NSObject
 
@@ -52,9 +52,11 @@ static NSString *const kPkid = @"pkid" ;
 // update by pkid .
 - (BOOL)update ;
 + (BOOL)updateList:(NSArray *)modelList ;
+
 // update by custom key .
-- (BOOL)updateWhere:(NSString *)strWhere ;
-+ (BOOL)updateListWhere:(NSString *)strWhere ;
+- (BOOL)updateWhereByProp:(NSString *)propName ;
++ (BOOL)updateList:(NSArray *)modelList
+       whereByProp:(NSString *)propName ;
 
 #pragma mark - select
 
@@ -92,8 +94,8 @@ static NSString *const kPkid = @"pkid" ;
 #pragma mark - Constraints
 
 // props Sqlite Keywords
-+ (NSDictionary *)modelPropertiesSqliteKeywords ; // set Constraints of property
-// ignore Properties
++ (NSDictionary *)modelPropertiesSqliteKeywords ; // set sqlite Constraints of property
+// ignore Properties . these properties will not join db CURD .
 + (NSArray *)ignoreProperties ;
 // Container property , value should be Class or Class name. Same as YYmodel .
 + (NSDictionary *)modelContainerPropertyGenericClass ;

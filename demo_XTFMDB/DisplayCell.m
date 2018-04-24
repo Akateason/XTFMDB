@@ -36,7 +36,7 @@
     
     if ([model isKindOfClass:[XTDBModel class]]) {
         CustomDBModel *m1 = model ;
-        self.lbPkid.text = [@"pkid" stringByAppendingString:[NSString stringWithFormat:@": %d",m1.pkid]] ;
+        self.lbPkid.text = [@"pkid" stringByAppendingString:[NSString stringWithFormat:@": %lu",(unsigned long)m1.pkid]] ;
         self.lbAge.text = [@"age" stringByAppendingString:[NSString stringWithFormat:@": %d",m1.age]] ;
         self.lbFloatVal.text = [@"floatVal" stringByAppendingString:[NSString stringWithFormat:@": %f",m1.floatVal]] ;
         self.lbTitle.text = [@"title" stringByAppendingString:[NSString stringWithFormat:@": %@",m1.title]] ;

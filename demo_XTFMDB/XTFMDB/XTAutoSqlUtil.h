@@ -16,7 +16,8 @@
 
 - (NSString *)sqlInsertWithModel:(id)model ;
 
-- (NSString *)sqlUpdateWithModel:(id)model ;
+- (NSString *)sqlUpdateSetWhereWithModel:(id)model
+                                 whereBy:(NSString *)whereProp ;
 
 - (NSString *)sqlDeleteWithTableName:(NSString *)tableName
                                where:(NSString *)strWhere ;

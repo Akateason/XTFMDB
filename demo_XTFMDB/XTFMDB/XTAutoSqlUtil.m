@@ -31,7 +31,8 @@
     m_orginCls = cls ;
     return [self getSqlUseRecursiveQuery:nil
                                    class:cls
-                                    type:xt_type_create] ;
+                                    type:xt_type_create
+                             whereByProp:nil] ;
 }
 
 - (NSString *)sqlInsertWithModel:(id)model
@@ -39,16 +40,19 @@
     m_orginCls = [model class] ;
     return [self getSqlUseRecursiveQuery:model
                                    class:nil
-                                    type:xt_type_insert] ;
+                                    type:xt_type_insert
+                             whereByProp:nil] ;
 }
 
-- (NSString *)sqlUpdateWithModel:(id)model
+- (NSString *)sqlUpdateSetWhereWithModel:(id)model whereBy:(NSString *)whereProp
 {
     m_orginCls = [model class] ;
     return [self getSqlUseRecursiveQuery:model
                                    class:nil
-                                    type:xt_type_update] ;
+                                    type:xt_type_update
+                             whereByProp:whereProp] ;
 }
+
 
 - (NSString *)sqlDeleteWithTableName:(NSString *)tableName
                                where:(NSString *)strWhere
@@ -175,6 +179,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
 - (NSString *)getSqlUseRecursiveQuery:(id)model
                                 class:(Class)class
                                  type:(TypeOfAutoSql)type
+                          whereByProp:(NSString *)whereByProp
 {
     Class cls = class ?: [model class] ;
     NSString *tableName = NSStringFromClass(cls) ;
@@ -224,15 +229,15 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                     strProperties = [[strProperties substringToIndex:strProperties.length - 1] mutableCopy] ;
                     strQuestions = [[strQuestions substringToIndex:strQuestions.length - 1] mutableCopy] ;
                     NSString *strResult = [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@ ( %@ ) VALUES ( %@ )",tableName,strProperties,strQuestions] ;
-                    XTFMDBLog(@"xt_db sql insert : \n%@\n\n",[strResult substringToIndex:100]) ;
+                    XTFMDBLog(@"xt_db sql insert : \n%@\n\n",[strResult substringToIndex:200]) ;
                     return strResult ;
                 }
                     break ;
                 case xt_type_update: {
                     strProperties = [[strProperties substringToIndex:strProperties.length - 1] mutableCopy] ;
-                    NSString *whereStr = [NSString stringWithFormat:@"%@ = %@",kPkid,dicModel[kPkid]] ;
+                    NSString *whereStr = [NSString stringWithFormat:@"%@ = %@",whereByProp,dicModel[whereByProp]] ;
                     NSString *strResult = [NSString stringWithFormat:@"UPDATE %@ SET %@ WHERE %@",tableName,strProperties,whereStr] ;
-                    XTFMDBLog(@"xt_db sql update : \n%@",[strResult substringToIndex:100]) ;
+                    XTFMDBLog(@"xt_db sql update : \n%@",[strResult substringToIndex:200]) ;
                     return strResult ;
                 }
                     break ;
@@ -492,7 +497,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
         // NEXT LOOP IF NEEDED .
         cls = [cls superclass] ;
     }
-
+    
     return item ;
 }
 

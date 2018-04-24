@@ -11,8 +11,11 @@
 #import "XTFMDBBase.h"
 #import <YYModel/YYModel.h>
 #import <objc/runtime.h>
+#import "NSDate+XTFMDB_Tick.h"
+#import "XTDBModel.h"
 
-static void *key_pkid = &key_pkid;
+
+static void *key_pkid = &key_pkid ;
 
 @implementation NSObject (XTFMDB)
 
@@ -117,26 +120,39 @@ static void *key_pkid = &key_pkid;
 
 #pragma mark --
 #pragma mark - update
+
+// update by pkid .
 - (BOOL)xt_update {
+    return [self xt_updateWhereByProp:kPkid] ;
+}
+
++ (BOOL)xt_updateList:(NSArray *)modelList {
+    return [self xt_updateList:modelList whereByProp:kPkid] ;
+}
+
+// update by custom key .
+- (BOOL)xt_updateWhereByProp:(NSString *)propName {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
     
     __block BOOL bSuccess ;
     [QUEUE inDatabase:^(FMDatabase *db) {
-        
-        bSuccess = [db executeUpdate:[sqlUTIL sqlUpdateWithModel:self]] ;
-        if (bSuccess)
-            XTFMDBLog(@"xt_db update success from tb %@\n\n",tableName) ;
-        else
-            XTFMDBLog(@"xt_db update fail from tb%@ \n\n",tableName) ;
-        
+        bSuccess = [db executeUpdate:[sqlUTIL sqlUpdateSetWhereWithModel:self whereBy:propName]] ;
+        if (bSuccess) {
+            XTFMDBLog(@"xt_db update success from tb %@ \n\n",tableName) ;
+        }
+        else {
+            XTFMDBLog(@"xt_db update fail from tb %@ \n\n",tableName) ;
+        }
     }] ;
     
     return bSuccess ;
 }
 
-+ (BOOL)xt_updateList:(NSArray *)modelList {
++ (BOOL)xt_updateList:(NSArray *)modelList
+          whereByProp:(NSString *)propName
+{
     if (!modelList || !modelList.count) return FALSE ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:NSStringFromClass([[modelList firstObject] class])]) return FALSE ;
@@ -145,12 +161,14 @@ static void *key_pkid = &key_pkid;
     [QUEUE inTransaction:^(FMDatabase *db, BOOL *rollback) {
         
         for (int i = 0; i < [modelList count]; i++) {
+            
             id model = [modelList objectAtIndex:i] ;
-            BOOL bSuccess = [db executeUpdate:[sqlUTIL sqlUpdateWithModel:model]] ;
+            BOOL bSuccess = [db executeUpdate:[sqlUTIL sqlUpdateSetWhereWithModel:model whereBy:propName]] ;
             if (bSuccess) {
                 XTFMDBLog(@"xt_db transaction update Successfrom index :%d",i) ;
             }
-            else { // error
+            else {
+                // error
                 XTFMDBLog(@"xt_db transaction update Failure from index :%d",i) ;
                 *rollback = TRUE ;
                 bAllSuccess = FALSE ;
@@ -159,14 +177,14 @@ static void *key_pkid = &key_pkid;
         }
         
         if (bAllSuccess)
-            XTFMDBLog(@"xt_db transaction update all complete in tb %@\n\n",NSStringFromClass([self class])) ;
+            XTFMDBLog(@"xt_db transaction update all complete \n\n") ;
         else
-            XTFMDBLog(@"xt_db transaction update all fail in tb %@\n\n",NSStringFromClass([self class])) ;
-        
+            XTFMDBLog(@"xt_db transaction update all fail \n\n") ;
     }] ;
     
     return bAllSuccess ;
 }
+
 
 #pragma mark --
 #pragma mark - select
@@ -262,7 +280,7 @@ static void *key_pkid = &key_pkid;
 #pragma mark --
 #pragma mark - delete
 - (BOOL)xt_deleteModel {
-    return [[self class] xt_deleteModelWhere:[NSString stringWithFormat:@"pkid = '%d'",self.pkid]] ;
+    return [[self class] xt_deleteModelWhere:[NSString stringWithFormat:@"pkid = '%lu'",(unsigned long)self.pkid]] ;
 }
 
 + (BOOL)xt_deleteModelWhere:(NSString *)strWhere {

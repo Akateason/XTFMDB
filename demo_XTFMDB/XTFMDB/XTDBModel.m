@@ -8,11 +8,13 @@
 
 #import "XTDBModel.h"
 #import "XTFMDBBase.h"
-//#import "XTDBModel+autoSql.h"
 #import <YYModel/YYModel.h>
 #import "XTFMDBConst.h"
 #import "NSDate+XTFMDB_Tick.h"
 #import "XTAutoSqlUtil.h"
+
+NSString *const kPkid = @"pkid";
+
 
 @interface XTDBModel ()
 
@@ -118,7 +120,17 @@
 #pragma mark --
 #pragma mark - update
 
+// update by pkid .
 - (BOOL)update {
+    return [self updateWhereByProp:kPkid] ;
+}
+
++ (BOOL)updateList:(NSArray *)modelList {
+    return [self updateList:modelList whereByProp:kPkid] ;
+}
+
+// update by custom key .
+- (BOOL)updateWhereByProp:(NSString *)propName {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
@@ -126,7 +138,7 @@
     __block BOOL bSuccess ;
     [QUEUE inDatabase:^(FMDatabase *db) {
         self.updateTime = [NSDate xt_getNowTick] ;
-        bSuccess = [db executeUpdate:[sqlUTIL sqlUpdateWithModel:self]] ;
+        bSuccess = [db executeUpdate:[sqlUTIL sqlUpdateSetWhereWithModel:self whereBy:propName]] ;
         if (bSuccess) {
             XTFMDBLog(@"xt_db update success from tb %@ \n\n",tableName) ;
         }
@@ -138,7 +150,9 @@
     return bSuccess ;
 }
 
-+ (BOOL)updateList:(NSArray *)modelList {
++ (BOOL)updateList:(NSArray *)modelList
+       whereByProp:(NSString *)propName
+{
     if (!modelList || !modelList.count) return FALSE ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:NSStringFromClass([[modelList firstObject] class])]) return FALSE ;
@@ -150,7 +164,7 @@
             
             XTDBModel *model = [modelList objectAtIndex:i] ;
             model.updateTime = [NSDate xt_getNowTick] ;
-            BOOL bSuccess = [db executeUpdate:[sqlUTIL sqlUpdateWithModel:model]] ;
+            BOOL bSuccess = [db executeUpdate:[sqlUTIL sqlUpdateSetWhereWithModel:model whereBy:propName]] ;
             if (bSuccess) {
                 XTFMDBLog(@"xt_db transaction update Successfrom index :%d",i) ;
             }
@@ -163,22 +177,14 @@
             }
         }
         
-        if (bAllSuccess) {
+        if (bAllSuccess)
             XTFMDBLog(@"xt_db transaction update all complete \n\n") ;
-        }
-        else {
+        else
             XTFMDBLog(@"xt_db transaction update all fail \n\n") ;
-        }
-        
     }] ;
     
     return bAllSuccess ;
 }
-
-//- (BOOL)updateByKey:(NSString *)key {}
-//+ (BOOL)updateList:(NSArray *)modelList byKey:(NSString *)key {}
-//+ (BOOL)updateList:(NSArray *)modelList byKey:(NSString *)key ignoreKeys:(NSString *)ignores {}
-
 
 #pragma mark --
 #pragma mark - select
@@ -252,8 +258,7 @@
     return [[self anyFuncWithSql:[NSString stringWithFormat:@"SELECT count(*) FROM %@",NSStringFromClass([self class])]] intValue] ;
 }
 
-+ (BOOL)isEmptyTable
-{
++ (BOOL)isEmptyTable {
     return ![self count] ;
 }
 
@@ -277,7 +282,7 @@
 #pragma mark - delete
 
 - (BOOL)deleteModel {
-    return [[self class] deleteModelWhere:[NSString stringWithFormat:@"pkid = '%d'",self.pkid]] ;
+    return [[self class] deleteModelWhere:[NSString stringWithFormat:@"pkid = '%lu'",(unsigned long)self.pkid]] ;
 }
 
 + (BOOL)deleteModelWhere:(NSString *)strWhere {
