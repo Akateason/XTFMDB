@@ -4,20 +4,20 @@
 pod 'XTFMDB'
 
 ### 特性
-1. Model直接存储.获取. 无需再转换
-2. 增删改查. 脱离sql语句
+1. Model直接CURD各种操作. 无需再转换
+2. 脱离sql语句. 常规操作中无需写sql 
 3. 主键自增. 插入不需设主键. pkid
-4. Model满足. 无嵌套. model的第一个属性必须是数字主键.且命名中须包含'pkid'.默认为pkid
+4. 升级简单, 一行代码完成表升级. 只需设置一个新的数据库版本号
 5. 任何操作. 线程安全
-6. 批量操作支持实务. 支持操作失败事务回滚. 且线程安全
+6. 批量操作默认支持实务. 支持操作失败事务回滚 
 7. 支持 每个字段自定义设置关键字. 已经集成默认关键字, 以下情况无需再写( NOT NULL, DEFAULT''字符类型默认值,DEFAULT'0'数字类型默认值 )
-8. 可指定哪些字段不参与建表.
-9. 支持各容器类存储. NSArray, NSDictionary
+8. 支持忽略属性, 比如ViewModel 可指定哪些字段不参与CURD操作. 
+9. 支持各容器类存储. NSArray, NSDictionary. 以及容器中带有自定义类等 NSArray<CutomCls *> ...
 10. 支持NSData类型
-11. 支持图片存储
-12. XTDBModel支持默认字段, createTime, updateTime, isDel
-13. 一行代码完成数据库升级.
-14. 常规运算, 求和,最值等
+11. 支持图片类型
+12. 基类XTDBModel支持默认字段pkid, createTime, updateTime, isDel
+13. 也可用于不继承于XTDBModel的任意类型. 但自定义的Model必须满足一个属性必须是数字主键.且命名中须包含'pkid'
+14. 常规运算,数量,求和,最值等等
 
 ## 使用方法
 ## CocoaPod
@@ -30,10 +30,10 @@ pod 'XTFMDB'
 ```
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-// 在这初始化数据库
-[[XTFMDBbase sharedInstance] configureDB:@"akateason"] ;
+    // 在这初始化数据库
+    [[XTFMDBbase sharedInstance] configureDB:@"yourDB_Name"] ;
 
-return YES;
+    return YES;
 }
 
 ```
@@ -62,42 +62,77 @@ return YES;
 方式2) 任意创建一个类, 可以直接实现对数据库操作增删改查等.但需要手动设置主键pkid
 ```
 @interface Model1 : NSObject
-@property (nonatomic)       int             pkid        ; // primary key
-@property (nonatomic)       int             age         ;
-@property (nonatomic)       float           floatVal    ;
-@property (nonatomic)       long long       tick        ;
-@property (nonatomic,copy)  NSString        *title      ;
-@property (nonatomic,copy)  NSString        *abcabc     ; // 不想在表里出现这个 !!
+@property (nonatomic)           int             pkid        ; //必须加上pkid
+
+// 基本类型, 什么都不用做
+@property (nonatomic)           int             age         ;
+@property (nonatomic)           float           floatVal    ;
+@property (nonatomic)           long long       tick        ;
+@property (nonatomic,copy)      NSString        *title      ;
+@property (nonatomic,copy)      NSString        *abcabc     ;
 @property (nonatomic,strong)    UIImage         *image      ;
-@property (nonatomic,copy)      NSArray         *myArr      ;
-@property (nonatomic,copy)      NSDictionary    *myDic      ;
+
+// 处理容器和嵌套, 需配置, 见下示例
+@property (nonatomic,copy)      NSArray<SomeInfo *>         *myArr      ;//Array<SomeInfo> , 
+//@property (nonatomic,strong)  NSMutableDictionary         *myDic      ;//Dict <NSString,AccessObj> 可变
+@property (nonatomic,copy)      NSDictionary                *myDic      ;//Dict <NSString,AccessObj> 不可变, 都可以
+@property (strong, nonatomic)   NSDate          *today      ;
+@property (strong, nonatomic)   SomeInfo        *sInfo      ; // 自动处理嵌套SomeInfo, 什么都不用做
 @end
 ```
-#### 可配置各个字段关键字
-注意:
-1. 在.m中覆盖基类`modelPropertiesSqliteKeywords`方法. 返回一个Dictionary. key为字段名. val为关键字, 加入想要多个关键字,以空格隔开即可 .
-2. 无需添加`NOT NULL`和`DEFAULT`关键字. (已集成) .
 
+
+#### 可配置各个字段sqlite约束
+注意:
+1. 在.m中覆盖基类`modelPropertiesSqliteKeywords`方法.  假如想要多个关键字,以空格隔开即可 .
+2. 无需添加`NOT NULL`,`DEFAULT`,`PRIMARY Key`关键字. (已集成) .
+
+```
+NOT NULL 约束：确保某列不能有 NULL 值。
+
+DEFAULT 约束：当某列没有指定值时，为该列提供默认值。
+
+UNIQUE 约束：确保某列中的所有值是不同的。
+
+PRIMARY Key 约束：唯一标识数据库表中的各行/记录。 
+
+CHECK 约束：CHECK 约束确保某列中的所有值满足一定条件。
+```
+
+e.g.
 ```
 + (NSDictionary *)modelPropertiesSqliteKeywords
 {
-return @{
-@"title" : @"UNIQUE" ,  // 
-...           
-} ;
+    return @{
+                @"title" : @"UNIQUE" ,  // 
+                ...           
+            } ;
 }
 ```
 
+
 #### 配置不想参与建表的字段
-在.m中覆盖基类ignoreProperties方法. 返回Array. 列出不想参与建表的字段
+在.m中覆盖基类ignoreProperties方法. 列出不想参与建表的字段
 ```
 + (NSArray *)ignoreProperties
 {
-return @[
-@"abcabc" ,
-...
-] ;
+    return @[
+                @"abcabc" ,
+                    ...
+            ] ;
 }
+```
+
+#### 配置嵌套容器的字段. 
+```
++ (NSDictionary *)modelContainerPropertyGenericClass {
+    return @{
+            @"myArr" : [SomeInfo class]    ,
+            @"myDic" : [AccessObj class]   ,
+            @"fatherList" : [SomeInfo class] ,
+        } ;
+}
+
 ```
 
 ###### 只需要导入`"XTFMDB.h"就可使用
@@ -119,7 +154,8 @@ int lastRowID = [aModel xt_insert] ; // 默认返回Sqlite LastRowId
 Bool isSuccess = [Model1 xt_insertList:modelList] ;
 ```
 
-#### 更新
+
+#### 更新 (默认根据客户端主键pkid)
 1. 更新单个
 ```
 Bool isSuccess = [aModel xt_update] ;
@@ -128,6 +164,18 @@ Bool isSuccess = [aModel xt_update] ;
 ```
 Bool isSuccess = [Model1 xt_updateList:modelList] ;
 ```
+
+
+#### 更新 指定根据自定义某个字段
+1. 更新单个
+```
+Bool isSuccess = [aModel xt_updateWhereByProp:@"userName"] ;
+```
+2. 批量更新
+```
+Bool isSuccess = [Model1 xt_updateList:modelList whereByProp:@"userName"] ;
+```
+
 
 #### 查询
 1. 查询表中所有数据
@@ -146,6 +194,14 @@ Model1 *model = [Model1 xt_findFirstWhere:@"pkid == 2"] ;
 ```
 BOOL isContained = [Model1 xt_hasModelWhere:@"pkid == 1"] ;
 ```
+5. 自定义sql语句的查询
+```
+多个
++ (NSArray *)xt_findWithSql:(NSString *)sql ;
+单个
++ (instancetype)xt_findFirstWithSql:(NSString *)sql ;
+```
+
 
 #### 删除
 1. 删除当前Model
@@ -164,13 +220,14 @@ BOOL isDel = [Model1 xt_dropTable] ;
 #### 运算操作 求和,最值,平均值等
 ```
 // func execute Statements
-+ (id)anyFuncWithSql:(NSString *)sql ;
-+ (int)count ;
-+ (BOOL)isEmptyTable ;
-+ (double)maxOf:(NSString *)property ;
-+ (double)minOf:(NSString *)property ;
-+ (double)sumOf:(NSString *)property ;
-+ (double)avgOf:(NSString *)property ;
++ (id)xt_anyFuncWithSql:(NSString *)sql ; // 自定义
++ (int)xt_count ;
++ (BOOL)xt_isEmptyTable ;
++ (double)xt_maxOf:(NSString *)property ;
++ (double)xt_minOf:(NSString *)property ;
++ (double)xt_sumOf:(NSString *)property ;
++ (double)xt_avgOf:(NSString *)property ;
+
 ```
 
 #### 更新数据库版本 加字段 (一行代码)
@@ -185,83 +242,4 @@ BOOL isDel = [Model1 xt_dropTable] ;
 ---
 
 
-```
-@interface XTFMDBBase : NSObject
-+ (XTFMDBBase *)sharedInstance ;
-@property (nonatomic,strong,readonly) FMDatabase         *database   ;
-@property (nonatomic,strong)          FMDatabaseQueue    *queue      ;
-
-#pragma mark --
-
-// config db in "- [(AppDelegate *) AppDidLaunchFinish]"
-- (void)configureDB:(NSString *)name ;
-- (void)configureDB:(NSString *)name
-path:(NSString *)path ;
-
-- (BOOL)verify ;
-
-- (BOOL)isTableExist:(NSString *)tableName ;
-
-@end
-```
-
-```
-@interface XTDBModel : NSObject
-
-// primaryKey
-@property (nonatomic,assign) int pkid ;
-
-#pragma mark - tableIsExist
-
-+ (BOOL)tableIsExist ;
-
-#pragma mark - create
-
-+ (BOOL)createTable ;
-
-#pragma mark - insert
-
-// insert or replace
-- (int)insert ; // return lastRowId .
-+ (BOOL)insertList:(NSArray *)modelList ;
-
-#pragma mark - update
-
-- (BOOL)update ;
-+ (BOOL)updateList:(NSArray *)modelList ;
-
-#pragma mark - select
-
-+ (NSArray *)selectAll ;
-+ (NSArray *)selectWhere:(NSString *)strWhere ; // param e.g. @" pkid = '1' "
-+ (instancetype)findFirstWhere:(NSString *)strWhere ;
-+ (BOOL)hasModelWhere:(NSString *)strWhere ;
-
-// any sql
-+ (NSArray *)findWithSql:(NSString *)sql ;
-+ (instancetype)findFirstWithSql:(NSString *)sql ;
-
-#pragma mark - delete
-
-- (BOOL)deleteModel ;
-+ (BOOL)deleteModelWhere:(NSString *)strWhere ; // param e.g. @" pkid = '1' "
-+ (BOOL)dropTable ;
-
-#pragma mark - alter
-
-+ (BOOL)alterAddColumn:(NSString *)name
-type:(NSString *)type ;
-
-
-#pragma mark - Constraints
-
-// props Sqlite Keywords
-+ (NSDictionary *)modelPropertiesSqliteKeywords ; // set Constraints of property
-// ignore Properties
-+ (NSArray *)ignoreProperties ;
-
-@end
-```
-
-
-有任何疑问或建议. 请issue于我.
+若有任何疑问或建议. 请issue或mail于我.
