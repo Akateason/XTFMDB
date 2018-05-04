@@ -18,6 +18,8 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 
+#define SAFELY_LOG_FORMAT(strResult)   ( strResult.length > 200 ) ? [strResult substringToIndex:200] : strResult
+
 @interface XTAutoSqlUtil ()
 {
     Class m_orginCls ;
@@ -229,7 +231,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                     strProperties = [[strProperties substringToIndex:strProperties.length - 1] mutableCopy] ;
                     strQuestions = [[strQuestions substringToIndex:strQuestions.length - 1] mutableCopy] ;
                     NSString *strResult = [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@ ( %@ ) VALUES ( %@ )",tableName,strProperties,strQuestions] ;
-                    XTFMDBLog(@"xt_db sql insert : \n%@\n\n",[strResult substringToIndex:200]) ;
+                    XTFMDBLog(@"xt_db sql insert : \n%@\n\n",SAFELY_LOG_FORMAT(strResult)) ;
                     return strResult ;
                 }
                     break ;
@@ -237,7 +239,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                     strProperties = [[strProperties substringToIndex:strProperties.length - 1] mutableCopy] ;
                     NSString *whereStr = [NSString stringWithFormat:@"%@ = %@",whereByProp,dicModel[whereByProp]] ;
                     NSString *strResult = [NSString stringWithFormat:@"UPDATE %@ SET %@ WHERE %@",tableName,strProperties,whereStr] ;
-                    XTFMDBLog(@"xt_db sql update : \n%@",[strResult substringToIndex:200]) ;
+                    XTFMDBLog(@"xt_db sql update : \n%@",SAFELY_LOG_FORMAT(strResult)) ;
                     return strResult ;
                 }
                     break ;
