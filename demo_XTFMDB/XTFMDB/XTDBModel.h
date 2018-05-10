@@ -72,12 +72,17 @@ extern NSString *const kPkid ;
 
 // func execute Statements
 + (id)anyFuncWithSql:(NSString *)sql ;
-+ (int)count ;
 + (BOOL)isEmptyTable ;
++ (int)count ;
++ (int)countWhere:(NSString *)whereStr ;
 + (double)maxOf:(NSString *)property ;
++ (double)maxOf:(NSString *)property where:(NSString *)whereStr ;
 + (double)minOf:(NSString *)property ;
++ (double)minOf:(NSString *)property where:(NSString *)whereStr ;
 + (double)sumOf:(NSString *)property ;
++ (double)sumOf:(NSString *)property where:(NSString *)whereStr ;
 + (double)avgOf:(NSString *)property ;
++ (double)avgOf:(NSString *)property where:(NSString *)whereStr ;
 
 #pragma mark - delete
 

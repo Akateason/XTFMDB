@@ -31,17 +31,21 @@
 @property (nonatomic,assign) int pkid ;
 
 #pragma mark - tableIsExist
+
 + (BOOL)xt_tableIsExist ;
 
 #pragma mark - create
+
 + (BOOL)xt_createTable ;
 
 #pragma mark - insert
+
 // insert or replace
 - (int)xt_insert ; // return lastRowId .
 + (BOOL)xt_insertList:(NSArray *)modelList ;
 
 #pragma mark - update
+
 // update by pkid .
 - (BOOL)xt_update ;
 + (BOOL)xt_updateList:(NSArray *)modelList ;
@@ -52,6 +56,7 @@
           whereByProp:(NSString *)propName ;
 
 #pragma mark - select
+
 + (NSArray *)xt_selectAll ;
 + (NSArray *)xt_selectWhere:(NSString *)strWhere ; // param e.g. @" pkid = '1' "
 + (instancetype)xt_findFirstWhere:(NSString *)strWhere ;
@@ -64,14 +69,20 @@
 
 // func execute Statements
 + (id)xt_anyFuncWithSql:(NSString *)sql ;
-+ (int)xt_count ;
 + (BOOL)xt_isEmptyTable ;
++ (int)xt_count ;
++ (int)xt_countWhere:(NSString *)whereStr ;
 + (double)xt_maxOf:(NSString *)property ;
++ (double)xt_maxOf:(NSString *)property where:(NSString *)whereStr ;
 + (double)xt_minOf:(NSString *)property ;
++ (double)xt_minOf:(NSString *)property where:(NSString *)whereStr ;
 + (double)xt_sumOf:(NSString *)property ;
++ (double)xt_sumOf:(NSString *)property where:(NSString *)whereStr ;
 + (double)xt_avgOf:(NSString *)property ;
++ (double)xt_avgOf:(NSString *)property where:(NSString *)whereStr ;
 
 #pragma mark - delete
+
 - (BOOL)xt_deleteModel ;
 + (BOOL)xt_deleteModelWhere:(NSString *)strWhere ; // param e.g. @" pkid = '1' "
 + (BOOL)xt_dropTable ;
@@ -82,7 +93,8 @@
                      type:(NSString *)type ;
 + (BOOL)xt_alterRenameToNewTableName:(NSString *)name ;
 
-#pragma mark - Constraints
+#pragma mark - Constraints config
+
 //props Sqlite Keywords
 + (NSDictionary *)modelPropertiesSqliteKeywords ; // set sqlite Constraints of property
 // ignore Properties . these properties will not join db CURD .

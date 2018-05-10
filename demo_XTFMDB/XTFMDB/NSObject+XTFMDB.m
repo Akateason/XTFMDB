@@ -253,32 +253,59 @@ static void *key_pkid = &key_pkid ;
     return !((NSNull *)val == [NSNull null]) ? val : nil ;
 }
 
-+ (int)xt_count {
-    return [[self xt_anyFuncWithSql:[NSString stringWithFormat:@"SELECT count(*) FROM %@",NSStringFromClass([self class])]] intValue] ;
-}
-
 + (BOOL)xt_isEmptyTable {
     return ![self xt_count] ;
 }
 
++ (int)xt_count {
+    return [self xt_countWhere:nil] ;
+}
+
++ (int)xt_countWhere:(NSString *)whereStr {
+    whereStr = whereStr ? [NSString stringWithFormat:@"WHERE %@",whereStr] : @"" ;
+    return [[self xt_anyFuncWithSql:[NSString stringWithFormat:@"SELECT count(*) FROM %@ %@",NSStringFromClass([self class]),whereStr]] intValue] ;
+}
+
 + (double)xt_maxOf:(NSString *)property {
-    return [[self xt_anyFuncWithSql:[NSString stringWithFormat:@"SELECT max(%@) FROM %@",property,NSStringFromClass([self class])]] doubleValue] ;
+    return [self xt_maxOf:property where:nil] ;
+}
+
++ (double)xt_maxOf:(NSString *)property where:(NSString *)whereStr {
+    whereStr = whereStr ? [NSString stringWithFormat:@"WHERE %@",whereStr] : @"" ;
+    return [[self xt_anyFuncWithSql:[NSString stringWithFormat:@"SELECT max(%@) FROM %@ %@",property,NSStringFromClass([self class]),whereStr]] doubleValue] ;
 }
 
 + (double)xt_minOf:(NSString *)property {
-    return [[self xt_anyFuncWithSql:[NSString stringWithFormat:@"SELECT min(%@) FROM %@",property,NSStringFromClass([self class])]] doubleValue] ;
+    return [self xt_minOf:property where:nil] ;
+}
+
++ (double)xt_minOf:(NSString *)property where:(NSString *)whereStr {
+    whereStr = whereStr ? [NSString stringWithFormat:@"WHERE %@",whereStr] : @"" ;
+    return [[self xt_anyFuncWithSql:[NSString stringWithFormat:@"SELECT min(%@) FROM %@ %@",property,NSStringFromClass([self class]),whereStr]] doubleValue] ;
 }
 
 + (double)xt_sumOf:(NSString *)property {
-    return [[self xt_anyFuncWithSql:[NSString stringWithFormat:@"SELECT sum(%@) FROM %@",property,NSStringFromClass([self class])]] doubleValue] ;
+    return [self xt_sumOf:property where:nil] ;
+}
+
++ (double)xt_sumOf:(NSString *)property where:(NSString *)whereStr {
+    whereStr = whereStr ? [NSString stringWithFormat:@"WHERE %@",whereStr] : @"" ;
+    return [[self xt_anyFuncWithSql:[NSString stringWithFormat:@"SELECT sum(%@) FROM %@ %@",property,NSStringFromClass([self class]),whereStr]] doubleValue] ;
 }
 
 + (double)xt_avgOf:(NSString *)property {
-    return [[self xt_anyFuncWithSql:[NSString stringWithFormat:@"SELECT avg(%@) FROM %@",property,NSStringFromClass([self class])]] doubleValue] ;
+    return [self xt_avgOf:property where:nil] ;
 }
+
++ (double)xt_avgOf:(NSString *)property where:(NSString *)whereStr {
+    whereStr = whereStr ? [NSString stringWithFormat:@"WHERE %@",whereStr] : @"" ;
+    return [[self xt_anyFuncWithSql:[NSString stringWithFormat:@"SELECT avg(%@) FROM %@ %@",property,NSStringFromClass([self class]),whereStr]] doubleValue] ;
+}
+
 
 #pragma mark --
 #pragma mark - delete
+
 - (BOOL)xt_deleteModel {
     return [[self class] xt_deleteModelWhere:[NSString stringWithFormat:@"pkid = '%lu'",(unsigned long)self.pkid]] ;
 }

@@ -254,28 +254,53 @@ NSString *const kPkid = @"pkid";
     return !((NSNull *)val == [NSNull null]) ? val : nil ;
 }
 
-+ (int)count {
-    return [[self anyFuncWithSql:[NSString stringWithFormat:@"SELECT count(*) FROM %@",NSStringFromClass([self class])]] intValue] ;
-}
-
 + (BOOL)isEmptyTable {
     return ![self count] ;
 }
 
++ (int)count {
+    return [self countWhere:nil] ;
+}
+
++ (int)countWhere:(NSString *)whereStr {
+    whereStr = whereStr ? [NSString stringWithFormat:@"WHERE %@",whereStr] : @"" ;
+    return [[self anyFuncWithSql:[NSString stringWithFormat:@"SELECT count(*) FROM %@ %@",NSStringFromClass([self class]),whereStr]] intValue] ;
+}
+
 + (double)maxOf:(NSString *)property {
-    return [[self anyFuncWithSql:[NSString stringWithFormat:@"SELECT max(%@) FROM %@",property,NSStringFromClass([self class])]] doubleValue] ;
+    return [self maxOf:property where:nil] ;
+}
+
++ (double)maxOf:(NSString *)property where:(NSString *)whereStr {
+    whereStr = whereStr ? [NSString stringWithFormat:@"WHERE %@",whereStr] : @"" ;
+    return [[self anyFuncWithSql:[NSString stringWithFormat:@"SELECT max(%@) FROM %@ %@",property,NSStringFromClass([self class]),whereStr]] doubleValue] ;
 }
 
 + (double)minOf:(NSString *)property {
-    return [[self anyFuncWithSql:[NSString stringWithFormat:@"SELECT min(%@) FROM %@",property,NSStringFromClass([self class])]] doubleValue] ;
+    return [self minOf:property where:nil] ;
+}
+
++ (double)minOf:(NSString *)property where:(NSString *)whereStr {
+    whereStr = whereStr ? [NSString stringWithFormat:@"WHERE %@",whereStr] : @"" ;
+    return [[self anyFuncWithSql:[NSString stringWithFormat:@"SELECT min(%@) FROM %@ %@",property,NSStringFromClass([self class]),whereStr]] doubleValue] ;
 }
 
 + (double)sumOf:(NSString *)property {
-    return [[self anyFuncWithSql:[NSString stringWithFormat:@"SELECT sum(%@) FROM %@",property,NSStringFromClass([self class])]] doubleValue] ;
+    return [self sumOf:property where:nil] ;
+}
+    
++ (double)sumOf:(NSString *)property where:(NSString *)whereStr {
+    whereStr = whereStr ? [NSString stringWithFormat:@"WHERE %@",whereStr] : @"" ;
+    return [[self anyFuncWithSql:[NSString stringWithFormat:@"SELECT sum(%@) FROM %@ %@",property,NSStringFromClass([self class]),whereStr]] doubleValue] ;
 }
 
 + (double)avgOf:(NSString *)property {
-    return [[self anyFuncWithSql:[NSString stringWithFormat:@"SELECT avg(%@) FROM %@",property,NSStringFromClass([self class])]] doubleValue] ;
+    return [self avgOf:property where:nil] ;
+}
+
++ (double)avgOf:(NSString *)property where:(NSString *)whereStr {
+    whereStr = whereStr ? [NSString stringWithFormat:@"WHERE %@",whereStr] : @"" ;
+    return [[self anyFuncWithSql:[NSString stringWithFormat:@"SELECT avg(%@) FROM %@ %@",property,NSStringFromClass([self class]),whereStr]] doubleValue] ;
 }
 
 #pragma mark --
