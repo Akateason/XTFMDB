@@ -4,7 +4,8 @@
 //
 //  Created by teason23 on 2017/5/4.
 //  Copyright © 2017年 teaason. All rights reserved.
-//
+
+// this is a zample .
 
 #import "ViewController.h"
 #import <objc/runtime.h>
@@ -57,6 +58,7 @@
                         @"findFirst",
                         @"AlterAdd",
                         @"sum" ,
+                        @"orderBy" ,
                         ] ;
 }
 
@@ -356,6 +358,18 @@
         double sumOfAges = [AnyModel xt_sumOf:@"age"] ;
         NSLog(@"sum of ages : %lf",sumOfAges) ;
     }
+}
+
+- (void)orderByAction {
+    NSArray *result = nil ;
+    if (!self.dBModelOrCustom) {
+        result = [[CustomDBModel selectAll] xt_orderby:@"age" descOrAsc:YES] ;
+    }
+    else {
+        result = [[AnyModel xt_selectAll] xt_orderby:@"age" descOrAsc:YES] ;
+    }
+
+    NSLog(@"order by  ???? \n: %@",[result yy_modelToJSONObject]) ;
 }
 
 #pragma mark -

@@ -13,5 +13,6 @@
 #import "XTFMDBBase.h"
 #import "XTDBModel.h"
 #import "NSObject+XTFMDB.h"
+#import "NSArray+XTFMDB.h"
 
 #endif /* XTFMDB_h */
