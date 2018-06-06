@@ -201,7 +201,11 @@ BOOL isContained = [Model1 xt_hasModelWhere:@"pkid == 1"] ;
 单个
 + (instancetype)xt_findFirstWithSql:(NSString *)sql ;
 ```
+6. 对结果排序
+```
+list = [[CustomDBModel selectAll] xt_orderby:@"age" descOrAsc:YES] ; // 对CustomDBModel结果集的age字段,做降序
 
+```
 
 #### 删除
 1. 删除当前Model
