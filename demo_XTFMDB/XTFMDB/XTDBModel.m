@@ -56,7 +56,13 @@ NSString *const kPkid = @"pkid";
 #pragma mark --
 #pragma mark - insert
 
-- (int)insert {
+typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
+    xt_insertWay_insert,
+    xt_insertWay_insertOrIgnore,
+    xt_insertWay_insertOrReplace
+};
+
+- (int)insertByWay:(XTFMDB_insertWay)way {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return -1 ;
     if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return -2 ;
@@ -65,7 +71,15 @@ NSString *const kPkid = @"pkid";
     [QUEUE inDatabase:^(FMDatabase *db) {
         self.createTime = [NSDate xt_getNowTick] ;
         self.updateTime = [NSDate xt_getNowTick] ;
-        BOOL bSuccess = [db executeUpdate:[sqlUTIL sqlInsertWithModel:self]] ;
+        
+        BOOL bSuccess ;
+        switch (way) {
+            case xt_insertWay_insert:           bSuccess = [db executeUpdate:[sqlUTIL sqlInsertWithModel:self]] ;           break ;
+            case xt_insertWay_insertOrIgnore:   bSuccess = [db executeUpdate:[sqlUTIL sqlInsertOrIgnoreWithModel:self]] ;   break ;
+            case xt_insertWay_insertOrReplace:  bSuccess = [db executeUpdate:[sqlUTIL sqlInsertOrReplaceWithModel:self]] ;  break ;
+            default: break ;
+        }
+        
         if (bSuccess) {
             lastRowId = (int)[db lastInsertRowId] ;
             XTFMDBLog(@"xt_db insert success lastRowID : %d \n\n",lastRowId) ;
@@ -79,7 +93,7 @@ NSString *const kPkid = @"pkid";
     return lastRowId ;
 }
 
-+ (BOOL)insertList:(NSArray *)modelList {
++ (BOOL)insertList:(NSArray *)modelList byWay:(XTFMDB_insertWay)way {
     if (!modelList || !modelList.count) return FALSE ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:NSStringFromClass([[modelList firstObject] class])]) return FALSE ;
@@ -91,7 +105,15 @@ NSString *const kPkid = @"pkid";
             XTDBModel *model = [modelList objectAtIndex:i] ;
             model.createTime = [NSDate xt_getNowTick] ;
             model.updateTime = [NSDate xt_getNowTick] ;
-            BOOL bSuccess = [db executeUpdate:[sqlUTIL sqlInsertWithModel:model]] ;
+            
+            BOOL bSuccess ;
+            switch (way) {
+                case xt_insertWay_insert:           bSuccess = [db executeUpdate:[sqlUTIL sqlInsertWithModel:self]] ;           break ;
+                case xt_insertWay_insertOrIgnore:   bSuccess = [db executeUpdate:[sqlUTIL sqlInsertOrIgnoreWithModel:self]] ;   break ;
+                case xt_insertWay_insertOrReplace:  bSuccess = [db executeUpdate:[sqlUTIL sqlInsertOrReplaceWithModel:self]] ;  break ;
+                default: break ;
+            }
+            
             if (bSuccess) {
                 XTFMDBLog(@"xt_db transaction insert Successfrom index :%d",i) ;
             }
@@ -115,7 +137,29 @@ NSString *const kPkid = @"pkid";
     return bAllSuccess ;
 }
 
+- (int)insert {
+    return [self insertByWay:xt_insertWay_insert] ;
+}
 
++ (BOOL)insertList:(NSArray *)modelList {
+    return [self insertList:modelList byWay:xt_insertWay_insert] ;
+}
+
+- (int)insertOrIgnore {
+    return [self insertByWay:xt_insertWay_insertOrIgnore] ;
+}
+
++ (BOOL)insertOrIgnoreWithList:(NSArray *)modelList {
+    return [self insertList:modelList byWay:xt_insertWay_insertOrIgnore] ;
+}
+
+- (int)insertOrReplace {
+    return [self insertByWay:xt_insertWay_insertOrReplace] ;
+}
+
++ (BOOL)insertOrReplaceWithList:(NSArray *)modelList {
+    return [self insertList:modelList byWay:xt_insertWay_insertOrReplace] ;
+}
 
 #pragma mark --
 #pragma mark - update

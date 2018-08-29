@@ -64,20 +64,34 @@ static void *key_pkid = &key_pkid ;
 #pragma mark --
 #pragma mark - insert
 
-- (int)xt_insert {
+typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
+    xt_insertWay_insert,
+    xt_insertWay_insertOrIgnore,
+    xt_insertWay_insertOrReplace
+};
+
+- (int)insertByWay:(XTFMDB_insertWay)way {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return -1 ;
     if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return -2 ;
     
     __block int lastRowId = 0 ;
     [QUEUE inDatabase:^(FMDatabase *db) {
-        BOOL bSuccess = [db executeUpdate:[sqlUTIL sqlInsertWithModel:self]] ;
+
+        BOOL bSuccess ;
+        switch (way) {
+            case xt_insertWay_insert:           bSuccess = [db executeUpdate:[sqlUTIL sqlInsertWithModel:self]] ;           break ;
+            case xt_insertWay_insertOrIgnore:   bSuccess = [db executeUpdate:[sqlUTIL sqlInsertOrIgnoreWithModel:self]] ;   break ;
+            case xt_insertWay_insertOrReplace:  bSuccess = [db executeUpdate:[sqlUTIL sqlInsertOrReplaceWithModel:self]] ;  break ;
+            default: break ;
+        }
+        
         if (bSuccess) {
             lastRowId = (int)[db lastInsertRowId] ;
-            XTFMDBLog(@"xt_db insert success lastRowID : %d fromTB %@ \n\n",lastRowId,tableName) ;
+            XTFMDBLog(@"xt_db insert success lastRowID : %d \n\n",lastRowId) ;
         }
         else {
-            XTFMDBLog(@"xt_db insert fail fromTB %@\n\n",tableName) ;
+            XTFMDBLog(@"xt_db insert fail\n\n") ;
             lastRowId = -3 ;
         }
     }] ;
@@ -85,8 +99,8 @@ static void *key_pkid = &key_pkid ;
     return lastRowId ;
 }
 
-+ (BOOL)xt_insertList:(NSArray *)modelList {
-    if (!modelList || !modelList.count) FALSE ;
++ (BOOL)insertList:(NSArray *)modelList byWay:(XTFMDB_insertWay)way {
+    if (!modelList || !modelList.count) return FALSE ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     if (![[XTFMDBBase sharedInstance] isTableExist:NSStringFromClass([[modelList firstObject] class])]) return FALSE ;
     
@@ -94,8 +108,15 @@ static void *key_pkid = &key_pkid ;
     [QUEUE inTransaction:^(FMDatabase *db, BOOL *rollback) {
         
         for (int i = 0; i < [modelList count]; i++) {
-            id model = [modelList objectAtIndex:i] ;
-            BOOL bSuccess = [db executeUpdate:[sqlUTIL sqlInsertWithModel:model]] ;
+            
+            BOOL bSuccess ;
+            switch (way) {
+                case xt_insertWay_insert:           bSuccess = [db executeUpdate:[sqlUTIL sqlInsertWithModel:self]] ;           break ;
+                case xt_insertWay_insertOrIgnore:   bSuccess = [db executeUpdate:[sqlUTIL sqlInsertOrIgnoreWithModel:self]] ;   break ;
+                case xt_insertWay_insertOrReplace:  bSuccess = [db executeUpdate:[sqlUTIL sqlInsertOrReplaceWithModel:self]] ;  break ;
+                default: break ;
+            }
+            
             if (bSuccess) {
                 XTFMDBLog(@"xt_db transaction insert Successfrom index :%d",i) ;
             }
@@ -107,16 +128,41 @@ static void *key_pkid = &key_pkid ;
             }
         }
         
-        if (bAllSuccess)
-            XTFMDBLog(@"xt_db transaction insert all complete in %@\n\n",NSStringFromClass([self class])) ;
-        else
-            XTFMDBLog(@"xt_db transaction insert all fail in %@\n\n",NSStringFromClass([self class])) ;
+        if (bAllSuccess) {
+            XTFMDBLog(@"xt_db transaction insert %@ all complete\n\n",NSStringFromClass([self class])) ;
+        }
+        else {
+            XTFMDBLog(@"xt_db transaction insert %@ all fail\n\n",NSStringFromClass([self class])) ;
+        }
+        
     }] ;
     
     return bAllSuccess ;
 }
 
+- (int)xt_insert {
+    return [self insertByWay:xt_insertWay_insert] ;
+}
 
++ (BOOL)xt_insertList:(NSArray *)modelList {
+    return [self insertList:modelList byWay:xt_insertWay_insert] ;
+}
+
+- (int)xt_insertOrIgnore {
+    return [self insertByWay:xt_insertWay_insertOrIgnore] ;
+}
+
++ (BOOL)xt_insertOrIgnoreWithList:(NSArray *)modelList {
+    return [self insertList:modelList byWay:xt_insertWay_insertOrIgnore] ;
+}
+
+- (int)xt_insertOrReplace {
+    return [self insertByWay:xt_insertWay_insertOrReplace] ;
+}
+
++ (BOOL)xt_insertOrReplaceWithList:(NSArray *)modelList {
+    return [self insertList:modelList byWay:xt_insertWay_insertOrReplace] ;
+}
 
 #pragma mark --
 #pragma mark - update

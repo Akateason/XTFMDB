@@ -28,8 +28,7 @@
 
 @implementation XTAutoSqlUtil
 
-- (NSString *)sqlCreateTableWithClass:(Class)cls
-{
+- (NSString *)sqlCreateTableWithClass:(Class)cls {
     m_orginCls = cls ;
     return [self getSqlUseRecursiveQuery:nil
                                    class:cls
@@ -37,12 +36,27 @@
                              whereByProp:nil] ;
 }
 
-- (NSString *)sqlInsertWithModel:(id)model
-{
+- (NSString *)sqlInsertWithModel:(id)model {
     m_orginCls = [model class] ;
     return [self getSqlUseRecursiveQuery:model
                                    class:nil
                                     type:xt_type_insert
+                             whereByProp:nil] ;
+}
+
+- (NSString *)sqlInsertOrIgnoreWithModel:(id)model {
+    m_orginCls = [model class] ;
+    return [self getSqlUseRecursiveQuery:model
+                                   class:nil
+                                    type:xt_type_insertOrIgnore
+                             whereByProp:nil] ;
+}
+
+- (NSString *)sqlInsertOrReplaceWithModel:(id)model {
+    m_orginCls = [model class] ;
+    return [self getSqlUseRecursiveQuery:model
+                                   class:nil
+                                    type:xt_type_insertOrReplace
                              whereByProp:nil] ;
 }
 
@@ -88,6 +102,8 @@
 typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     xt_type_create = 1,
     xt_type_insert ,
+    xt_type_insertOrIgnore ,
+    xt_type_insertOrReplace ,
     xt_type_update ,
 } ;
 
@@ -198,7 +214,9 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                 [strProperties appendString:[self appendCreate:cls]] ;
             }
                 break ;
-            case xt_type_insert: {
+            case xt_type_insert:
+            case xt_type_insertOrIgnore:
+            case xt_type_insertOrReplace:{
                 NSDictionary *resDic = [self appendInsert:cls
                                                     model:model
                                                  dicModel:dicModel] ;
@@ -230,7 +248,23 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                 case xt_type_insert: {
                     strProperties = [[strProperties substringToIndex:strProperties.length - 1] mutableCopy] ;
                     strQuestions = [[strQuestions substringToIndex:strQuestions.length - 1] mutableCopy] ;
+                    NSString *strResult = [NSString stringWithFormat:@"INSERT INTO %@ ( %@ ) VALUES ( %@ )",tableName,strProperties,strQuestions] ;
+                    XTFMDBLog(@"xt_db sql insert : \n%@\n\n",SAFELY_LOG_FORMAT(strResult)) ;
+                    return strResult ;
+                }
+                    break ;
+                case xt_type_insertOrIgnore: {
+                    strProperties = [[strProperties substringToIndex:strProperties.length - 1] mutableCopy] ;
+                    strQuestions = [[strQuestions substringToIndex:strQuestions.length - 1] mutableCopy] ;
                     NSString *strResult = [NSString stringWithFormat:@"INSERT OR IGNORE INTO %@ ( %@ ) VALUES ( %@ )",tableName,strProperties,strQuestions] ;
+                    XTFMDBLog(@"xt_db sql insert : \n%@\n\n",SAFELY_LOG_FORMAT(strResult)) ;
+                    return strResult ;
+                }
+                    break ;
+                case xt_type_insertOrReplace: {
+                    strProperties = [[strProperties substringToIndex:strProperties.length - 1] mutableCopy] ;
+                    strQuestions = [[strQuestions substringToIndex:strQuestions.length - 1] mutableCopy] ;
+                    NSString *strResult = [NSString stringWithFormat:@"INSERT OR REPLACE INTO %@ ( %@ ) VALUES ( %@ )",tableName,strProperties,strQuestions] ;
                     XTFMDBLog(@"xt_db sql insert : \n%@\n\n",SAFELY_LOG_FORMAT(strResult)) ;
                     return strResult ;
                 }
