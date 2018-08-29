@@ -44,7 +44,7 @@ extern NSString *const kPkid ;
 
 #pragma mark - insert
 
-// insert or replace
+// insert or ignore
 - (int)insert ; // return lastRowId .
 + (BOOL)insertList:(NSArray *)modelList ;
 

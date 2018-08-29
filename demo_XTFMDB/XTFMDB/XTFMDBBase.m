@@ -13,7 +13,6 @@
 
 #define SQLITE_NAME( _name_ )   [name stringByAppendingString:@".sqlite"]
 
-#define DB                      [XTFMDBBase sharedInstance].database
 
 @interface XTFMDBBase ()
 @property (nonatomic,strong,readwrite) FMDatabase         *database   ;
@@ -22,8 +21,8 @@
 @implementation XTFMDBBase
 @synthesize version = _version ;
 
-+ (XTFMDBBase *)sharedInstance
-{
++ (XTFMDBBase *)sharedInstance {
+    
     static dispatch_once_t onceToken;
     static XTFMDBBase *singleton ;
     dispatch_once(&onceToken, ^{
@@ -32,13 +31,12 @@
     return singleton ;
 }
 
-- (int)version
-{
+- (int)version {
     return [XTDBVersion findFirst].version ;
 }
 
-- (void)setVersion:(int)version
-{
+- (void)setVersion:(int)version {
+    
     XTDBVersion *dbv = [XTDBVersion findFirst] ;
     dbv.version = version ;
     [dbv update] ;
@@ -48,20 +46,19 @@
 #pragma mark --
 #pragma mark - configure
 
-- (void)configureDB:(NSString *)name
-{
+- (void)configureDB:(NSString *)name {
     NSString *documentPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] ;
     [self configureDB:name
                  path:documentPath] ;
 }
 
 - (void)configureDB:(NSString *)name
-               path:(NSString *)path
-{
+               path:(NSString *)path {
+    
     XTFMDBLog(@"xt_db path :\n%@", path) ;
     XTFMDBLog(@"xt_db sqlName  : %@",name) ;
-    NSString *finalPath = [path stringByAppendingPathComponent:SQLITE_NAME(name)] ;
     
+    NSString *finalPath = [path stringByAppendingPathComponent:SQLITE_NAME(name)] ;
     DB = [FMDatabase databaseWithPath:finalPath] ;
     [DB open] ;
     
@@ -80,8 +77,8 @@
 
 #pragma mark --
 
-- (BOOL)verify
-{
+- (BOOL)verify {
+    
     if (!DB) {
         XTFMDBLog(@"xt_db not exist") ;
         return FALSE;
@@ -94,8 +91,8 @@
     return TRUE ;
 }
 
-- (BOOL)isTableExist:(NSString *)tableName
-{
+- (BOOL)isTableExist:(NSString *)tableName {
+    
     __block BOOL bExist ;
     [QUEUE inDatabase:^(FMDatabase *db) {
         bExist = [db tableExists:tableName] ;
@@ -110,8 +107,8 @@
 
 - (void)dbUpgradeTable:(Class)tableCls
              paramsAdd:(NSArray *)paramsAdd
-               version:(int)version
-{
+               version:(int)version {
+    
     NSString *tableName = NSStringFromClass(tableCls) ;
     int dbVersion = self.version ;
     if (version <= dbVersion) {

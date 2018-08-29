@@ -14,6 +14,7 @@
 #define DB                            [XTFMDBBase sharedInstance].database
 #define sqlUTIL                       [XTFMDBBase sharedInstance].sqlUtil
 
+
 @interface XTFMDBBase : NSObject
 
 + (XTFMDBBase *)sharedInstance ;
@@ -32,6 +33,7 @@
  */
 - (void)configureDB:(NSString *)name
                path:(NSString *)path ;
+
 - (void)configureDB:(NSString *)name ;
 
 /**

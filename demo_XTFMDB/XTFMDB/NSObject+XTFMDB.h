@@ -40,7 +40,7 @@
 
 #pragma mark - insert
 
-// insert or replace
+// insert or ignore
 - (int)xt_insert ; // return lastRowId .
 + (BOOL)xt_insertList:(NSArray *)modelList ;
 

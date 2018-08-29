@@ -15,15 +15,11 @@
 
 #define XTFMDBLog(format, ...) do {                                         \
 (NSLog)((format), ##__VA_ARGS__);                                           \
-fprintf(stderr, "🏀🏀🏀🏀🏀\n");                                           \
+fprintf(stderr, "🌙🌙🌙xtfmdb🌙🌙🌙\n");                                           \
 } while (0)
 
 #else
 #   define XTFMDBLog(...)
 #endif
-
-
-
-
 
 #endif /* XTFMDBConst_h */
