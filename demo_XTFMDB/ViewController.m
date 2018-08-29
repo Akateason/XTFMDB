@@ -39,8 +39,7 @@
     return _dBModelOrCustom ;
 }
 
-- (void)viewDidLoad
-{
+- (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     self.edgesForExtendedLayout = UIRectEdgeNone ;
@@ -50,6 +49,8 @@
                         @"select" ,
                         @"selectWhere" ,
                         @"insert" ,
+                        @"insertOrIgnore" ,
+                        @"insertOrReplace" ,
                         @"update" ,
                         @"delete" ,
                         @"drop",
@@ -68,32 +69,26 @@
 }
 
 #pragma mark - table
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.datasource.count ;
 }
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     MainVCell *cell = [tableView dequeueReusableCellWithIdentifier:@"MainVCell"] ;
     cell.textLabel.text = self.datasource[indexPath.row] ;
     return cell ;
 }
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 40 ;
-}
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {return 40 ;}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *strButtonName = [self.datasource[indexPath.row] stringByAppendingString:@"Action"] ;
     SEL methodSel = NSSelectorFromString(strButtonName) ;
     ((void (*)(id, SEL, id))objc_msgSend)(self, methodSel, nil) ;
 }
 
-
 #pragma mark - actions
 
-- (void)createAction
-{
+- (void)createAction {
     if (!self.dBModelOrCustom) {
         [CustomDBModel createTable] ;
     }
@@ -102,8 +97,7 @@
     }
 }
 
-- (void)selectAction
-{
+- (void)selectAction {
     if (!self.dBModelOrCustom) {
         NSArray *list = [CustomDBModel selectAll] ;
         for (CustomDBModel *model in list) {
@@ -120,8 +114,7 @@
     [self displayJump] ;
 }
 
-- (void)selectWhereAction
-{
+- (void)selectWhereAction {
     if (!self.dBModelOrCustom) {
         NSArray *list = [CustomDBModel selectWhere:@"age > 10 "] ;
         NSLog(@"list : %@ \ncount:%@",list,@(list.count)) ;
@@ -132,8 +125,7 @@
     }
 }
 
-- (void)insertAction
-{
+- (void)insertAction {
     if (!self.dBModelOrCustom) {
         CustomDBModel *m1 = [CustomDBModel new] ; // 不需设置主键
         m1.age = arc4random() % 100 ;
@@ -148,7 +140,7 @@
         [m1 insert] ;
     }
     else {
-        AnyModel *m1 = [AnyModel new] ; // 不需设置主键
+        AnyModel *m1 = [AnyModel new] ; // 需设置主键
         m1.age = arc4random() % 100 ;
         m1.floatVal = 3232.89f ;
         m1.tick = 666666666666 ;
@@ -187,8 +179,49 @@
     [self displayJump] ;
 }
 
-- (void)updateAction
-{
+- (void)insertOrIgnoreAction {
+    if (!self.dBModelOrCustom) {
+        CustomDBModel *m1 = [CustomDBModel new] ; // 不需设置主键
+        m1.age = 1 ;
+        m1.floatVal = 2 ;
+        m1.tick = 1 ;
+        m1.title = @"insert or ignore" ;
+        [m1 insertOrIgnore] ;
+    }
+    else {
+        AnyModel *m1 = [AnyModel new] ;
+        m1.age = 1 ;
+        m1.floatVal = 2 ;
+        m1.tick = 1 ;
+        m1.title = @"insert or ignore" ;
+        [m1 xt_insertOrIgnore] ;
+    }
+    
+    [self displayJump] ;
+}
+
+- (void)insertOrReplaceAction {
+    if (!self.dBModelOrCustom) {
+        CustomDBModel *m1 = [CustomDBModel new] ; // 不需设置主键
+        m1.age = 5 ;
+        m1.floatVal = 3 ;
+        m1.tick = 13 ;
+        m1.title = @"insert or replace" ;
+        [m1 insertOrReplace] ;
+    }
+    else {
+        AnyModel *m1 = [AnyModel new] ;
+        m1.age = 5 ;
+        m1.floatVal = 3 ;
+        m1.tick = 13 ;
+        m1.title = @"insert or replace" ;
+        [m1 xt_insertOrReplace] ;
+    }
+    
+    [self displayJump] ;
+}
+
+- (void)updateAction {
     if (!self.dBModelOrCustom) {
         CustomDBModel *m1 = [[CustomDBModel selectAll] lastObject] ;
         m1.image = nil ;
@@ -215,8 +248,7 @@
     [self displayJump] ;
 }
 
-- (void)deleteAction
-{
+- (void)deleteAction {
     if (!self.dBModelOrCustom) {
         NSString *titleDel = ((CustomDBModel *)[[CustomDBModel selectAll] lastObject]).title ;
         [CustomDBModel deleteModelWhere:[NSString stringWithFormat:@"title == '%@'",titleDel]] ;
@@ -229,8 +261,7 @@
     [self displayJump] ;
 }
 
-- (void)dropAction
-{
+- (void)dropAction {
     if (!self.dBModelOrCustom) {
         [CustomDBModel dropTable] ;
     }
@@ -241,12 +272,10 @@
     [self displayJump] ;
 }
 
-- (void)insertListAction
-{
+- (void)insertListAction {
     if (!self.dBModelOrCustom) {
         NSMutableArray *list = [@[] mutableCopy] ;
-        for (int i = 0 ; i < 10; i++)
-        {
+        for (int i = 0 ; i < 10; i++) {
             CustomDBModel *m1 = [CustomDBModel new] ; // 插入不需设置主键
             m1.age = i + 1 ;
             m1.floatVal = i + 0.3 ;
@@ -266,8 +295,7 @@
     }
     else {
         NSMutableArray *list = [@[] mutableCopy] ;
-        for (int i = 0 ; i < 10; i++)
-        {
+        for (int i = 0 ; i < 10; i++) {
             AnyModel *m1 = [AnyModel new] ; // 插入不需设置主键
             m1.age = i + 1 ;
             m1.floatVal = i + 0.3 ;
@@ -290,13 +318,11 @@
     [self displayJump] ;
 }
 
-- (void)updateListAction
-{
+- (void)updateListAction {
     if (!self.dBModelOrCustom) {
         NSArray *getlist = [CustomDBModel selectWhere:@"age > 5"] ;
         NSMutableArray *tmplist = [@[] mutableCopy] ;
-        for (int i = 0 ; i < getlist.count ; i++)
-        {
+        for (int i = 0 ; i < getlist.count ; i++) {
             CustomDBModel *model = getlist[i] ;
             model.title = [model.title stringByAppendingString:[NSString stringWithFormat:@"+%d",model.age]] ;
             model.myArr = @[@15] ;
@@ -309,8 +335,7 @@
     else {
         NSArray *getlist = [AnyModel xt_selectWhere:@"age > 5"] ;
         NSMutableArray *tmplist = [@[] mutableCopy] ;
-        for (int i = 0 ; i < getlist.count ; i++)
-        {
+        for (int i = 0 ; i < getlist.count ; i++) {
             AnyModel *model = getlist[i] ;
             model.title = [model.title stringByAppendingString:[NSString stringWithFormat:@"+%d",model.age]] ;
             model.myArr = @[@15] ;
@@ -325,8 +350,7 @@
     [self displayJump] ;
 }
 
-- (void)findFirstAction
-{
+- (void)findFirstAction {
     if (!self.dBModelOrCustom) {
         CustomDBModel *model = [CustomDBModel findFirstWhere:@"pkid == 2"] ;
         NSLog(@"m : %@",[model yy_modelToJSONObject]) ;
@@ -337,8 +361,7 @@
     }
 }
 
-- (void)AlterAddAction
-{
+- (void)AlterAddAction {
     if (!self.dBModelOrCustom) {
         [CustomDBModel alterAddColumn:@"adddddddddd"
                                  type:@"INTEGER default 0 NOT NULL"] ;
@@ -378,7 +401,6 @@
     [self performSegueWithIdentifier:@"root2display"
                               sender:@(self.dBModelOrCustom)] ;
 }
-
 
 #pragma mark - storyboard
 

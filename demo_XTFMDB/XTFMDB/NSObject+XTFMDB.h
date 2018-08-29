@@ -41,15 +41,15 @@
 #pragma mark - insert
 
 // insert
-- (int)xt_insert ; // return lastRowId .
+- (BOOL)xt_insert ; // return lastRowId .
 + (BOOL)xt_insertList:(NSArray *)modelList ;
 
 // insert or ignore
-- (int)xt_insertOrIgnore ; // return lastRowId .
+- (BOOL)xt_insertOrIgnore ; // return lastRowId .
 + (BOOL)xt_insertOrIgnoreWithList:(NSArray *)modelList ;
 
 // insert or replace
-- (int)xt_insertOrReplace ; // return lastRowId .
+- (BOOL)xt_insertOrReplace ; // return lastRowId .
 + (BOOL)xt_insertOrReplaceWithList:(NSArray *)modelList ;
 #pragma mark - update
 

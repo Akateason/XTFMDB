@@ -70,33 +70,23 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     xt_insertWay_insertOrReplace
 };
 
-- (int)insertByWay:(XTFMDB_insertWay)way {
+- (BOOL)insertByWay:(XTFMDB_insertWay)way {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return -1 ;
     if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return -2 ;
     
-    __block int lastRowId = 0 ;
+    __block BOOL bSuccess ;
     [QUEUE inDatabase:^(FMDatabase *db) {
-
-        BOOL bSuccess ;
+        
         switch (way) {
             case xt_insertWay_insert:           bSuccess = [db executeUpdate:[sqlUTIL sqlInsertWithModel:self]] ;           break ;
             case xt_insertWay_insertOrIgnore:   bSuccess = [db executeUpdate:[sqlUTIL sqlInsertOrIgnoreWithModel:self]] ;   break ;
             case xt_insertWay_insertOrReplace:  bSuccess = [db executeUpdate:[sqlUTIL sqlInsertOrReplaceWithModel:self]] ;  break ;
             default: break ;
         }
-        
-        if (bSuccess) {
-            lastRowId = (int)[db lastInsertRowId] ;
-            XTFMDBLog(@"xt_db insert success lastRowID : %d \n\n",lastRowId) ;
-        }
-        else {
-            XTFMDBLog(@"xt_db insert fail\n\n") ;
-            lastRowId = -3 ;
-        }
     }] ;
     
-    return lastRowId ;
+    return bSuccess ;
 }
 
 + (BOOL)insertList:(NSArray *)modelList byWay:(XTFMDB_insertWay)way {
@@ -140,7 +130,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     return bAllSuccess ;
 }
 
-- (int)xt_insert {
+- (BOOL)xt_insert {
     return [self insertByWay:xt_insertWay_insert] ;
 }
 
@@ -148,7 +138,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     return [self insertList:modelList byWay:xt_insertWay_insert] ;
 }
 
-- (int)xt_insertOrIgnore {
+- (BOOL)xt_insertOrIgnore {
     return [self insertByWay:xt_insertWay_insertOrIgnore] ;
 }
 
@@ -156,7 +146,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     return [self insertList:modelList byWay:xt_insertWay_insertOrIgnore] ;
 }
 
-- (int)xt_insertOrReplace {
+- (BOOL)xt_insertOrReplace {
     return [self insertByWay:xt_insertWay_insertOrReplace] ;
 }
 

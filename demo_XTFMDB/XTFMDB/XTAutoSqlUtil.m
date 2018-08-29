@@ -18,7 +18,7 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 
-#define SAFELY_LOG_FORMAT(strResult)   ( strResult.length > 200 ) ? [strResult substringToIndex:200] : strResult
+#define SAFELY_LOG_FORMAT(strResult)   ( strResult.length > 1000 ) ? [strResult substringToIndex:1000] : strResult
 
 @interface XTAutoSqlUtil ()
 {
