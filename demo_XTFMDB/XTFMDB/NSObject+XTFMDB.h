@@ -41,16 +41,20 @@
 #pragma mark - insert
 
 // insert
-- (BOOL)xt_insert ; // return lastRowId .
+- (BOOL)xt_insert ;
 + (BOOL)xt_insertList:(NSArray *)modelList ;
 
 // insert or ignore
-- (BOOL)xt_insertOrIgnore ; // return lastRowId .
+- (BOOL)xt_insertOrIgnore ;
 + (BOOL)xt_insertOrIgnoreWithList:(NSArray *)modelList ;
 
 // insert or replace
-- (BOOL)xt_insertOrReplace ; // return lastRowId .
+- (BOOL)xt_insertOrReplace ;
 + (BOOL)xt_insertOrReplaceWithList:(NSArray *)modelList ;
+
+// upsert
+- (BOOL)xt_upsertWhereByProp:(NSString *)propName ;
+
 #pragma mark - update
 
 // update by pkid .

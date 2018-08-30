@@ -45,16 +45,19 @@ extern NSString *const kPkid ;
 #pragma mark - insert
 
 // insert
-- (BOOL)insert ; // return lastRowId .
+- (BOOL)insert ;
 + (BOOL)insertList:(NSArray *)modelList ;
 
 // insert or ignore
-- (BOOL)insertOrIgnore ; // return lastRowId .
+- (BOOL)insertOrIgnore ;
 + (BOOL)insertOrIgnoreWithList:(NSArray *)modelList ;
 
 // insert or replace
-- (BOOL)insertOrReplace ; // return lastRowId .
+- (BOOL)insertOrReplace ;
 + (BOOL)insertOrReplaceWithList:(NSArray *)modelList ;
+
+// upsert
+- (BOOL)upsertWhereByProp:(NSString *)propName ;
 
 #pragma mark - update
 // update by pkid .

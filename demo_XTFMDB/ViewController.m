@@ -52,6 +52,7 @@
                         @"insertOrIgnore" ,
                         @"insertOrReplace" ,
                         @"update" ,
+                        @"upsert" ,
                         @"delete" ,
                         @"drop",
                         @"insertList",
@@ -216,6 +217,27 @@
         m1.tick = 13 ;
         m1.title = @"insert or replace" ;
         [m1 xt_insertOrReplace] ;
+    }
+    
+    [self displayJump] ;
+}
+
+- (void)upsertAction {
+    if (!self.dBModelOrCustom) {
+        CustomDBModel *m1 = [CustomDBModel new] ; // 不需设置主键
+        m1.age = arc4random() % 100 ;
+        m1.floatVal = 4 ;
+        m1.tick = 14 ;
+        m1.title = @"upsert" ;
+        [m1 upsertWhereByProp:@"title"] ;
+    }
+    else {
+        AnyModel *m1 = [AnyModel new] ;
+        m1.age = arc4random() % 100 ;
+        m1.floatVal = 4 ;
+        m1.tick = 14 ;
+        m1.title = @"upsert" ;
+        [m1 xt_upsertWhereByProp:@"title"] ;
     }
     
     [self displayJump] ;

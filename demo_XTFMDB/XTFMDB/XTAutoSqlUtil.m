@@ -271,7 +271,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                     break ;
                 case xt_type_update: {
                     strProperties = [[strProperties substringToIndex:strProperties.length - 1] mutableCopy] ;
-                    NSString *whereStr = [NSString stringWithFormat:@"%@ = %@",whereByProp,dicModel[whereByProp]] ;
+                    NSString *whereStr = [NSString stringWithFormat:@"%@ = '%@'",whereByProp,dicModel[whereByProp]] ;
                     NSString *strResult = [NSString stringWithFormat:@"UPDATE %@ SET %@ WHERE %@",tableName,strProperties,whereStr] ;
                     XTFMDBLog(@"xt_db sql update : \n%@",SAFELY_LOG_FORMAT(strResult)) ;
                     return strResult ;

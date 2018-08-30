@@ -19,4 +19,12 @@
              } ;
 }
 
+
++ (NSDictionary *)modelPropertiesSqliteKeywords
+{
+    return @{
+             @"title" : @"UNIQUE"
+             } ;
+}
+
 @end

@@ -98,12 +98,13 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     [QUEUE inTransaction:^(FMDatabase *db, BOOL *rollback) {
         
         for (int i = 0; i < [modelList count]; i++) {
+            id model = [modelList objectAtIndex:i] ;
             
             BOOL bSuccess ;
             switch (way) {
-                case xt_insertWay_insert:           bSuccess = [db executeUpdate:[sqlUTIL sqlInsertWithModel:self]] ;           break ;
-                case xt_insertWay_insertOrIgnore:   bSuccess = [db executeUpdate:[sqlUTIL sqlInsertOrIgnoreWithModel:self]] ;   break ;
-                case xt_insertWay_insertOrReplace:  bSuccess = [db executeUpdate:[sqlUTIL sqlInsertOrReplaceWithModel:self]] ;  break ;
+                case xt_insertWay_insert:           bSuccess = [db executeUpdate:[sqlUTIL sqlInsertWithModel:model]] ;           break ;
+                case xt_insertWay_insertOrIgnore:   bSuccess = [db executeUpdate:[sqlUTIL sqlInsertOrIgnoreWithModel:model]] ;   break ;
+                case xt_insertWay_insertOrReplace:  bSuccess = [db executeUpdate:[sqlUTIL sqlInsertOrReplaceWithModel:model]] ;  break ;
                 default: break ;
             }
             
@@ -153,6 +154,17 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 + (BOOL)xt_insertOrReplaceWithList:(NSArray *)modelList {
     return [self insertList:modelList byWay:xt_insertWay_insertOrReplace] ;
 }
+
+- (BOOL)xt_upsertWhereByProp:(NSString *)propName {
+    BOOL exist = [[self class] xt_hasModelWhere:[NSString stringWithFormat:@"%@ == '%@'",propName,[self valueForKey:propName]]] ;
+    if (exist) {
+        return [self xt_updateWhereByProp:propName] ;
+    }
+    else {
+        return [self xt_insert] ;
+    }
+}
+
 
 #pragma mark --
 #pragma mark - update

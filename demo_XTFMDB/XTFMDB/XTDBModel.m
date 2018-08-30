@@ -98,9 +98,9 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
             
             BOOL bSuccess ;
             switch (way) {
-                case xt_insertWay_insert:           bSuccess = [db executeUpdate:[sqlUTIL sqlInsertWithModel:self]] ;           break ;
-                case xt_insertWay_insertOrIgnore:   bSuccess = [db executeUpdate:[sqlUTIL sqlInsertOrIgnoreWithModel:self]] ;   break ;
-                case xt_insertWay_insertOrReplace:  bSuccess = [db executeUpdate:[sqlUTIL sqlInsertOrReplaceWithModel:self]] ;  break ;
+                case xt_insertWay_insert:           bSuccess = [db executeUpdate:[sqlUTIL sqlInsertWithModel:model]] ;           break ;
+                case xt_insertWay_insertOrIgnore:   bSuccess = [db executeUpdate:[sqlUTIL sqlInsertOrIgnoreWithModel:model]] ;   break ;
+                case xt_insertWay_insertOrReplace:  bSuccess = [db executeUpdate:[sqlUTIL sqlInsertOrReplaceWithModel:model]] ;  break ;
                 default: break ;
             }
             
@@ -151,11 +151,23 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     return [self insertList:modelList byWay:xt_insertWay_insertOrReplace] ;
 }
 
+- (BOOL)upsertWhereByProp:(NSString *)propName {
+    BOOL exist = [[self class] hasModelWhere:[NSString stringWithFormat:@"%@ == '%@'",propName,[self valueForKey:propName]]] ;
+    if (exist) {
+        return [self updateWhereByProp:propName] ;
+    }
+    else {
+        return [self insert] ;
+    }
+}
+
 #pragma mark --
 #pragma mark - update
 
 // update by pkid .
 - (BOOL)update {
+    if (!self.pkid) return NO ;
+    
     return [self updateWhereByProp:kPkid] ;
 }
 
