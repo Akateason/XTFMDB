@@ -33,7 +33,7 @@
  */
 - (void)configureDB:(NSString *)name
                path:(NSString *)path ;
-
+// db default in /Documents
 - (void)configureDB:(NSString *)name ;
 
 /**

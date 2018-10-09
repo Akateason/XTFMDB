@@ -166,7 +166,11 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 
 // update by pkid .
 - (BOOL)update {
-    if (!self.pkid) return NO ;
+    if (!self.pkid) {
+        NSString *tableName = NSStringFromClass([self class]) ;
+        XTFMDBLog(@"xt_db update fail from tb %@ \n Error pkid in nil \n",tableName) ;
+        return NO ;
+    }
     
     return [self updateWhereByProp:kPkid] ;
 }
