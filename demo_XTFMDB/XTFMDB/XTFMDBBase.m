@@ -11,7 +11,7 @@
 #import "XTDBVersion.h"
 #import "NSObject+XTFMDB_Reflection.h"
 
-#define SQLITE_NAME( _name_ )   [name stringByAppendingString:@".sqlite"]
+#define SQLITE_NAME( _name_ )   [_name_ stringByAppendingString:@".sqlite"]
 
 
 @interface XTFMDBBase ()
@@ -45,13 +45,13 @@
 
 #pragma mark --
 #pragma mark - configure
-
+// deprecated
 - (void)configureDB:(NSString *)name {
     NSString *documentPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject] ;
     [self configureDB:name
                  path:documentPath] ;
 }
-
+// deprecated
 - (void)configureDB:(NSString *)name
                path:(NSString *)path {
     XTFMDBLog(@"xt_db sqlName  : %@",name) ;
@@ -60,6 +60,7 @@
 }
 
 - (void)configureDBWithPath:(NSString *)finalPath {
+    finalPath = SQLITE_NAME(finalPath) ;
     XTFMDBLog(@"xt_db path :\n%@", finalPath) ;
     DB = [FMDatabase databaseWithPath:finalPath] ;
     [DB open] ;
