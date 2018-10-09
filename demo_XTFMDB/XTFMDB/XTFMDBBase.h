@@ -27,14 +27,13 @@
 /**
  db prepare config db in - [(AppDelegate *) AppDidLaunchFinish]
  also create table of dbVersion .
- 
- @param name dbname
- @param path inpath
  */
-- (void)configureDB:(NSString *)name
-               path:(NSString *)path ;
-// db default in /Documents
-- (void)configureDB:(NSString *)name ;
+- (void)configureDBWithPath:(NSString *)finalPath ;
+
+- (void)configureDB:(NSString *)name path:(NSString *)path __attribute__((deprecated("use configureDBWithPath instead"))) ;
+- (void)configureDB:(NSString *)name __attribute__((deprecated("use configureDBWithPath instead"))) ; // location default in /Documents
+
+
 
 /**
  DB Version Upgrade

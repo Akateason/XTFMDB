@@ -54,11 +54,13 @@
 
 - (void)configureDB:(NSString *)name
                path:(NSString *)path {
-    
-    XTFMDBLog(@"xt_db path :\n%@", path) ;
     XTFMDBLog(@"xt_db sqlName  : %@",name) ;
-    
     NSString *finalPath = [path stringByAppendingPathComponent:SQLITE_NAME(name)] ;
+    [self configureDBWithPath:finalPath] ;
+}
+
+- (void)configureDBWithPath:(NSString *)finalPath {
+    XTFMDBLog(@"xt_db path :\n%@", finalPath) ;
     DB = [FMDatabase databaseWithPath:finalPath] ;
     [DB open] ;
     
