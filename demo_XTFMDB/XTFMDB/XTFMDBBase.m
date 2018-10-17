@@ -11,6 +11,9 @@
 #import "XTDBVersion.h"
 #import "NSObject+XTFMDB_Reflection.h"
 
+
+
+
 #define SQLITE_NAME( _name_ )   [_name_ stringByAppendingString:@".sqlite"]
 
 
@@ -22,7 +25,7 @@
 @synthesize version = _version ;
 
 + (XTFMDBBase *)sharedInstance {
-    
+        
     static dispatch_once_t onceToken;
     static XTFMDBBase *singleton ;
     dispatch_once(&onceToken, ^{

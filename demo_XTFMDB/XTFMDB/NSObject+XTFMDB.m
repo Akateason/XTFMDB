@@ -51,8 +51,8 @@ static void *key_pkid = &key_pkid ;
             // create table
             NSString *sql = [sqlUTIL sqlCreateTableWithClass:[self class]] ;
             bReturn = [db executeUpdate:sql] ;
-            if (bReturn) XTFMDBLog(@"xt_db create %@ success",tableName) ;
-            else XTFMDBLog(@"xt_db create %@ fail",tableName) ;
+            if (bReturn) {XTFMDBLog(@"xt_db create %@ success",tableName) ;}
+            else {XTFMDBLog(@"xt_db create %@ fail",tableName) ;}
         }] ;
     }
     else
@@ -224,10 +224,12 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
             }
         }
         
-        if (bAllSuccess)
+        if (bAllSuccess) {
             XTFMDBLog(@"xt_db transaction update all complete \n\n") ;
-        else
+        }
+        else {
             XTFMDBLog(@"xt_db transaction update all fail \n\n") ;
+        }
     }] ;
     
     return bAllSuccess ;
@@ -366,10 +368,12 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {
         bSuccess = [db executeUpdate:[sqlUTIL sqlDeleteWithTableName:tableName where:strWhere]] ;
-        if (bSuccess)
+        if (bSuccess) {
             XTFMDBLog(@"xt_db delete model success in %@\n\n",tableName) ;
-        else
+        }
+        else {
             XTFMDBLog(@"xt_db delete model fail in %@\n\n",tableName) ;
+        }
     }] ;
     
     return bSuccess ;
@@ -383,10 +387,12 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {
         bSuccess = [db executeUpdate:[sqlUTIL sqlDrop:tableName]] ;
-        if (bSuccess)
+        if (bSuccess) {
             XTFMDBLog(@"xt_db drop %@ success\n\n",tableName) ;
-        else
+        }
+        else {
             XTFMDBLog(@"xt_db drop %@ fail\n\n",tableName) ;
+        }
     }] ;
     
     return bSuccess ;
@@ -407,10 +413,12 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
         bSuccess = [db executeUpdate:[sqlUTIL sqlAlterAdd:name
                                                                type:type
                                                               table:tableName]] ;
-        if (bSuccess)
+        if (bSuccess) {
             XTFMDBLog(@"xt_db alter add success in %@\n\n",tableName) ;
-        else
+        }
+        else {
             XTFMDBLog(@"xt_db alter add fail in %@\n\n",tableName) ;
+        }
     }] ;
     return bSuccess ;
 }
@@ -424,10 +432,12 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     [QUEUE inDatabase:^(FMDatabase *db) {
         bSuccess = [db executeUpdate:[sqlUTIL sqlAlterRenameOldTable:tableName
                                                       toNewTableName:name]] ;
-        if (bSuccess)
+        if (bSuccess) {
             XTFMDBLog(@"xt_db alter rename success in %@\n\n",tableName) ;
-        else
+        }
+        else {
             XTFMDBLog(@"xt_db alter rename fail in %@\n\n",tableName) ;
+        }
     }] ;
     return bSuccess ;
 }

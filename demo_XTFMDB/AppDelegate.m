@@ -21,6 +21,8 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // 在这初始化数据库
+    
+    [XTFMDBBase sharedInstance].isDebugMode = YES ;
     [[XTFMDBBase sharedInstance] configureDB:@"akateason"] ;
     
 //    升级数据库

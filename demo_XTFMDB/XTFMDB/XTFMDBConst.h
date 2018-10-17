@@ -6,20 +6,23 @@
 //  Copyright © 2017年 teason. All rights reserved.
 //
 
+#import "XTFMDBBase.h"
+
 #ifndef XTFMDBConst_h
 #define XTFMDBConst_h
 
-#define xtfmdb_DEBUG    1
 
-#if xtfmdb_DEBUG
+#define XTFMDBLog1(format, ...)                 do {    \
+fprintf(stderr, "🌙🌙🌙xtfmdb🌙🌙🌙\n");               \
+(NSLog)((format), ##__VA_ARGS__);                       \
+fprintf(stderr, "🌙🌙🌙xtfmdb🌙🌙🌙\n\n"); } while (0)   \
 
-#define XTFMDBLog(format, ...) do {                                         \
-(NSLog)((format), ##__VA_ARGS__);                                           \
-fprintf(stderr, "🌙🌙🌙xtfmdb🌙🌙🌙\n");                                           \
-} while (0)
 
-#else
-#   define XTFMDBLog(...)
-#endif
+#define XTFMDBLog(format, ...)     if (XTFMDB_isDebug) { \
+XTFMDBLog1((format), ##__VA_ARGS__) ;                    \
+};                                                       \
+
+
+
 
 #endif /* XTFMDBConst_h */

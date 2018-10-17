@@ -13,7 +13,7 @@
 #define QUEUE                         [XTFMDBBase sharedInstance].queue
 #define DB                            [XTFMDBBase sharedInstance].database
 #define sqlUTIL                       [XTFMDBBase sharedInstance].sqlUtil
-
+#define XTFMDB_isDebug                [XTFMDBBase sharedInstance].isDebugMode
 
 @interface XTFMDBBase : NSObject
 
@@ -23,6 +23,8 @@
 @property (nonatomic,strong)          FMDatabaseQueue    *queue      ;
 @property (nonatomic)                 int                version     ;
 @property (strong, nonatomic)         XTAutoSqlUtil      *sqlUtil    ;
+
+@property (nonatomic)                 BOOL  isDebugMode ;
 
 /**
  db prepare config db in - [(AppDelegate *) AppDidLaunchFinish]
