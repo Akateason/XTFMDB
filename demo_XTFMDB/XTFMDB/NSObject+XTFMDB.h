@@ -31,8 +31,9 @@
 @property (nonatomic,assign) int pkid ;
 
 #pragma mark - tableIsExist
-// if not exist createTable
+
 + (BOOL)xt_tableIsExist ;
++ (BOOL)xt_autoCreateIfNotExist ;
 
 #pragma mark - create
 
