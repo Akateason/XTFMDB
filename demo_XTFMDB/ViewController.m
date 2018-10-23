@@ -366,7 +366,7 @@
 
             [tmplist addObject:model] ;
         }
-        [AnyModel xt_updateList:tmplist] ;
+        [AnyModel xt_updateListByPkid:tmplist] ;
     }
     
     [self displayJump] ;

@@ -63,9 +63,8 @@ __attribute__((deprecated("Class XTDBModel is deprecated , use NSObject+XTFMDB.h
 - (BOOL)upsertWhereByProp:(NSString *)propName ;
 
 #pragma mark - update
-// update by pkid .
-- (BOOL)update ;
-+ (BOOL)updateList:(NSArray *)modelList ;
+- (BOOL)update ; //  default update by pkid. if pkid nil, update by a unique prop if has .
++ (BOOL)updateList:(NSArray *)modelList ; // update by pkid .
 
 // update by custom key .
 - (BOOL)updateWhereByProp:(NSString *)propName ;

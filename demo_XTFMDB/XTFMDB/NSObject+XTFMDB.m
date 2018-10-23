@@ -198,12 +198,38 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 #pragma mark --
 #pragma mark - update
 
-// update by pkid .
+/**
+ Update
+ default update by pkid.
+ if pkid nil, update by a unique prop if has .
+ */
 - (BOOL)xt_update {
-    return [self xt_updateWhereByProp:kPkid] ;
+    if (self.pkid != 0) {
+        return [self xt_updateWhereByProp:kPkid] ;
+    }
+    else {
+        NSDictionary *keywordsMap = [self.class modelPropertiesSqliteKeywords] ;
+        NSString *getOneUniqueKey = nil ;
+        for (NSString *key in keywordsMap.allKeys) {
+            NSString *val = keywordsMap[key] ;
+            if ([val isEqualToString:@"UNIQUE"] || [val isEqualToString:@"unique"]) {
+                getOneUniqueKey = key ;
+                break ;
+            }
+        }
+        
+        if (getOneUniqueKey != nil) {
+            return [self xt_updateWhereByProp:getOneUniqueKey] ;
+        }
+        else {
+            XTFMDBLog(@"xt_db update Failed from tb %@ \n no primary key\n",NSStringFromClass([self class])) ;
+            return NO ;
+        }
+    }
+    return NO ;
 }
 
-+ (BOOL)xt_updateList:(NSArray *)modelList {
++ (BOOL)xt_updateListByPkid:(NSArray *)modelList {
     return [self xt_updateList:modelList whereByProp:kPkid] ;
 }
 

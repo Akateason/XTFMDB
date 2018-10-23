@@ -173,15 +173,35 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 #pragma mark --
 #pragma mark - update
 
-// update by pkid .
+/**
+ Update
+ default update by pkid.
+ if pkid nil, update by a unique prop if has .
+ */
 - (BOOL)update {
-    if (!self.pkid) {
-        NSString *tableName = NSStringFromClass([self class]) ;
-        XTFMDBLog(@"xt_db update fail from tb %@ \n Error pkid in nil \n",tableName) ;
-        return NO ;
+    if (self.pkid != 0) {
+        return [self updateWhereByProp:kPkid] ;
     }
-    
-    return [self updateWhereByProp:kPkid] ;
+    else {
+        NSDictionary *keywordsMap = [self.class modelPropertiesSqliteKeywords] ;
+        NSString *getOneUniqueKey = nil ;
+        for (NSString *key in keywordsMap.allKeys) {
+            NSString *val = keywordsMap[key] ;
+            if ([val isEqualToString:@"UNIQUE"] || [val isEqualToString:@"unique"]) {
+                getOneUniqueKey = key ;
+                break ;
+            }
+        }
+        
+        if (getOneUniqueKey != nil) {
+            return [self updateWhereByProp:getOneUniqueKey] ;
+        }
+        else {
+            XTFMDBLog(@"xt_db update Failed from tb %@ \n no primary key\n",NSStringFromClass([self class])) ;
+            return NO ;
+        }
+    }
+    return NO ;
 }
 
 + (BOOL)updateList:(NSArray *)modelList {
@@ -220,7 +240,6 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     [QUEUE inTransaction:^(FMDatabase *db, BOOL *rollback) {
         
         for (int i = 0; i < [modelList count]; i++) {
-            
             XTDBModel *model = [modelList objectAtIndex:i] ;
             model.updateTime = [NSDate xt_getNowTick] ;
             BOOL bSuccess = [db executeUpdate:[sqlUTIL sqlUpdateSetWhereWithModel:model whereBy:propName]] ;

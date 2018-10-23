@@ -61,8 +61,8 @@
 #pragma mark - update
 
 // update by pkid .
-- (BOOL)xt_update ;
-+ (BOOL)xt_updateList:(NSArray *)modelList ;
+- (BOOL)xt_update ;// Update default update by pkid. if pkid nil, update by a unique prop if has .
++ (BOOL)xt_updateListByPkid:(NSArray *)modelList ;
 
 // update by custom key . 
 - (BOOL)xt_updateWhereByProp:(NSString *)propName ;
