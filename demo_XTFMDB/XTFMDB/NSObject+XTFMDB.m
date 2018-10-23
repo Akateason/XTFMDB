@@ -32,13 +32,19 @@ static void *key_pkid = &key_pkid ;
 
 #pragma mark --
 #pragma mark - tableIsExist
+// if not exist createTable
 + (BOOL)xt_tableIsExist {
     NSString *tableName = NSStringFromClass([self class]) ;
-    return [[XTFMDBBase sharedInstance] isTableExist:tableName] ;
+    BOOL isExist = [[XTFMDBBase sharedInstance] isTableExist:tableName] ;
+    if (!isExist) {
+        [self.class xt_createTable] ;
+    }
+    return isExist ;
 }
 
 #pragma mark --
 #pragma mark - create
+
 + (BOOL)xt_createTable {
     NSString *tableName = NSStringFromClass([self class]) ;
     
@@ -55,8 +61,6 @@ static void *key_pkid = &key_pkid ;
             else {XTFMDBLog(@"xt_db create %@ fail",tableName) ;}
         }] ;
     }
-    else
-        XTFMDBLog(@"xt_db %@ already exist",tableName) ;
     
     return bReturn ;
 }
@@ -71,9 +75,8 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 };
 
 - (BOOL)insertByWay:(XTFMDB_insertWay)way {
-    NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return -1 ;
-    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return -2 ;
+    [self.class xt_tableIsExist] ;
     
     __block BOOL bSuccess ;
     [QUEUE inDatabase:^(FMDatabase *db) {
@@ -92,7 +95,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 + (BOOL)insertList:(NSArray *)modelList byWay:(XTFMDB_insertWay)way {
     if (!modelList || !modelList.count) return FALSE ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
-    if (![[XTFMDBBase sharedInstance] isTableExist:NSStringFromClass([[modelList firstObject] class])]) return FALSE ;
+    [[[modelList firstObject] class] xt_tableIsExist] ;
     
     __block BOOL bAllSuccess = TRUE ;
     [QUEUE inTransaction:^(FMDatabase *db, BOOL *rollback) {
@@ -182,7 +185,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 - (BOOL)xt_updateWhereByProp:(NSString *)propName {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
-    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
+    [self.class xt_tableIsExist] ;
     
     __block BOOL bSuccess ;
     [QUEUE inDatabase:^(FMDatabase *db) {
@@ -203,7 +206,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 {
     if (!modelList || !modelList.count) return FALSE ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
-    if (![[XTFMDBBase sharedInstance] isTableExist:NSStringFromClass([[modelList firstObject] class])]) return FALSE ;
+    [[[modelList firstObject] class] xt_tableIsExist] ;
     
     __block BOOL bAllSuccess = TRUE ;
     [QUEUE inTransaction:^(FMDatabase *db, BOOL *rollback) {
@@ -265,9 +268,8 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 
 // any sql
 + (NSArray *)xt_findWithSql:(NSString *)sql {
-    NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return nil ;
-    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return nil ;
+    [self.class xt_tableIsExist] ;
     
     __block NSMutableArray *resultList = [@[] mutableCopy] ;
     [QUEUE inDatabase:^(FMDatabase *db) {
@@ -363,7 +365,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 + (BOOL)xt_deleteModelWhere:(NSString *)strWhere {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
-    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
+    [self.class xt_tableIsExist] ;
     
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {
@@ -382,7 +384,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 + (BOOL)xt_dropTable {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
-    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
+    [self.class xt_tableIsExist] ;
     
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {
@@ -402,17 +404,15 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 #pragma mark - alter
 
 + (BOOL)xt_alterAddColumn:(NSString *)name
-                     type:(NSString *)type
-{
+                     type:(NSString *)type {
+    
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
-    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
+    [self.class xt_tableIsExist] ;
     
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {
-        bSuccess = [db executeUpdate:[sqlUTIL sqlAlterAdd:name
-                                                               type:type
-                                                              table:tableName]] ;
+        bSuccess = [db executeUpdate:[sqlUTIL sqlAlterAdd:name type:type table:tableName]] ;
         if (bSuccess) {
             XTFMDBLog(@"xt_db alter add success in %@\n\n",tableName) ;
         }
@@ -426,12 +426,11 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 + (BOOL)xt_alterRenameToNewTableName:(NSString *)name {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
-    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
+    [self.class xt_tableIsExist] ;
     
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {
-        bSuccess = [db executeUpdate:[sqlUTIL sqlAlterRenameOldTable:tableName
-                                                      toNewTableName:name]] ;
+        bSuccess = [db executeUpdate:[sqlUTIL sqlAlterRenameOldTable:tableName toNewTableName:name]] ;
         if (bSuccess) {
             XTFMDBLog(@"xt_db alter rename success in %@\n\n",tableName) ;
         }
@@ -446,20 +445,17 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 #pragma mark - rewrite in subClass if Needed .
 
 // set constraints of properties
-+ (NSDictionary *)modelPropertiesSqliteKeywords
-{
++ (NSDictionary *)modelPropertiesSqliteKeywords {
     return nil ;
 }
 
 // ignore Properties
-+ (NSArray *)ignoreProperties
-{
++ (NSArray *)ignoreProperties {
     return nil ;
 }
 
 // Container property , value should be Class or Class name. Same as YYmodel .
-+ (NSDictionary *)modelContainerPropertyGenericClass
-{
++ (NSDictionary *)modelContainerPropertyGenericClass {
     return nil ;
 }
 

@@ -35,7 +35,7 @@ extern NSString *const kPkid ;
 @property (nonatomic,assign)    BOOL        isDel       ;
 
 #pragma mark - tableIsExist
-
+// if not exist createTable
 + (BOOL)tableIsExist ;
 
 #pragma mark - create

@@ -24,10 +24,14 @@ NSString *const kPkid = @"pkid";
 
 #pragma mark --
 #pragma mark - tableIsExist
-
+// if not exist createTable
 + (BOOL)tableIsExist {
     NSString *tableName = NSStringFromClass([self class]) ;
-    return [[XTFMDBBase sharedInstance] isTableExist:tableName] ;
+    BOOL isExist = [[XTFMDBBase sharedInstance] isTableExist:tableName] ;
+    if (!isExist) {
+        [self.class createTable] ;
+    }
+    return isExist ;
 }
 
 #pragma mark --
@@ -35,7 +39,6 @@ NSString *const kPkid = @"pkid";
 
 + (BOOL)createTable {
     NSString *tableName = NSStringFromClass([self class]) ;
-    
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     
     __block BOOL bReturn = FALSE ;
@@ -52,7 +55,6 @@ NSString *const kPkid = @"pkid";
             }
         }] ;
     }
-    else XTFMDBLog(@"xt_db %@ already exist",tableName) ;
     
     return bReturn ;
 }
@@ -67,9 +69,8 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 };
 
 - (BOOL)insertByWay:(XTFMDB_insertWay)way {
-    NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return -1 ;
-    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return -2 ;
+    [self.class tableIsExist] ;
     
     __block BOOL bSuccess ;
     [QUEUE inDatabase:^(FMDatabase *db) {
@@ -90,7 +91,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 + (BOOL)insertList:(NSArray *)modelList byWay:(XTFMDB_insertWay)way {
     if (!modelList || !modelList.count) return FALSE ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
-    if (![[XTFMDBBase sharedInstance] isTableExist:NSStringFromClass([[modelList firstObject] class])]) return FALSE ;
+    [[[modelList firstObject] class] tableIsExist] ;
     
     __block BOOL bAllSuccess = TRUE ;
     [QUEUE inTransaction:^(FMDatabase *db, BOOL *rollback) {
@@ -187,7 +188,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 - (BOOL)updateWhereByProp:(NSString *)propName {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
-    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
+    [self.class tableIsExist] ;
     
     __block BOOL bSuccess ;
     [QUEUE inDatabase:^(FMDatabase *db) {
@@ -209,7 +210,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 {
     if (!modelList || !modelList.count) return FALSE ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
-    if (![[XTFMDBBase sharedInstance] isTableExist:NSStringFromClass([[modelList firstObject] class])]) return FALSE ;
+    [[[modelList firstObject] class] tableIsExist] ;
     
     __block BOOL bAllSuccess = TRUE ;
     [QUEUE inTransaction:^(FMDatabase *db, BOOL *rollback) {
@@ -271,9 +272,8 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 
 // any sql execute Query
 + (NSArray *)findWithSql:(NSString *)sql {
-    NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return nil ;
-    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return nil ;
+    [self.class tableIsExist] ;
     
     __block NSMutableArray *resultList = [@[] mutableCopy] ;
     [QUEUE inDatabase:^(FMDatabase *db) {
@@ -369,11 +369,10 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 + (BOOL)deleteModelWhere:(NSString *)strWhere {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
-    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
+    [self.class tableIsExist] ;
     
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {
-        
         bSuccess = [db executeUpdate:[sqlUTIL sqlDeleteWithTableName:tableName where:strWhere]] ;
         if (bSuccess) {
             XTFMDBLog(@"xt_db delete model success from tb %@\n\n",tableName) ;
@@ -389,7 +388,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 + (BOOL)dropTable {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
-    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
+    [self.class tableIsExist] ;
     
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {
@@ -403,11 +402,11 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 #pragma mark - alter
 
 + (BOOL)alterAddColumn:(NSString *)name
-                  type:(NSString *)type
-{
+                  type:(NSString *)type {
+    
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
-    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
+    [self.class tableIsExist] ;
     
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {
@@ -427,7 +426,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 + (BOOL)alterRenameToNewTableName:(NSString *)name {
     NSString *tableName = NSStringFromClass([self class]) ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
-    if (![[XTFMDBBase sharedInstance] isTableExist:tableName]) return FALSE ;
+    [self.class tableIsExist] ;
     
     __block BOOL bSuccess = FALSE ;
     [QUEUE inDatabase:^(FMDatabase *db) {
@@ -446,20 +445,17 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 #pragma mark --
 #pragma mark - constrains ( rewrite in subClass if Needed .)
 // set constraints of properties
-+ (NSDictionary *)modelPropertiesSqliteKeywords
-{
++ (NSDictionary *)modelPropertiesSqliteKeywords {
     return nil ;
 }
 
 // ignore Properties
-+ (NSArray *)ignoreProperties
-{
++ (NSArray *)ignoreProperties {
     return nil ;
 }
 
 // Container property , value should be Class or Class name. Same as YYmodel .
-+ (NSDictionary *)modelContainerPropertyGenericClass
-{
++ (NSDictionary *)modelContainerPropertyGenericClass {
     return nil ;
 }
 
