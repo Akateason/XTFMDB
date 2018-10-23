@@ -27,6 +27,8 @@
 
 extern NSString *const kPkid ;
 
+__attribute__((deprecated("Class XTDBModel is deprecated , use NSObject+XTFMDB.h instead!!!")))
+
 @interface XTDBModel : NSObject
 
 @property (nonatomic,assign)    int         pkid        ; // primaryKey
