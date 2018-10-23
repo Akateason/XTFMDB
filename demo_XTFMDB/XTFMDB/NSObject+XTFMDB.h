@@ -27,8 +27,10 @@
 
 @interface NSObject (XTFMDB)
 
-// primaryKey
-@property (nonatomic,assign) int pkid ;
+@property (nonatomic,assign)    int         pkid           ; // primaryKey
+@property (nonatomic,assign)    long long   xt_createTime  ;
+@property (nonatomic,assign)    long long   xt_updateTime  ;
+@property (nonatomic,assign)    BOOL        xt_isDel       ;
 
 #pragma mark - tableIsExist
 

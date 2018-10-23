@@ -15,20 +15,38 @@
 #import "XTDBModel.h"
 
 
-static void *key_pkid = &key_pkid ;
 
 @implementation NSObject (XTFMDB)
 
 #pragma mark --
 
-- (void)setPkid:(int)pkid {
-    objc_setAssociatedObject(self, &key_pkid, @(pkid), OBJC_ASSOCIATION_ASSIGN) ;
+static void *key_pkid = &key_pkid ;
+- (void)setPkid:(int)pkid { objc_setAssociatedObject(self, &key_pkid, @(pkid), OBJC_ASSOCIATION_ASSIGN) ; }
+- (int)pkid { return [objc_getAssociatedObject(self, &key_pkid) intValue] ; }
+
+static void *key_createtime = &key_createtime ;
+- (void)setXt_createTime:(long long)xt_createTime {
+    objc_setAssociatedObject(self, &key_createtime, @(xt_createTime), OBJC_ASSOCIATION_ASSIGN) ;
+}
+- (long long)xt_createTime {
+    return [objc_getAssociatedObject(self, &key_createtime) longLongValue] ;
 }
 
-- (int)pkid {
-    return [objc_getAssociatedObject(self, &key_pkid) intValue] ;
+static void *key_updateTime = &key_updateTime ;
+- (void)setXt_updateTime:(long long)xt_updateTime {
+    objc_setAssociatedObject(self, &key_updateTime, @(xt_updateTime), OBJC_ASSOCIATION_ASSIGN) ;
+}
+- (long long)xt_updateTime {
+    return [objc_getAssociatedObject(self, &key_updateTime) longLongValue] ;
 }
 
+static void *key_isDel = &key_isDel ;
+- (void)setXt_isDel:(BOOL)xt_isDel {
+    objc_setAssociatedObject(self, &key_isDel, @(xt_isDel), OBJC_ASSOCIATION_ASSIGN) ;
+}
+- (BOOL)xt_isDel {
+    return [objc_getAssociatedObject(self, &key_isDel) boolValue] ;
+}
 
 #pragma mark --
 #pragma mark - tableIsExist
@@ -84,6 +102,8 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     
     __block BOOL bSuccess ;
     [QUEUE inDatabase:^(FMDatabase *db) {
+        self.xt_createTime = [NSDate xt_getNowTick] ;
+        self.xt_updateTime = [NSDate xt_getNowTick] ;
         
         switch (way) {
             case xt_insertWay_insert:           bSuccess = [db executeUpdate:[sqlUTIL sqlInsertWithModel:self]] ;           break ;
@@ -106,6 +126,8 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
         
         for (int i = 0; i < [modelList count]; i++) {
             id model = [modelList objectAtIndex:i] ;
+            [model setValue:@([NSDate xt_getNowTick]) forKey:@"xt_createTime"] ;
+            [model setValue:@([NSDate xt_getNowTick]) forKey:@"xt_updateTime"] ;
             
             BOOL bSuccess ;
             switch (way) {
@@ -193,6 +215,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     
     __block BOOL bSuccess ;
     [QUEUE inDatabase:^(FMDatabase *db) {
+        self.xt_updateTime = [NSDate xt_getNowTick] ;
         bSuccess = [db executeUpdate:[sqlUTIL sqlUpdateSetWhereWithModel:self whereBy:propName]] ;
         if (bSuccess) {
             XTFMDBLog(@"xt_db update success from tb %@ \n\n",tableName) ;
@@ -218,6 +241,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
         for (int i = 0; i < [modelList count]; i++) {
             
             id model = [modelList objectAtIndex:i] ;
+            [model setValue:@([NSDate xt_getNowTick]) forKey:@"xt_updateTime"] ;
             BOOL bSuccess = [db executeUpdate:[sqlUTIL sqlUpdateSetWhereWithModel:model whereBy:propName]] ;
             if (bSuccess) {
                 XTFMDBLog(@"xt_db transaction update Successfrom index :%d",i) ;
