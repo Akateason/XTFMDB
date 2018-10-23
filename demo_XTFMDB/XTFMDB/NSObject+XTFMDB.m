@@ -41,7 +41,7 @@ static void *key_pkid = &key_pkid ;
 + (BOOL)xt_autoCreateIfNotExist {
     BOOL isExist = [self xt_tableIsExist] ;
     if (!isExist) {
-        [self.class createTable] ;
+        [self.class xt_createTable] ;
     }
     return isExist ;
 }
