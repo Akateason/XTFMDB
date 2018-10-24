@@ -80,7 +80,6 @@
     return [[self class] propertiesInfo];
 }
 
-// 属性列表与属性的各种信息
 + (NSArray *)propertiesInfo
 {
     NSMutableArray *propertieArray = [NSMutableArray array];

@@ -5,32 +5,15 @@
 //  Created by teason23 on 2017/5/8.
 //  Copyright © 2017年 teaason. All rights reserved.
 //
-//### 特性
-//1. Model直接存储.获取. 无需再转换
-//2. 增删改查. 脱离sql语句
-//3. 主键自增. 插入不需设主键. pkid
-//4. Model满足. 无嵌套. model的第一个属性必须是数字主键.且命名中须包含'pkid'.默认为pkid
-//5. 任何操作. 线程安全
-//6. 批量操作支持实务. 支持操作失败事务回滚. 且线程安全
-//7. 支持 每个字段自定义设置关键字. 已经集成默认关键字, 以下情况无需再写( NOT NULL, DEFAULT''字符类型默认值,DEFAULT'0'数字类型默认值 )
-//8. 可指定哪些字段不参与建表.
-//9. 支持各容器类存储. NSArray<Obj *>, NSDictionary
-//10. 支持NSData,UIImage,NSDate
-//11. 支持自定义类作为属性
-//12. 支持图片存储
-//13. XTDBModel支持默认字段, createTime, updateTime, isDel
-//14. 一行代码完成数据库升级.
-//15. 常规运算, 求和,最值等
-
-
+#define kPkid                          @"pkid"
 #import <Foundation/Foundation.h>
 
 @interface NSObject (XTFMDB)
 
-@property (nonatomic,assign)    int         pkid           ; // primaryKey
-@property (nonatomic,assign)    long long   xt_createTime  ;
-@property (nonatomic,assign)    long long   xt_updateTime  ;
-@property (nonatomic,assign)    BOOL        xt_isDel       ;
+@property (nonatomic) int       pkid ; // primaryKey
+@property (nonatomic) long long xt_createTime ;
+@property (nonatomic) long long xt_updateTime ;
+@property (nonatomic) BOOL      xt_isDel ;
 
 #pragma mark - tableIsExist
 

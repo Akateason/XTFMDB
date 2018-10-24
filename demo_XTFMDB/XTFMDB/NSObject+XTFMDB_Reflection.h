@@ -33,9 +33,8 @@
 
 - (NSArray*)methodListInfo;
 
-//创建并返回一个指向所有已注册类的指针列表
 + (NSArray *)registedClassList;
-//实例变量
+
 + (NSArray *)instanceVariable;
 
 - (NSDictionary *)protocolList;

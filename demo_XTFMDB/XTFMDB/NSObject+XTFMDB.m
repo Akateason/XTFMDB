@@ -32,20 +32,20 @@ static void *key_createtime = &key_createtime ;
     return [objc_getAssociatedObject(self, &key_createtime) longLongValue] ;
 }
 
-static void *key_updateTime = &key_updateTime ;
+static void *key_updatetime = &key_updatetime ;
 - (void)setXt_updateTime:(long long)xt_updateTime {
-    objc_setAssociatedObject(self, &key_updateTime, @(xt_updateTime), OBJC_ASSOCIATION_ASSIGN) ;
+    objc_setAssociatedObject(self, &key_updatetime, @(xt_updateTime), OBJC_ASSOCIATION_ASSIGN) ;
 }
 - (long long)xt_updateTime {
-    return [objc_getAssociatedObject(self, &key_updateTime) longLongValue] ;
+    return [objc_getAssociatedObject(self, &key_updatetime) longLongValue] ;
 }
 
-static void *key_isDel = &key_isDel ;
+static void *key_isdel = &key_isdel ;
 - (void)setXt_isDel:(BOOL)xt_isDel {
-    objc_setAssociatedObject(self, &key_isDel, @(xt_isDel), OBJC_ASSOCIATION_ASSIGN) ;
+    objc_setAssociatedObject(self, &key_isdel, @(xt_isDel), OBJC_ASSOCIATION_ASSIGN) ;
 }
 - (BOOL)xt_isDel {
-    return [objc_getAssociatedObject(self, &key_isDel) boolValue] ;
+    return [objc_getAssociatedObject(self, &key_isdel) boolValue] ;
 }
 
 #pragma mark --
@@ -102,8 +102,8 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     
     __block BOOL bSuccess ;
     [QUEUE inDatabase:^(FMDatabase *db) {
-        self.xt_createTime = [NSDate xt_getNowTick] ;
-        self.xt_updateTime = [NSDate xt_getNowTick] ;
+        [self setValue:@([NSDate xt_getNowTick]) forKey:@"xt_createTime"] ;
+        [self setValue:@([NSDate xt_getNowTick]) forKey:@"xt_updateTime"] ;
         
         switch (way) {
             case xt_insertWay_insert:           bSuccess = [db executeUpdate:[sqlUTIL sqlInsertWithModel:self]] ;           break ;
@@ -241,7 +241,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     
     __block BOOL bSuccess ;
     [QUEUE inDatabase:^(FMDatabase *db) {
-        self.xt_updateTime = [NSDate xt_getNowTick] ;
+        [self setValue:@([NSDate xt_getNowTick]) forKey:@"xt_updateTime"] ;
         bSuccess = [db executeUpdate:[sqlUTIL sqlUpdateSetWhereWithModel:self whereBy:propName]] ;
         if (bSuccess) {
             XTFMDBLog(@"xt_db update success from tb %@ \n\n",tableName) ;

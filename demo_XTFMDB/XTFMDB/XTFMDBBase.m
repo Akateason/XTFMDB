@@ -10,7 +10,7 @@
 #import "XTFMDBConst.h"
 #import "XTDBVersion.h"
 #import "NSObject+XTFMDB_Reflection.h"
-
+#import "NSObject+XTFMDB.h"
 
 
 
@@ -35,14 +35,14 @@
 }
 
 - (int)version {
-    return [XTDBVersion findFirst].version ;
+    return [XTDBVersion xt_findFirst].version ;
 }
 
 - (void)setVersion:(int)version {
     
-    XTDBVersion *dbv = [XTDBVersion findFirst] ;
+    XTDBVersion *dbv = [XTDBVersion xt_findFirst] ;
     dbv.version = version ;
-    [dbv update] ;
+    [dbv xt_update] ;
     _version = version ;
 }
 
@@ -72,12 +72,12 @@
     
     sqlUTIL = [[XTAutoSqlUtil alloc] init] ;
     
-    [XTDBVersion createTable] ;
+    [XTDBVersion xt_createTable] ;
     
     if (!self.version) {
         XTDBVersion *dbv = [XTDBVersion new] ;
         dbv.version = 1 ;
-        [dbv insert] ;
+        [dbv xt_insert] ;
     }
 }
 

@@ -15,9 +15,12 @@ pod 'XTFMDB'
 9. 支持各容器类存储. NSArray, NSDictionary. 以及容器中带有自定义类等 NSArray<CutomCls *> ...
 10. 支持NSData类型
 11. 支持图片类型
-12. 基类XTDBModel支持默认字段pkid, createTime, updateTime, isDel
+12. 支持默认字段pkid, xt_createTime, xt_updateTime, xt_isDel
 13. 也可用于不继承于XTDBModel的任意类型. 但自定义的Model必须满足一个属性必须是数字主键.且命名中须包含'pkid'
 14. 常规运算,数量,求和,最值等等
+15. 支持自动建表
+16. 无基类, 无入侵性, 任意组合.
+
 
 ## 使用方法
 ## CocoaPod
@@ -31,8 +34,9 @@ pod 'XTFMDB'
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // 在这初始化数据库
-    [[XTFMDBbase sharedInstance] configureDB:@"yourDB_Name"] ;
-
+    [XTFMDBBase sharedInstance].isDebugMode = YES ;
+    [[XTFMDBBase sharedInstance] configureDBWithPath:documentsDirectory] ;
+    
     return YES;
 }
 
@@ -42,24 +46,7 @@ pod 'XTFMDB'
 
 ### 使用CRUD
 先创建一个自定义模型类`Model1`
-
-支持两种建模方式
-
-方式1) XTDBModel的子类, 可以直接实现对数据库操作增删改查等.并且无需设置主键pkid
-```
-@interface Model1 : XTDBModel
-// 无需设置主键 默认 pkid
-@property (nonatomic)       int             age         ;
-@property (nonatomic)       float           floatVal    ;
-@property (nonatomic)       long long       tick        ;
-@property (nonatomic,copy)  NSString        *title      ;
-@property (nonatomic,copy)  NSString        *abcabc     ; // 不想在表里出现这个 !!
-@property (nonatomic,strong)    UIImage         *image      ;
-@property (nonatomic,copy)      NSArray         *myArr      ;
-@property (nonatomic,copy)      NSDictionary    *myDic      ;
-@end
-```
-方式2) 任意创建一个类, 可以直接实现对数据库操作增删改查等.但需要手动设置主键pkid
+任意创建一个类, 可以直接实现对数据库操作增删改查等.但需要手动设置主键pkid
 ```
 @interface Model1 : NSObject
 @property (nonatomic)           int             pkid        ; //必须加上pkid
@@ -138,7 +125,7 @@ e.g.
 ###### 只需要导入`"XTFMDB.h"就可使用
 
 #### 创建表
-1. 马上创建一张名为`Model1`的数据库表
+1. 马上创建一张名为`Model1`的数据库表(会自动创建可不写)
 ```
 [Model1 xt_createTable] ; // [Model1 createTable] ; 当Model1是XTDBModel子类时,也可以用这个方法.以下方法均可以同上.
 ```

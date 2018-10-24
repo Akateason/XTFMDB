@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="4Rr-Au-gwo">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="4Rr-Au-gwo">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -49,23 +48,8 @@
                             <constraint firstItem="MJf-ZW-xnG" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="k6K-uI-l5b"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="H2w-qD-G7Z">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="ikm-th-YT6">
-                            <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="tZ4-ji-DSu">
-                                <rect key="frame" x="184" y="7" width="175" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <segments>
-                                    <segment title="XTDBModel"/>
-                                    <segment title="NSObject"/>
-                                </segments>
-                                <connections>
-                                    <action selector="segmentValueChange:" destination="BYZ-38-t0r" eventType="valueChanged" id="AUz-t9-DrT"/>
-                                </connections>
-                            </segmentedControl>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" id="H2w-qD-G7Z"/>
                     <connections>
-                        <outlet property="segment" destination="tZ4-ji-DSu" id="nel-yx-pbU"/>
                         <outlet property="table" destination="MJf-ZW-xnG" id="isl-BG-zLp"/>
                         <segue destination="Jfd-4C-GKE" kind="push" identifier="root2display" id="I2P-aL-p4V"/>
                     </connections>

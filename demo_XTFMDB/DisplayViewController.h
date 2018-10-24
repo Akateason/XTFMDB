@@ -9,5 +9,4 @@
 #import <UIKit/UIKit.h>
 
 @interface DisplayViewController : UIViewController
-@property (nonatomic) BOOL dbModelOrCustom ;
 @end

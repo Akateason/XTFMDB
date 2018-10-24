@@ -15,7 +15,7 @@
 
 @interface AnyModel : Father
 
-@property (nonatomic)           int             pkid        ;
+//@property (nonatomic)           int             pkid        ;
 
 @property (nonatomic)           int             age         ;
 @property (nonatomic)           float           floatVal    ;

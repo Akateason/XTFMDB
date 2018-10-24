@@ -7,8 +7,7 @@
 //
 
 #import "AppDelegate.h"
-#import "XTFMDBBase.h"
-#import "CustomDBModel.h"
+#import "XTFMDB/XTFMDB.h"
 #import "AnyModel.h"
 #import <YYModel/YYModel.h>
 
@@ -21,9 +20,11 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // 在这初始化数据库
-    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    documentsDirectory = [documentsDirectory stringByAppendingString:@"/akateason"] ;
     [XTFMDBBase sharedInstance].isDebugMode = YES ;
-    [[XTFMDBBase sharedInstance] configureDB:@"akateason"] ;
+    [[XTFMDBBase sharedInstance] configureDBWithPath:documentsDirectory] ;
     
 //    升级数据库
 //    [[XTFMDBBase sharedInstance] dbUpgradeTable:CustomDBModel.class

@@ -9,19 +9,18 @@
 #import "XTAutoSqlUtil.h"
 #import "NSObject+XTFMDB_Reflection.h"
 #import "XTFMDBConst.h"
-#import "XTDBModel.h"
+#import "NSObject+XTFMDB.h"
 #import <FMDB/FMDB.h>
 #import <UIKit/UIKit.h>
 #import "NSDate+XTFMDB_Tick.h"
-#import "XTDBModel.h"
 #import <YYModel/YYModel.h>
 #import <objc/runtime.h>
 #import <objc/message.h>
 
 #define SAFELY_LOG_FORMAT(strResult)   ( strResult.length > 1000 ) ? [strResult substringToIndex:1000] : strResult
 
-@interface XTAutoSqlUtil ()
-{
+
+@interface XTAutoSqlUtil () {
     Class m_orginCls ;
 }
 @end
@@ -107,9 +106,10 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     xt_type_update ,
 } ;
 
-- (NSString *)appendCreate:(Class)cls {
+- (NSString *)appendCreate:(Class)cls
+              propInfoList:(NSArray *)propInfoList {
     NSMutableString *strProperties = [@"" mutableCopy] ;
-    NSArray *propInfoList = [cls propertiesInfo] ;
+//    NSArray *propInfoList = [self xt_autosql_propertiesInfo:cls] ;
     for (int i = 0; i < propInfoList.count; i++) {
         NSDictionary *dic   = propInfoList[i] ;
         NSString *name      = dic[@"name"] ;
@@ -140,11 +140,12 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
 
 - (NSDictionary *)appendInsert:(Class)cls
                          model:(id)model
-                      dicModel:(NSDictionary *)dicModel
-{
+                  propInfoList:(NSArray *)propInfoList
+                      dicModel:(NSDictionary *)dicModel {
+    
     NSMutableString *strProperties = [@"" mutableCopy] ;
     NSMutableString *strQuestions  = [@"" mutableCopy] ;
-    NSArray *propInfoList = [cls propertiesInfo] ;
+//    NSArray *propInfoList = [self xt_autosql_propertiesInfo:cls] ;
     for (int i = 0; i < propInfoList.count; i++) {
         id dicTmp           = propInfoList[i] ;
         NSString *name      = dicTmp[@"name"] ;
@@ -168,10 +169,11 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
 
 - (NSString *)appendUpdate:(Class)cls
                      model:(id)model
-                  dicModel:(NSDictionary *)dicModel
-{
+              propInfoList:(NSArray *)propInfoList
+                  dicModel:(NSDictionary *)dicModel {
+    
     NSString *setsStr       = @"" ;
-    NSArray *propInfoList = [cls propertiesInfo] ;
+//    NSArray *propInfoList = [self xt_autosql_propertiesInfo:cls] ;
     for (int i = 0; i < propInfoList.count; i++)
     {
         id dicTmp           = propInfoList[i] ;
@@ -197,28 +199,31 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
 - (NSString *)getSqlUseRecursiveQuery:(id)model
                                 class:(Class)class
                                  type:(TypeOfAutoSql)type
-                          whereByProp:(NSString *)whereByProp
-{
+                          whereByProp:(NSString *)whereByProp {
+    
     Class cls = class ?: [model class] ;
     NSString *tableName = NSStringFromClass(cls) ;
     NSMutableString *strProperties = [@"" mutableCopy] ;
     NSMutableString *strQuestions  = [@"" mutableCopy] ;
-    NSDictionary *dicModel = [self changeSpecifiedValToUTF8StringVal:model] ;
+    NSDictionary *dicModel = [self changeSpecifiedValToUTF8StringVal:model fromClass:cls] ;
+    BOOL isFirst = NO ;
     
     // Recursive Query
     while ( 1 ) {
+        NSArray *propInfoList = !isFirst ? [self xt_autosql_propertiesInfo:cls] : [cls propertiesInfo] ;
         
         // APPEND SQL STRING .
         switch (type) {
             case xt_type_create: {
-                [strProperties appendString:[self appendCreate:cls]] ;
+                [strProperties appendString:[self appendCreate:cls propInfoList:propInfoList]] ;
             }
                 break ;
             case xt_type_insert:
             case xt_type_insertOrIgnore:
-            case xt_type_insertOrReplace:{
+            case xt_type_insertOrReplace: {
                 NSDictionary *resDic = [self appendInsert:cls
                                                     model:model
+                                             propInfoList:propInfoList
                                                  dicModel:dicModel] ;
                 [strProperties appendString:resDic[@"p"]] ;
                 [strQuestions appendString:resDic[@"q"]] ;
@@ -227,6 +232,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
             case xt_type_update: {
                 [strProperties appendString:[self appendUpdate:cls
                                                          model:model
+                                                  propInfoList:propInfoList
                                                       dicModel:dicModel]] ;
             }
                 break ;
@@ -235,7 +241,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
         }
         
         // RETURN IF NEEDED .
-        if ([cls isEqual:[XTDBModel class]] || [cls.superclass isEqual:[NSObject class]]) {
+        if ([cls.superclass isEqual:[NSObject class]]) {
             switch (type) {
                 case xt_type_create: {
                     NSString *resultSql = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS %@ ( %@ )",
@@ -284,11 +290,11 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
         
         // NEXT LOOP IF NEEDED .
         cls = [cls superclass] ;
+        isFirst = YES ;
     }
 }
 
-- (NSString *)sqlTypeWithType:(NSString *)strType
-{
+- (NSString *)sqlTypeWithType:(NSString *)strType {
     if ([strType containsString:@"int"] || [strType containsString:@"Integer"]) {
         return @"INTEGER" ;
     }
@@ -326,23 +332,20 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     return @"TEXT" ; // custom Cls or default
 }
 
-- (NSString *)defaultValWithSqlType:(NSString *)sqlType
-{
+- (NSString *)defaultValWithSqlType:(NSString *)sqlType {
     if ([sqlType containsString:@"TEXT"] || [sqlType containsString:@"char"]) {
         return @" DEFAULT ''" ;
     }
     else return @" DEFAULT '0'" ;
 }
 
-- (NSString *)keywordsWithName:(NSString *)name
-{
+- (NSString *)keywordsWithName:(NSString *)name {
     id dic = [m_orginCls modelPropertiesSqliteKeywords] ;
     if ( !dic || !dic[name] ) return @"" ;
     return dic[name] ;
 }
 
-- (BOOL)propIsIgnore:(NSString *)name
-{
+- (BOOL)propIsIgnore:(NSString *)name {
     id list = [[self defaultIgnoreProps] arrayByAddingObjectsFromArray:[m_orginCls ignoreProperties]] ;
     if (!list) return FALSE ;
     return [list containsObject:name] ;
@@ -352,8 +355,12 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     return [@[@"hash",@"superclass",@"description",@"debugDescription"] mutableCopy] ;
 }
 
-- (NSDictionary *)changeSpecifiedValToUTF8StringVal:(id)model {
-    NSDictionary *dic = [model propertyDictionary] ; // propModel
+- (NSDictionary *)changeSpecifiedValToUTF8StringVal:(id)model fromClass:(Class)cls {
+    NSMutableDictionary *dic = [[model propertyDictionary] mutableCopy] ; // propModel
+    [dic setObject:[model valueForKey:kPkid] forKey:kPkid] ;
+    [dic setObject:[model valueForKey:@"xt_createTime"] forKey:@"xt_createTime"] ;
+    [dic setObject:[model valueForKey:@"xt_updateTime"] forKey:@"xt_updateTime"] ;
+    [dic setObject:[model valueForKey:@"xt_isDel"] forKey:@"xt_isDel"] ;
     
     NSMutableDictionary *tmpDic = [dic mutableCopy] ;
     for (NSString *key in dic) {
@@ -438,8 +445,9 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     NSMutableDictionary *tmpDic = [[resultSet resultDictionary] mutableCopy] ;
     if (!tmpDic) return nil ;
     
+    BOOL isFirst = NO ;
     while ( 1 ) {
-        NSArray *propInfoList = [cls propertiesInfo] ;
+        NSArray *propInfoList = (!isFirst) ? [self xt_autosql_propertiesInfo:cls] : [cls propertiesInfo] ;
         for (int i = 0; i < propInfoList.count; i++) {
             NSDictionary *dic   = propInfoList[i] ;
             NSString *name      = dic[@"name"] ;
@@ -447,7 +455,6 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
             NSString *valFromFMDB = tmpDic[name] ;
             if (!valFromFMDB || [valFromFMDB isKindOfClass:[NSNull class]]) continue ;
             if ([valFromFMDB isKindOfClass:[NSString class]] && !valFromFMDB.length) continue ;
-                            
             
             if ([type containsString:@"NSData"]) {
                 NSData *tmpData = [[NSData alloc] initWithBase64EncodedString:valFromFMDB options:NSDataBase64DecodingIgnoreUnknownCharacters] ;
@@ -491,12 +498,12 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
             }
         }
         
-        
-        if ([cls isEqual:[XTDBModel class]] || [cls.superclass isEqual:[NSObject class]]) {
+        if ([cls.superclass isEqual:[NSObject class]]) {
             break ;
         }
         // NEXT LOOP IF NEEDED .
         cls = [cls superclass] ;
+        isFirst = YES ;
     }
     
     return tmpDic ;
@@ -504,13 +511,14 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
 
 // 处理yymodel无法解析嵌套对象的字典的问题.
 - (id)resetDictionaryFromDBModel:(NSDictionary *)dbModel
-                      resultItem:(id)item
-{
+                      resultItem:(id)item {
+    
     m_orginCls = [item class] ;
     Class cls = m_orginCls ;
-
+    BOOL isFirst = NO ;
+    
     while ( 1 ) {
-        NSArray *propInfoList = [cls propertiesInfo] ;
+        NSArray *propInfoList = !isFirst ? [self xt_autosql_propertiesInfo:cls] : [cls propertiesInfo] ;
         for (int i = 0; i < propInfoList.count; i++) {
             NSDictionary *dic   = propInfoList[i] ;
             NSString *name      = dic[@"name"] ;
@@ -527,11 +535,12 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
             }
         }
         
-        if ([cls isEqual:[XTDBModel class]] || [cls.superclass isEqual:[NSObject class]]) {
+        if ([cls.superclass isEqual:[NSObject class]]) {
             break ;
         }
         // NEXT LOOP IF NEEDED .
         cls = [cls superclass] ;
+        isFirst = YES ;
     }
     
     return item ;
@@ -543,4 +552,43 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     return [orgString stringByReplacingCharactersInRange:NSMakeRange(0, 1) withString:prefix] ;
 }
 
+- (NSArray *)xt_autosql_propertiesInfo:(Class)cls {
+    return [self appendDefaultPropInfoFromArray:[cls propertiesInfo]] ;
+ }
+
+- (NSArray *)appendDefaultPropInfoFromArray:(NSArray *)array {
+    NSMutableArray *list = [@[
+                              @{
+                                  @"attribute" : @[@"nonatomic"] ,
+                                  @"isDynamic" : @0 ,
+                                  @"name" : kPkid ,
+                                  @"type" : @"int" ,
+                                  } ,
+                              @{
+                                  @"attribute" : @[@"nonatomic"] ,
+                                  @"isDynamic" : @0 ,
+                                  @"name" : @"xt_createTime" ,
+                                  @"type" : @"long long" ,
+                                  } ,
+                              @{
+                                  @"attribute" : @[@"nonatomic"] ,
+                                  @"isDynamic" : @0 ,
+                                  @"name" : @"xt_updateTime" ,
+                                  @"type" : @"long long" ,
+                                  } ,
+                              @{
+                                  @"attribute" : @[@"nonatomic"] ,
+                                  @"isDynamic" : @0 ,
+                                  @"name" : @"xt_isDel" ,
+                                  @"type" : @"BOOL" ,
+                                  }
+                              ] mutableCopy] ;
+    [list addObjectsFromArray:array] ;
+    return list ;
+}
+
 @end
+
+
+
+

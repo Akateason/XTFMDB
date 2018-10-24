@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		7DBF8FCF2023080A0030C3D5 /* XTDBVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 7DBF8FCE202308090030C3D5 /* XTDBVersion.m */; };
-		8F0C1EE11F8B7159009359AC /* CustomDBModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F0C1EE01F8B7159009359AC /* CustomDBModel.m */; };
 		8F0C1EE41F8B7184009359AC /* AnyModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F0C1EE31F8B7184009359AC /* AnyModel.m */; };
 		8F108F52203E718400217B87 /* NSDate+XTFMDB_Tick.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F108F51203E718400217B87 /* NSDate+XTFMDB_Tick.m */; };
 		8F108F58203E943100217B87 /* NSObject+XTFMDB_Reflection.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F108F57203E943100217B87 /* NSObject+XTFMDB_Reflection.m */; };
@@ -41,8 +40,6 @@
 		7473C28BD95C9470D4806ECC /* Pods_demo_XTFMDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_demo_XTFMDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DBF8FCD202308080030C3D5 /* XTDBVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XTDBVersion.h; path = XTFMDB/XTDBVersion.h; sourceTree = "<group>"; };
 		7DBF8FCE202308090030C3D5 /* XTDBVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XTDBVersion.m; path = XTFMDB/XTDBVersion.m; sourceTree = "<group>"; };
-		8F0C1EDF1F8B7159009359AC /* CustomDBModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomDBModel.h; sourceTree = "<group>"; };
-		8F0C1EE01F8B7159009359AC /* CustomDBModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomDBModel.m; sourceTree = "<group>"; };
 		8F0C1EE21F8B7184009359AC /* AnyModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnyModel.h; sourceTree = "<group>"; };
 		8F0C1EE31F8B7184009359AC /* AnyModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AnyModel.m; sourceTree = "<group>"; };
 		8F108F50203E718400217B87 /* NSDate+XTFMDB_Tick.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSDate+XTFMDB_Tick.h"; path = "XTFMDB/NSDate+XTFMDB_Tick.h"; sourceTree = "<group>"; };
@@ -103,8 +100,6 @@
 		7D4B27B4202820DA001CA91B /* model */ = {
 			isa = PBXGroup;
 			children = (
-				8F0C1EDF1F8B7159009359AC /* CustomDBModel.h */,
-				8F0C1EE01F8B7159009359AC /* CustomDBModel.m */,
 				8F0C1EE21F8B7184009359AC /* AnyModel.h */,
 				8F0C1EE31F8B7184009359AC /* AnyModel.m */,
 				8F9357B4207A158A003F5522 /* subCls */,
@@ -367,7 +362,6 @@
 				8F108F58203E943100217B87 /* NSObject+XTFMDB_Reflection.m in Sources */,
 				8F9357B3207A146D003F5522 /* SomeInfo.m in Sources */,
 				8F664CDB207B6E41006BC485 /* Father.m in Sources */,
-				8F0C1EE11F8B7159009359AC /* CustomDBModel.m in Sources */,
 				8FFD738F1EBB1C2C00148B83 /* main.m in Sources */,
 				7DBF8FCF2023080A0030C3D5 /* XTDBVersion.m in Sources */,
 				8FFD73FC1EC0397000148B83 /* NSObject+XTFMDB.m in Sources */,
