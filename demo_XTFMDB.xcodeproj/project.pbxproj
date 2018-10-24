@@ -97,6 +97,8 @@
 		7D4B27B4202820DA001CA91B /* model */ = {
 			isa = PBXGroup;
 			children = (
+				8F664CD9207B6E41006BC485 /* Father.h */,
+				8F664CDA207B6E41006BC485 /* Father.m */,
 				8F0C1EE21F8B7184009359AC /* AnyModel.h */,
 				8F0C1EE31F8B7184009359AC /* AnyModel.m */,
 				8F9357B4207A158A003F5522 /* subCls */,
@@ -111,8 +113,6 @@
 				8F9357B2207A146D003F5522 /* SomeInfo.m */,
 				8F9357B5207A15C6003F5522 /* AccessObj.h */,
 				8F9357B6207A15C6003F5522 /* AccessObj.m */,
-				8F664CD9207B6E41006BC485 /* Father.h */,
-				8F664CDA207B6E41006BC485 /* Father.m */,
 			);
 			name = subCls;
 			sourceTree = "<group>";

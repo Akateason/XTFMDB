@@ -17,4 +17,20 @@
              } ;
 }
 
+
+
++ (instancetype)randomAFather {
+    int randomNum = arc4random() % 100 ; ;
+
+    Father *f = [Father new] ;
+    f.fatherName = [NSString stringWithFormat:@"我是你爹%d",randomNum] ;
+    
+    SomeInfo *info = [SomeInfo new] ;
+    info.infoStr = [@(randomNum) stringValue] ;
+    info.infoID = randomNum ;
+    f.fatherList = @[info] ;
+    
+    return f ;
+}
+
 @end
