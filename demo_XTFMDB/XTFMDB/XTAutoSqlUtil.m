@@ -68,13 +68,11 @@
                              whereByProp:whereProp] ;
 }
 
-
 - (NSString *)sqlDeleteWithTableName:(NSString *)tableName
                                where:(NSString *)strWhere
 {
     return [NSString stringWithFormat:@"DELETE FROM %@ WHERE %@",tableName,strWhere] ;
 }
-
 
 - (NSString *)sqlDrop:(NSString *)tableName
 {
@@ -109,7 +107,6 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
 - (NSString *)appendCreate:(Class)cls
               propInfoList:(NSArray *)propInfoList {
     NSMutableString *strProperties = [@"" mutableCopy] ;
-//    NSArray *propInfoList = [self xt_autosql_propertiesInfo:cls] ;
     for (int i = 0; i < propInfoList.count; i++) {
         NSDictionary *dic   = propInfoList[i] ;
         NSString *name      = dic[@"name"] ;
@@ -145,7 +142,6 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     
     NSMutableString *strProperties = [@"" mutableCopy] ;
     NSMutableString *strQuestions  = [@"" mutableCopy] ;
-//    NSArray *propInfoList = [self xt_autosql_propertiesInfo:cls] ;
     for (int i = 0; i < propInfoList.count; i++) {
         id dicTmp           = propInfoList[i] ;
         NSString *name      = dicTmp[@"name"] ;
@@ -173,7 +169,6 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                   dicModel:(NSDictionary *)dicModel {
     
     NSString *setsStr       = @"" ;
-//    NSArray *propInfoList = [self xt_autosql_propertiesInfo:cls] ;
     for (int i = 0; i < propInfoList.count; i++)
     {
         id dicTmp           = propInfoList[i] ;
