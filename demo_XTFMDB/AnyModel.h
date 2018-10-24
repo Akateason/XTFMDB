@@ -25,7 +25,8 @@
 @property (strong, nonatomic)   NSDate              *today      ;
 @property (strong, nonatomic)   SomeInfo            *sInfo      ;// 什么都不用做
 
-
+// 更新数据库
+//@property (nonatomic,copy)      NSString *lztmjyxjzdzmy ; //
 
 + (instancetype)customRandomModel ;
 @end

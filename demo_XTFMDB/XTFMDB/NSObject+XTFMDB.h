@@ -86,6 +86,9 @@
 
 #pragma mark - alter
 
+/**
+ use [[XTFMDBBase sharedInstance] dbUpgradeTable: paramsAdd: version:] to upgrade Database !!!
+ */
 + (BOOL)xt_alterAddColumn:(NSString *)name
                      type:(NSString *)type ;
 + (BOOL)xt_alterRenameToNewTableName:(NSString *)name ;

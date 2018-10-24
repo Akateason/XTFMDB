@@ -178,8 +178,9 @@
 }
 
 - (void)AlterAddAction {
-    [AnyModel xt_alterAddColumn:@"adddddddddd"
-                           type:@"INTEGER default 0 NOT NULL"] ;
+    [[XTFMDBBase sharedInstance] dbUpgradeTable:AnyModel.class
+                                      paramsAdd:@[@"lztmjyxjzdzmy"]
+                                        version:2] ;
 }
 
 - (void)sumAction {

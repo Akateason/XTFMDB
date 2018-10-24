@@ -137,7 +137,7 @@
             *stop = YES ;
         }
         if (!isError) {
-            [tableCls performSelector:@selector(alterAddColumn:type:)
+            [tableCls performSelector:@selector(xt_alterAddColumn:type:)
                            withObject:key
                            withObject:sqlType] ;
         }
