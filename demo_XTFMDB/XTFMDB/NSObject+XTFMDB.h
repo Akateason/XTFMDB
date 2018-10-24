@@ -4,24 +4,24 @@
 //
 //  Created by teason23 on 2017/5/8.
 //  Copyright © 2017年 teaason. All rights reserved.
+//  XTDBModel is deprecated . use NSObject+XTFMDB.h instead !
 //
+
 #define kPkid                          @"pkid"
 #import <Foundation/Foundation.h>
 
 @interface NSObject (XTFMDB)
 
+// Default columns
 @property (nonatomic) int       pkid ; // primaryKey
 @property (nonatomic) long long xt_createTime ;
 @property (nonatomic) long long xt_updateTime ;
 @property (nonatomic) BOOL      xt_isDel ;
 
-#pragma mark - tableIsExist
+#pragma mark - create
 
 + (BOOL)xt_tableIsExist ;
 + (BOOL)xt_autoCreateIfNotExist ;
-
-#pragma mark - create
-
 + (BOOL)xt_createTable ;
 
 #pragma mark - insert

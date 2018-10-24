@@ -8,15 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-//@class SomeInfo,AccessObj ;
 #import "SomeInfo.h"
 #import "AccessObj.h"
 #import "Father.h"
 
 @interface AnyModel : Father
-
-//@property (nonatomic)           int             pkid        ;
-
 @property (nonatomic)           int             age         ;
 @property (nonatomic)           float           floatVal    ;
 @property (nonatomic)           long long       tick        ;
@@ -29,5 +25,4 @@
 @property (nonatomic,copy)    NSDictionary         *myDic      ;//Dict <NSString,AccessObj> 不可变, 都可以
 @property (strong, nonatomic)   NSDate          *today      ;
 @property (strong, nonatomic)   SomeInfo        *sInfo      ;//什么都不用做
-
 @end

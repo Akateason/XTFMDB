@@ -12,9 +12,6 @@
 #import <YYModel/YYModel.h>
 #import <objc/runtime.h>
 #import "NSDate+XTFMDB_Tick.h"
-#import "XTDBModel.h"
-
-
 
 @implementation NSObject (XTFMDB)
 
@@ -49,7 +46,7 @@ static void *key_isdel = &key_isdel ;
 }
 
 #pragma mark --
-#pragma mark - tableIsExist
+#pragma mark - create
 
 + (BOOL)xt_tableIsExist {
     NSString *tableName = NSStringFromClass([self class]) ;
@@ -64,16 +61,11 @@ static void *key_isdel = &key_isdel ;
     return isExist ;
 }
 
-#pragma mark --
-#pragma mark - create
-
 + (BOOL)xt_createTable {
     NSString *tableName = NSStringFromClass([self class]) ;
-    
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     
     __block BOOL bReturn = FALSE ;
-    
     if(![[XTFMDBBase sharedInstance] isTableExist:tableName]) {
         [QUEUE inDatabase:^(FMDatabase *db) {
             // create table
@@ -255,8 +247,8 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 }
 
 + (BOOL)xt_updateList:(NSArray *)modelList
-          whereByProp:(NSString *)propName
-{
+          whereByProp:(NSString *)propName {
+    
     if (!modelList || !modelList.count) return FALSE ;
     if (![[XTFMDBBase sharedInstance] verify]) return FALSE ;
     [[[modelList firstObject] class] xt_autoCreateIfNotExist] ;
@@ -265,7 +257,6 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     [QUEUE inTransaction:^(FMDatabase *db, BOOL *rollback) {
         
         for (int i = 0; i < [modelList count]; i++) {
-            
             id model = [modelList objectAtIndex:i] ;
             [model setValue:@([NSDate xt_getNowTick]) forKey:@"xt_updateTime"] ;
             BOOL bSuccess = [db executeUpdate:[sqlUTIL sqlUpdateSetWhereWithModel:model whereBy:propName]] ;
@@ -273,7 +264,6 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
                 XTFMDBLog(@"xt_db transaction update Successfrom index :%d",i) ;
             }
             else {
-                // error
                 XTFMDBLog(@"xt_db transaction update Failure from index :%d",i) ;
                 *rollback = TRUE ;
                 bAllSuccess = FALSE ;
@@ -453,7 +443,6 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     
     return bSuccess ;
 }
-
 
 #pragma mark - alter
 

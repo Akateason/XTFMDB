@@ -29,12 +29,11 @@
 @implementation DisplayCell
 
 
-- (void)configure:(id)model
-{
+- (void)configure:(id)model {
     if (!model) return ;
     
     AnyModel *m1 = model ;
-    self.lbPkid.text = [@"pkid" stringByAppendingString:[NSString stringWithFormat:@": %d",m1.pkid]] ;
+    self.lbPkid.text = [@"pkid" stringByAppendingString:[NSString stringWithFormat:@": %d, create : %lld, update : %lld",m1.pkid,m1.xt_createTime,m1.xt_updateTime]] ;
     self.lbAge.text = [@"age" stringByAppendingString:[NSString stringWithFormat:@": %d",m1.age]] ;
     self.lbFloatVal.text = [@"floatVal" stringByAppendingString:[NSString stringWithFormat:@": %f",m1.floatVal]] ;
     self.lbTitle.text = [@"title" stringByAppendingString:[NSString stringWithFormat:@": %@",m1.title]] ;

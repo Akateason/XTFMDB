@@ -19,7 +19,6 @@
 
 #define SAFELY_LOG_FORMAT(strResult)   ( strResult.length > 1000 ) ? [strResult substringToIndex:1000] : strResult
 
-
 @interface XTAutoSqlUtil () {
     Class m_orginCls ;
 }
@@ -175,6 +174,8 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
         NSString *name      = dicTmp[@"name"] ;
         // dont update primary key
         if ([name containsString:kPkid]) continue ;
+        // dont update xt_createTime
+        if ([name containsString:@"createTime"]) continue ;
         // ignore prop
         if ([self propIsIgnore:name]) continue ;
         // ignore nil prop
@@ -504,7 +505,11 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     return tmpDic ;
 }
 
-// 处理yymodel无法解析嵌套对象的字典的问题.
+/**
+ 结果处理
+ 1. 处理yymodel无法解析嵌套对象的字典的问题.
+ 2. 注入默认字段
+ */
 - (id)resetDictionaryFromDBModel:(NSDictionary *)dbModel
                       resultItem:(id)item {
     
@@ -530,13 +535,27 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
             }
         }
         
-        if ([cls.superclass isEqual:[NSObject class]]) {
-            break ;
-        }
+        if ([cls.superclass isEqual:[NSObject class]]) break ;
+        
         // NEXT LOOP IF NEEDED .
         cls = [cls superclass] ;
         isFirst = YES ;
     }
+    
+    item = [self injectDefaultColumnFromDBModel:dbModel resultItem:item] ;
+    
+    return item ;
+}
+
+// add default column . pkid, xt_createTime ...
+- (id)injectDefaultColumnFromDBModel:(NSDictionary *)dbModel
+                          resultItem:(id)item {
+    
+    m_orginCls = [item class] ;
+    [item setValue:dbModel[kPkid] forKey:kPkid] ;
+    [item setValue:dbModel[@"xt_createTime"] forKey:@"xt_createTime"] ;
+    [item setValue:dbModel[@"xt_updateTime"] forKey:@"xt_updateTime"] ;
+    [item setValue:dbModel[@"xt_isDel"] forKey:@"xt_isDel"] ;
     
     return item ;
 }

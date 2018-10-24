@@ -20,8 +20,7 @@
 }
 
 
-+ (NSDictionary *)modelPropertiesSqliteKeywords
-{
++ (NSDictionary *)modelPropertiesSqliteKeywords {
     return @{
              @"title" : @"UNIQUE"
              } ;
