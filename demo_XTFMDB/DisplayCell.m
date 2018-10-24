@@ -15,15 +15,8 @@
 
 @interface DisplayCell ()
 @property (weak, nonatomic) IBOutlet UILabel *lbPkid;
-@property (weak, nonatomic) IBOutlet UILabel *lbAge;
-@property (weak, nonatomic) IBOutlet UILabel *lbFloatVal;
-@property (weak, nonatomic) IBOutlet UILabel *lbTitle;
 @property (weak, nonatomic) IBOutlet UIImageView *img;
-@property (weak, nonatomic) IBOutlet UILabel *lbArr;
-@property (weak, nonatomic) IBOutlet UILabel *lbDic;
-@property (weak, nonatomic) IBOutlet UILabel *lbDate;
-@property (weak, nonatomic) IBOutlet UILabel *lbObj;
-
+@property (weak, nonatomic) IBOutlet UILabel *lbContent;
 @end
 
 @implementation DisplayCell
@@ -33,15 +26,9 @@
     if (!model) return ;
     
     AnyModel *m1 = model ;
-    self.lbPkid.text = [@"pkid" stringByAppendingString:[NSString stringWithFormat:@": %d, create : %lld, update : %lld",m1.pkid,m1.xt_createTime,m1.xt_updateTime]] ;
-    self.lbAge.text = [@"age" stringByAppendingString:[NSString stringWithFormat:@": %d",m1.age]] ;
-    self.lbFloatVal.text = [@"floatVal" stringByAppendingString:[NSString stringWithFormat:@": %f",m1.floatVal]] ;
-    self.lbTitle.text = [@"title" stringByAppendingString:[NSString stringWithFormat:@": %@",m1.title]] ;
+    self.lbPkid.text = [@"pkid" stringByAppendingString:[NSString stringWithFormat:@": %d, %@",m1.pkid,m1.title]] ;
     self.img.image = m1.image ;
-    self.lbArr.text = [NSString stringWithFormat:@"%@",m1.myArr] ;
-    self.lbDic.text = [NSString stringWithFormat:@"%@",m1.myDic] ;
-    self.lbDate.text = [NSDate xt_getStrWithTick:[m1.today xt_getTick]] ;
-    self.lbObj.text = [m1.sInfo yy_modelToJSONString] ;
+    self.lbContent.text = [NSString stringWithFormat:@"%@",[model yy_modelToJSONObject]] ;
 }
 
 - (void)awakeFromNib {

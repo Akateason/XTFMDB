@@ -7,15 +7,15 @@
 //
 
 #import "NSObject+XTFMDB.h"
+#import <objc/runtime.h>
+#import <YYModel/YYModel.h>
 #import "XTFMDBConst.h"
 #import "XTFMDBBase.h"
-#import <YYModel/YYModel.h>
-#import <objc/runtime.h>
 #import "NSDate+XTFMDB_Tick.h"
 
 @implementation NSObject (XTFMDB)
 
-#pragma mark --
+#pragma mark - props
 
 static void *key_pkid = &key_pkid ;
 - (void)setPkid:(int)pkid { objc_setAssociatedObject(self, &key_pkid, @(pkid), OBJC_ASSOCIATION_ASSIGN) ; }
@@ -255,7 +255,6 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     
     __block BOOL bAllSuccess = TRUE ;
     [QUEUE inTransaction:^(FMDatabase *db, BOOL *rollback) {
-        
         for (int i = 0; i < [modelList count]; i++) {
             id model = [modelList objectAtIndex:i] ;
             [model setValue:@([NSDate xt_getNowTick]) forKey:@"xt_updateTime"] ;
@@ -281,7 +280,6 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     
     return bAllSuccess ;
 }
-
 
 #pragma mark --
 #pragma mark - select
