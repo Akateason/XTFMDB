@@ -202,8 +202,8 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
 - (NSString *)getSqlUseRecursiveQuery:(id)model
                                 class:(Class) class
                                  type:(TypeOfAutoSql)type
-                          whereByProp:(NSString *)whereByProp {
-    
+                          whereByProp:(NSString *)whereByProp
+{
     Class            cls           = class ?: [model class];
     NSString *       tableName     = NSStringFromClass(cls);
     NSMutableString *strProperties = [@"" mutableCopy];
@@ -312,7 +312,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     }
 }
 
-- (NSString *)sqlTypeWithType : (NSString *)strType {
+    - (NSString *)sqlTypeWithType : (NSString *)strType {
     if ([strType containsString:@"int"] || [strType containsString:@"Integer"]) {
         return @"INTEGER";
     }
