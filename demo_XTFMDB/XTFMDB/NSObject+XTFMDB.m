@@ -320,15 +320,19 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 #pragma mark - select
 
 + (NSArray *)xt_selectAll {
-    return [self xt_selectWhere:nil];
+    return [self xt_findAll];
+}
+
++ (NSArray *)xt_findAll {
+    return [self xt_findWhere:nil];
 }
 
 + (instancetype)xt_findFirstWhere:(NSString *)strWhere {
-    return [[self xt_selectWhere:strWhere] firstObject];
+    return [[self xt_findWhere:strWhere] firstObject];
 }
 
 + (instancetype)xt_findFirst {
-    return [[self xt_selectAll] firstObject];
+    return [[self xt_findAll] firstObject];
 }
 
 + (BOOL)xt_hasModelWhere:(NSString *)strWhere {
@@ -336,6 +340,10 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 }
 
 + (NSArray *)xt_selectWhere:(NSString *)strWhere {
+    return [self xt_findWhere:strWhere];
+}
+
++ (NSArray *)xt_findWhere:(NSString *)strWhere {
     NSString *tableName = NSStringFromClass([self class]);
     NSString *sql =
         !strWhere ? [NSString stringWithFormat:@"SELECT * FROM %@", tableName] : [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@",

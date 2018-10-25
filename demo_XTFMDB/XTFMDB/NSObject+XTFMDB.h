@@ -55,8 +55,14 @@
 
 #pragma mark - select
 
-+ (NSArray *)xt_selectAll;
-+ (NSArray *)xt_selectWhere:(NSString *)strWhere; // param e.g. @" pkid = '1' "
++ (NSArray *)xt_findAll;
++ (NSArray *)xt_selectAll
+    __attribute__((deprecated("use xt_findAll instead")));
+
++ (NSArray *)xt_findWhere:(NSString *)strWhere; // param e.g. @" pkid = '1' "
++ (NSArray *)xt_selectWhere:(NSString *)strWhere
+    __attribute__((deprecated("use xt_findWhere instead"))); // param e.g. @" pkid = '1' "
+
 + (instancetype)xt_findFirstWhere:(NSString *)strWhere;
 + (instancetype)xt_findFirst;
 + (BOOL)xt_hasModelWhere:(NSString *)strWhere;
