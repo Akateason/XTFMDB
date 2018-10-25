@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+
 @interface SomeInfo : NSObject
 
-@property (copy, nonatomic) NSString *infoStr ;
-@property (nonatomic) int infoID ;
+@property (copy, nonatomic) NSString *infoStr;
+@property (nonatomic) int infoID;
 
 @end

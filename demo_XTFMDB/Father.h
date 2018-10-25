@@ -7,13 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
-@class SomeInfo ;
+@class SomeInfo;
+
 
 @interface Father : NSObject
 
-@property (copy, nonatomic) NSString            *fatherName ;
-@property (copy, nonatomic) NSArray<SomeInfo *> *fatherList ;
+@property (copy, nonatomic) NSString *           fatherName;
+@property (copy, nonatomic) NSArray<SomeInfo *> *fatherList;
 
-+ (instancetype)randomAFather ;
++ (instancetype)randomAFather;
 
 @end

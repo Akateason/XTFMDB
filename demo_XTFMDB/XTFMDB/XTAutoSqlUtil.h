@@ -8,37 +8,37 @@
 
 #import <Foundation/Foundation.h>
 
-@class FMResultSet ;
+@class FMResultSet;
+
 
 @interface XTAutoSqlUtil : NSObject
 
-- (NSString *)sqlCreateTableWithClass:(Class)cls ;
+- (NSString *)sqlCreateTableWithClass:(Class)cls;
 
-- (NSString *)sqlInsertWithModel:(id)model ;
-- (NSString *)sqlInsertOrIgnoreWithModel:(id)model ;
-- (NSString *)sqlInsertOrReplaceWithModel:(id)model ;
+- (NSString *)sqlInsertWithModel:(id)model;
+- (NSString *)sqlInsertOrIgnoreWithModel:(id)model;
+- (NSString *)sqlInsertOrReplaceWithModel:(id)model;
 
 - (NSString *)sqlUpdateSetWhereWithModel:(id)model
-                                 whereBy:(NSString *)whereProp ;
+                                 whereBy:(NSString *)whereProp;
 
 - (NSString *)sqlDeleteWithTableName:(NSString *)tableName
-                               where:(NSString *)strWhere ;
+                               where:(NSString *)strWhere;
 
-- (NSString *)sqlDrop:(NSString *)tableName ;
+- (NSString *)sqlDrop:(NSString *)tableName;
 
 - (NSString *)sqlAlterAdd:(NSString *)name
                      type:(NSString *)type
-                    table:(NSString *)tableName ;
+                    table:(NSString *)tableName;
 
 - (NSString *)sqlAlterRenameOldTable:(NSString *)oldTableName
-                      toNewTableName:(NSString *)newTableName ;
+                      toNewTableName:(NSString *)newTableName;
 
 - (NSDictionary *)getResultDicFromClass:(Class)cls
-                              resultSet:(FMResultSet *)resultSet ;
+                              resultSet:(FMResultSet *)resultSet;
 
-- (NSString *)sqlTypeWithType:(NSString *)strType ;
+- (NSString *)sqlTypeWithType:(NSString *)strType;
 
-- (id)resetDictionaryFromDBModel:(NSDictionary *)dbModel
-                      resultItem:(id)item ;
+- (id)resetDictionaryFromDBModel:(NSDictionary *)dbModel resultItem:(id)item;
 
 @end

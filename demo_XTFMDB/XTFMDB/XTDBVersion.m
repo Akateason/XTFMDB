@@ -8,12 +8,11 @@
 
 #import "XTDBVersion.h"
 
+
 @implementation XTDBVersion
 
 + (NSDictionary *)modelPropertiesSqliteKeywords {
-    return @{
-             @"version" : @"UNIQUE"
-             } ;
+    return @{ @"version" : @"UNIQUE" };
 }
 
 @end

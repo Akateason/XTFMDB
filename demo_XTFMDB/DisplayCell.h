@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
+
 @interface DisplayCell : UITableViewCell
-- (void)configure:(id)model ;
+- (void)configure:(id)model;
 @end

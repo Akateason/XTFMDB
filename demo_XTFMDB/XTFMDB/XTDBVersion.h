@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+
 @interface XTDBVersion : NSObject
 
-@property (assign,nonatomic) int version ;
+@property (assign, nonatomic) int version;
 
 @end

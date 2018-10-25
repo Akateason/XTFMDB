@@ -7,11 +7,12 @@
 //
 
 #import "DisplayCell.h"
-#import "NSObject+XTFMDB.h"
 #import "AnyModel.h"
 #import "NSDate+XTFMDB_Tick.h"
-#import <YYModel/YYModel.h>
+#import "NSObject+XTFMDB.h"
 #import "SomeInfo.h"
+#import <YYModel/YYModel.h>
+
 
 @interface DisplayCell ()
 @property (weak, nonatomic) IBOutlet UILabel *lbPkid;
@@ -19,16 +20,19 @@
 @property (weak, nonatomic) IBOutlet UILabel *lbContent;
 @end
 
+
 @implementation DisplayCell
 
-
 - (void)configure:(id)model {
-    if (!model) return ;
-    
-    AnyModel *m1 = model ;
-    self.lbPkid.text = [@"pkid" stringByAppendingString:[NSString stringWithFormat:@": %d, %@",m1.pkid,m1.title]] ;
-    self.img.image = m1.image ;
-    self.lbContent.text = [NSString stringWithFormat:@"%@",[model yy_modelToJSONObject]] ;
+    if (!model)
+        return;
+
+    AnyModel *m1     = model;
+    self.lbPkid.text = [@"pkid"
+        stringByAppendingString:[NSString stringWithFormat:@": %d, %@", m1.pkid, m1.title]];
+    self.img.image = m1.image;
+    self.lbContent.text =
+        [NSString stringWithFormat:@"%@", [model yy_modelToJSONObject]];
 }
 
 - (void)awakeFromNib {

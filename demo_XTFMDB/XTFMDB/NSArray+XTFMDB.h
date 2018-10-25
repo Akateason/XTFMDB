@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+
 @interface NSArray (XTFMDB)
 
 /**
@@ -16,7 +17,6 @@
  @param descOrAsc   BOOL  desc - 1 , asc - 0
  @return a sorted list
  */
-- (NSArray *)xt_orderby:(NSString *)columnName
-              descOrAsc:(BOOL)descOrAsc ;
+- (NSArray *)xt_orderby:(NSString *)columnName descOrAsc:(BOOL)descOrAsc;
 
 @end

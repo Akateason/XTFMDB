@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+
 @interface AccessObj : NSObject
 
-@property (copy, nonatomic) NSString *accessStr ;
+@property (copy, nonatomic) NSString *accessStr;
 
 @end
