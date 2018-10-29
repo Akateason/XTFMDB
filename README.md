@@ -20,7 +20,6 @@
 # 设计思路:
 运用 iOS Runtime 在目前最权威的sqlite开源库FMDB之上增加ORM模型关系映射,  并使用Category的方式脱离基类, 并动态加入默认字段. 使任何类都能建表.
 
-![图片](https://images-cdn.shimo.im/CfG7jytREwoQhB8N/SHMDatabase.png!thumbnail)
 
 
 
