@@ -1,236 +1,285 @@
+# 设计初衷: 
+快速一站式sqlite数据库搭建. 调用更轻.快. 无需关注细节 .
+
+# 特性:
+* 无基类, 无入侵性. 可直接在第三方类上建表 .
+* 直接脱离项目中控制表的繁杂代码, Model直接进入CURD操作.脱离sql语句 .   
+* 自带默认字段pkid, xt_createTime, xt_updateTime, xt_isDel. 无需关注主键和创建更新时间变化处理 .
+* 自动建表 .
+* 主键自增. 插入不需设主键. 默认pkid .
+* 任何操作. 线程安全 .
+* 批量操作默认实务.以及失败回滚  .
+* 支持各容器类存储. NSArray, NSDictionary. 以及容器中带有自定义类等. 能处理任意嵌套组合 .
+* 数据库升级简单, 一行代码完成数据库多表升级. 只需设置一个新的数据库版本号 .
+* 每个字段可自定义设置关键字. 已经集成默认关键字, 无需再写非空和默认值( NOT NULL, DEFAULT''字符类型默认值,DEFAULT'0'数字类型默认值 ) .
+* 支持忽略属性, 比如ViewModel 可指定哪些字段不参与CURD操作 .  
+* 常规函数,数量,求和,最值等 .
+* 支持NSData类型 .
+* 支持UIImage类型 .
+
+# 设计思路:
+运用 iOS Runtime 在目前最权威的sqlite开源库FMDB之上增加ORM模型关系映射,  并使用Category的方式脱离基类, 并动态加入默认字段. 使任何类都能建表.
+
+![图片](https://images-cdn.shimo.im/CfG7jytREwoQhB8N/SHMDatabase.png!thumbnail)
 
 
-# XTFMDB
-pod 'XTFMDB'
-
-### 特性
-1. Model直接CURD各种操作. 无需再转换
-2. 脱离sql语句. 常规操作中无需写sql 
-3. 主键自增. 插入不需设主键. pkid
-4. 升级简单, 一行代码完成表升级. 只需设置一个新的数据库版本号
-5. 任何操作. 线程安全
-6. 批量操作默认支持实务. 支持操作失败事务回滚 
-7. 支持 每个字段自定义设置关键字. 已经集成默认关键字, 以下情况无需再写( NOT NULL, DEFAULT''字符类型默认值,DEFAULT'0'数字类型默认值 )
-8. 支持忽略属性, 比如ViewModel 可指定哪些字段不参与CURD操作. 
-9. 支持各容器类存储. NSArray, NSDictionary. 以及容器中带有自定义类等 NSArray<CutomCls *> ...
-10. 支持NSData类型
-11. 支持图片类型
-12. 支持默认字段pkid, xt_createTime, xt_updateTime, xt_isDel
-13. 也可用于不继承于XTDBModel的任意类型. 但自定义的Model必须满足一个属性必须是数字主键.且命名中须包含'pkid'
-14. 常规运算,数量,求和,最值等等
-15. 支持自动建表
-16. 无基类, 无入侵性, 任意组合.
-
-
-## 使用方法
-## CocoaPod
-pod 'XTFMDB'
- 
-导入 XTFMDB.h
-
-### 初始化 在app启动时调用配置函数
-
-```
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-    // 在这初始化数据库
-    [XTFMDBBase sharedInstance].isDebugMode = YES ;
-    [[XTFMDBBase sharedInstance] configureDBWithPath:documentsDirectory] ;
-    
-    return YES;
-}
-
-```
 
 ---
-
-### 使用CRUD
-先创建一个自定义模型类`Model1`
-任意创建一个类, 可以直接实现对数据库操作增删改查等.但需要手动设置主键pkid
+# 接入方式:
 ```
-@interface Model1 : NSObject
-@property (nonatomic)           int             pkid        ; //必须加上pkid
+pod 'XTFMDB'
+```
+# 如何使用:
+导入头文件  #import <XTFMDB.h>
 
-// 基本类型, 什么都不用做
-@property (nonatomic)           int             age         ;
-@property (nonatomic)           float           floatVal    ;
-@property (nonatomic)           long long       tick        ;
-@property (nonatomic,copy)      NSString        *title      ;
-@property (nonatomic,copy)      NSString        *abcabc     ;
-@property (nonatomic,strong)    UIImage         *image      ;
 
-// 处理容器和嵌套, 需配置, 见下示例
-@property (nonatomic,copy)      NSArray<SomeInfo *>         *myArr      ;//Array<SomeInfo> , 
-//@property (nonatomic,strong)  NSMutableDictionary         *myDic      ;//Dict <NSString,AccessObj> 可变
-@property (nonatomic,copy)      NSDictionary                *myDic      ;//Dict <NSString,AccessObj> 不可变, 都可以
-@property (strong, nonatomic)   NSDate          *today      ;
-@property (strong, nonatomic)   SomeInfo        *sInfo      ; // 自动处理嵌套SomeInfo, 什么都不用做
+* 启动时配置
+
+在AppDelegate didFinishLaunchingWithOptions中完成配置
+```
+    [XTFMDBBase sharedInstance].isDebugMode = YES; //是否打印内部log
+    NSString *yourDbPath = @".../shimoDB"; 
+    [[XTFMDBBase sharedInstance] configureDBWithPath:yourDbPath];
+    
+```
+
+* 插入
+```
+// insert
+- (BOOL)xt_insert;
++ (BOOL)xt_insertList:(NSArray *)modelList;
+
+// insert or ignore
+- (BOOL)xt_insertOrIgnore;
++ (BOOL)xt_insertOrIgnoreWithList:(NSArray *)modelList;
+
+// insert or replace
+- (BOOL)xt_insertOrReplace;
++ (BOOL)xt_insertOrReplaceWithList:(NSArray *)modelList;
+
+// upsert
+- (BOOL)xt_upsertWhereByProp:(NSString *)propName;
+```
+以下m1代表AnyModel.class下的实例.
+1. insert
+```
+    [m1 xt_insert];//单个
+    [AnyModel xt_insertList:list];//批量
+        
+```
+2. insert or ignore
+```
+    [m1 xt_insertOrIgnore]; //如果存在则忽略, 单个
+    [AnyModel xt_insertOrIgnoreWithList:list]; //如果存在则忽略, 批量
+
+```
+3. insert or replace
+```
+    [m1 xt_insertOrReplace]; //如果存在则替换, 单个
+    [AnyModel xt_insertOrReplaceWithList:list]; //如果存在则替换, 批量
+    
+```
+4. upsert
+```
+    [m1 xt_upsertWhereByProp:@"name"];//存在则更新,不存在则插入.    
+    
+```
+
+* 更新
+```
+// update by pkid .
+- (BOOL)xt_update; // Update default update by pkid. if pkid nil, update by a unique prop if has .
++ (BOOL)xt_updateListByPkid:(NSArray *)modelList;//批量更新
+
+// update by custom key
+- (BOOL)xt_updateWhereByProp:(NSString *)propName;//单个
++ (BOOL)xt_updateList:(NSArray *)modelList whereByProp:(NSString *)propName;//批量
+
+```
+e.g.
+1. 根据主键update整个model
+```
+    [m1 xt_update];//更新此对象(先找pkid,如果主键空,则寻找是否含有唯一的字段去更新.)
+    [AnyModel xt_updateListByPkid:list];//批量
+    
+```
+2. 指定根据某字段update整个model
+```
+    [m1 xt_updateWhereByProp:@"name"];//更新此对象(按手动指定某字段)
+    [AnyModel xt_updateList:list whereByProp:@"name"];//批量
+```
+
+* 查询
+```
++ (NSArray *)xt_findAll;
++ (NSArray *)xt_findWhere:(NSString *)strWhere; // param e.g. @" pkid = '1' "
+
++ (instancetype)xt_findFirstWhere:(NSString *)strWhere;
++ (instancetype)xt_findFirst;
++ (BOOL)xt_hasModelWhere:(NSString *)strWhere;
+
+// any sql execute Query
++ (NSArray *)xt_findWithSql:(NSString *)sql;
++ (instancetype)xt_findFirstWithSql:(NSString *)sql;
+```
+e.g.
+1. 列表查询
+```
+    list = [AnyModel xt_findAll]; //查询此表所有记录
+    list = [AnyModel xt_findWhere:@"name == 'mamba'"];//条件查询
+
+```
+2. 单个查询    
+```
+    item = [AnyModel xt_findFirstWhere:@"name == 'mamba'"];//查询单个
+    item = [AnyModel xt_findFirst];
+    
+```
+3. 查是否存在
+```
+    bool has = [AnyModel xt_hasModelWhere:@"age < 4"] ; //是否存在满足条件的数据
+    
+```
+4. 自定义查询
+```
+    list = [AnyModel xt_findWithSql:@"select * from AnyModel"] ;//自定义sql语句, 查询列表
+    item = [AnyModel xt_findFirstWithSql:@"select * from AnyModel where age == 111"] ;//自定义sql语句, 查询单个
+    
+```
+
+* 删除
+```
+- (BOOL)xt_deleteModel;
++ (BOOL)xt_deleteModelWhere:(NSString *)strWhere; // param e.g. @" pkid = '1' "
++ (BOOL)xt_dropTable;
+```
+e.g.
+1. 删除当前Model
+```
+    [m1 xt_deleteModel];//删除记录
+    
+```
+2. 删除指定Model
+```
+    [AnyModel xt_deleteModelWhere:@"name == 'peter'"];
+    
+```
+3. 删除表
+```
+    [AnyModel xt_dropTable]; //删除表
+    
+```
+
+* 常用函数
+```
+// func execute Statements
++ (id)xt_anyFuncWithSql:(NSString *)sql;
++ (BOOL)xt_isEmptyTable;
++ (int)xt_count;
++ (int)xt_countWhere:(NSString *)whereStr;
++ (double)xt_maxOf:(NSString *)property;
++ (double)xt_maxOf:(NSString *)property where:(NSString *)whereStr;
++ (double)xt_minOf:(NSString *)property;
++ (double)xt_minOf:(NSString *)property where:(NSString *)whereStr;
++ (double)xt_sumOf:(NSString *)property;
++ (double)xt_sumOf:(NSString *)property where:(NSString *)whereStr;
++ (double)xt_avgOf:(NSString *)property;
++ (double)xt_avgOf:(NSString *)property where:(NSString *)whereStr;
+```
+e.g.
+```
+    int count = [AnyModel xt_count] ;
+    int count = [AnyModel xt_countWhere:@"age < 10"] ;
+
+    double max = [AnyModel xt_maxOf:@"age"] ;
+    double max = [AnyModel xt_maxOf:@"age" where:@"location == 'shanghai'"] ;
+    
+```
+
+* 配置约束
+
+需要更深入的配置建表, 在AnyModel类中重载三个方法
+```
+// props Sqlite Keywords
++ (NSDictionary *)modelPropertiesSqliteKeywords; // set sqlite Constraints of property
+
+// ignore Properties . these properties will not join db CURD .
++ (NSArray *)ignoreProperties;
+
+// Container property , value should be Class or Class name. Same as YYmodel .
++ (NSDictionary *)modelContainerPropertyGenericClass;
+
+```
+
+1.  配置属性约束
+
+modelPropertiesSqliteKeywords , 配置属性约束, 非空与默认值已经加入无需配置, 例如在这里可以指定某字段的唯一性
+```
++ (NSDictionary *)modelPropertiesSqliteKeywords {
+  return @{@"name":@"UNIQUE"} ;
+}
+```
+1. 配置不想参加建表的字段
+
+ignoreProperties, 配置不想参加建表的字段. 例如ViewModel相关的属性等.
+```
++ (NSArray *)ignoreProperties {
+  return @[@"a1",@"a2"] ;
+}
+```
+1. 配置容器类中的所需要存放的数据类型
+
+modelContainerPropertyGenericClass, 处理在容器类型中嵌套有其他类.
+```
+@class Shadow, Border, Attachment;
+
+@interface Attributes
+@property NSString *name;
+@property NSArray *shadows; //Array<Shadow>
+@property NSSet *borders; //Set<Border>
+@property NSMutableDictionary *attachments; //Dict<NSString,Attachment>
+@end
+
+@implementation Attributes
+// 返回容器类中的所需要存放的数据类型 (以 Class 或 Class Name 的形式)。
++ (NSDictionary *)modelContainerPropertyGenericClass {
+    return @{@"shadows" : [Shadow class],
+             @"borders" : Border.class,
+             @"attachments" : @"Attachment" };
+}
 @end
 ```
 
-
-#### 可配置各个字段sqlite约束
-注意:
-1. 在.m中覆盖基类`modelPropertiesSqliteKeywords`方法.  假如想要多个关键字,以空格隔开即可 .
-2. 无需添加`NOT NULL`,`DEFAULT`,`PRIMARY Key`关键字. (已集成) .
-
+* 升级
 ```
-NOT NULL 约束：确保某列不能有 NULL 值。
-
-DEFAULT 约束：当某列没有指定值时，为该列提供默认值。
-
-UNIQUE 约束：确保某列中的所有值是不同的。
-
-PRIMARY Key 约束：唯一标识数据库表中的各行/记录。 
-
-CHECK 约束：CHECK 约束确保某列中的所有值满足一定条件。
+/**
+ DB Version Upgrade
+ @param tableCls    Class
+ @param paramsAdd   @[propName1 ,propName2 ,... ,]
+ @param version (int) start from 1
+ */
+- (void)dbUpgradeTable:(Class)tableCls
+             paramsAdd:(NSArray *)paramsAdd
+               version:(int)version;
 ```
-
-e.g.
+e.g. 一行代码完成数据库升级.
 ```
-+ (NSDictionary *)modelPropertiesSqliteKeywords
-{
-    return @{
-                @"title" : @"UNIQUE" ,  // 
-                ...           
-            } ;
-}
+[[XTFMDBBase sharedInstance] dbUpgradeTable:AnyModel1.class
+                                      paramsAdd:@[ @"b1",@"b2",@"b3" ]
+                                        version:2];
+//只需传入对应表,新增字段数组,和对应数据库版本号.版本号默认从1开始. 逐次升级后递增.
+以此版本号为标识.
+[[XTFMDBBase sharedInstance] dbUpgradeTable:AnyModel2.class
+                                      paramsAdd:@[ @"c1",@"c2",@"c3" ]
+                                        version:3];
 ```
 
 
-#### 配置不想参与建表的字段
-在.m中覆盖基类ignoreProperties方法. 列出不想参与建表的字段
-```
-+ (NSArray *)ignoreProperties
-{
-    return @[
-                @"abcabc" ,
-                    ...
-            ] ;
-}
-```
-
-#### 配置嵌套容器的字段. 
-```
-+ (NSDictionary *)modelContainerPropertyGenericClass {
-    return @{
-            @"myArr" : [SomeInfo class]    ,
-            @"myDic" : [AccessObj class]   ,
-            @"fatherList" : [SomeInfo class] ,
-        } ;
-}
-
-```
-
-###### 只需要导入`"XTFMDB.h"就可使用
-
-#### 创建表
-1. 马上创建一张名为`Model1`的数据库表(会自动创建可不写)
-```
-[Model1 xt_createTable] ; // [Model1 createTable] ; 当Model1是XTDBModel子类时,也可以用这个方法.以下方法均可以同上.
-```
-
-#### 插入
-1. 插入单个
-```
-// 生成aModel对象. 直接插入
-int lastRowID = [aModel xt_insert] ; // 默认返回Sqlite LastRowId
-```
-2. 批量插入
-```
-Bool isSuccess = [Model1 xt_insertList:modelList] ;
-```
 
 
-#### 更新 (默认根据客户端主键pkid)
-1. 更新单个
-```
-Bool isSuccess = [aModel xt_update] ;
-```
-2. 批量更新
-```
-Bool isSuccess = [Model1 xt_updateList:modelList] ;
-```
+<end>
 
+# 附:
+* mac上的sqlite可视化工具推荐 SQLite Professional
+* 使用中如有任何疑问,请issue于我 Akateason 
 
-#### 更新 指定根据自定义某个字段
-1. 更新单个
-```
-Bool isSuccess = [aModel xt_updateWhereByProp:@"userName"] ;
-```
-2. 批量更新
-```
-Bool isSuccess = [Model1 xt_updateList:modelList whereByProp:@"userName"] ;
-```
-
-
-#### 查询
-1. 查询表中所有数据
-```
-NSArray *list = [Model1 xt_selectAll] ;
-```
-2. 按条件查询
-```      
-NSArray *list = [Model1 xt_selectWhere:@" title = 'aaaaaa' "] ; // 直接传入where条件即可
-```
-3. 按条件查询单个
-```
-Model1 *model = [Model1 xt_findFirstWhere:@"pkid == 2"] ;
-```
-4. 按条件查询是否包含
-```
-BOOL isContained = [Model1 xt_hasModelWhere:@"pkid == 1"] ;
-```
-5. 自定义sql语句的查询
-```
-多个
-+ (NSArray *)xt_findWithSql:(NSString *)sql ;
-单个
-+ (instancetype)xt_findFirstWithSql:(NSString *)sql ;
-```
-6. 对结果排序
-```
-list = [[CustomDBModel selectAll] xt_orderby:@"age" descOrAsc:YES] ; // 对CustomDBModel结果集的age字段,做降序
-
-```
-
-#### 删除
-1. 删除当前Model
-```
-BOOL isDel = [aModel xt_deleteModel] ;
-```
-2. 按条件删除某Model
-```
-BOOL isDel = [Model1 xt_deleteModelWhere:@" title == 'aaa' "] ;
-```
-3. 删除本表
-```
-BOOL isDel = [Model1 xt_dropTable] ;
-```
-
-#### 运算操作 求和,最值,平均值等
-```
-// func execute Statements
-+ (id)xt_anyFuncWithSql:(NSString *)sql ; // 自定义
-+ (int)xt_count ;
-+ (BOOL)xt_isEmptyTable ;
-+ (double)xt_maxOf:(NSString *)property ;
-+ (double)xt_minOf:(NSString *)property ;
-+ (double)xt_sumOf:(NSString *)property ;
-+ (double)xt_avgOf:(NSString *)property ;
-
-```
-
-#### 更新数据库版本 加字段 (一行代码)
-```
-将数据库版本更新为v2. 在Model1中加3个字段,只需要把字段名写入!
-    [[XTFMDBBase sharedInstance] dbUpgradeTable:Model1.class
-                                      paramsAdd:@[@"a1",@"a2",@"a3"]
-                                        version:2] ;
-
-```
-
----
-
-
-若有任何疑问或建议. 请issue或mail于我.
