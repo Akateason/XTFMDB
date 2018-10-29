@@ -186,6 +186,7 @@ e.g.
 + (double)xt_avgOf:(NSString *)property where:(NSString *)whereStr;
 ```
 e.g.
+1. 常用函数
 ```
     int count = [AnyModel xt_count] ;
     int count = [AnyModel xt_countWhere:@"age < 10"] ;
@@ -193,6 +194,28 @@ e.g.
     double max = [AnyModel xt_maxOf:@"age"] ;
     double max = [AnyModel xt_maxOf:@"age" where:@"location == 'shanghai'"] ;
     
+```
+2. 自定义函数
+```
+id val = [AnyModel shmdb_anyFuncWithSql:@"..."] ;
+
+```
+
+
+* 排序
+```
+/**
+Order by . (in memory)
+@param columnName  --- must be a int column
+@param descOrAsc   BOOL  desc - 1 , asc - 0
+@return a sorted list
+*/
+- (NSArray *)shmdb_orderby:(NSString *)columnName
+descOrAsc:(BOOL)descOrAsc;
+```
+e.g.
+```
+    [list shmdb_orderby:@"age" descOrAsc:1]; //按年龄降序排列
 ```
 
 * 配置约束
