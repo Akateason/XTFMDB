@@ -53,10 +53,10 @@
 }
 // deprecated
 - (void)configureDB:(NSString *)name path:(NSString *)path {
-    if (![path containsString:@".sqlite"]) path = SQLITE_NAME(path);
+    if (![name containsString:@".sqlite"]) name = SQLITE_NAME(name);
 
     XTFMDBLog(@"xt_db sqlName  : %@", name);
-    NSString *finalPath = [path stringByAppendingPathComponent:path];
+    NSString *finalPath = [path stringByAppendingPathComponent:name];
     [self configureDBWithPath:finalPath];
 }
 
