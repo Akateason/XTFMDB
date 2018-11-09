@@ -21,11 +21,11 @@
 
 
 @implementation XTFMDBBase
-@synthesize     version = _version;
+@synthesize version = _version;
 
 + (XTFMDBBase *)sharedInstance {
     static dispatch_once_t onceToken;
-    static XTFMDBBase *    singleton;
+    static XTFMDBBase *singleton;
     dispatch_once(&onceToken, ^{
         singleton = [[XTFMDBBase alloc] init];
     });
@@ -53,13 +53,16 @@
 }
 // deprecated
 - (void)configureDB:(NSString *)name path:(NSString *)path {
+    if (![path containsString:@".sqlite"]) path = SQLITE_NAME(path);
+
     XTFMDBLog(@"xt_db sqlName  : %@", name);
-    NSString *finalPath = [path stringByAppendingPathComponent:SQLITE_NAME(name)];
+    NSString *finalPath = [path stringByAppendingPathComponent:path];
     [self configureDBWithPath:finalPath];
 }
 
 - (void)configureDBWithPath:(NSString *)finalPath {
-    finalPath = SQLITE_NAME(finalPath);
+    if (![finalPath containsString:@".sqlite"]) finalPath = SQLITE_NAME(finalPath);
+
     XTFMDBLog(@"xt_db path :\n%@", finalPath);
     DB = [FMDatabase databaseWithPath:finalPath];
     [DB open];
@@ -109,7 +112,7 @@
              paramsAdd:(NSArray *)paramsAdd
                version:(int)version {
     NSString *tableName = NSStringFromClass(tableCls);
-    int       dbVersion = self.version;
+    int dbVersion       = self.version;
     if (version <= dbVersion) {
         XTFMDBLog(@"xt_db already Upgraded. v%d for table %@", version, tableName);
         return;

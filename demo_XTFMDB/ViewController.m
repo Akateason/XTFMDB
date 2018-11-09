@@ -22,7 +22,7 @@
 
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UITableView *table;
-@property (copy, nonatomic) NSArray *             datasource;
+@property (copy, nonatomic) NSArray *datasource;
 @end
 
 
@@ -169,7 +169,7 @@
 }
 
 - (void)updateListAction {
-    NSArray *       getlist = [AnyModel xt_selectWhere:@"age > 5"];
+    NSArray *getlist        = [AnyModel xt_selectWhere:@"age > 5"];
     NSMutableArray *tmplist = [@[] mutableCopy];
     for (int i = 0; i < getlist.count; i++) {
         AnyModel *model = getlist[i];

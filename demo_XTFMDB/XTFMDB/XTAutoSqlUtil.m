@@ -108,10 +108,10 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
 - (NSString *)appendCreate:(Class)cls propInfoList:(NSArray *)propInfoList {
     NSMutableString *strProperties = [@"" mutableCopy];
     for (int i = 0; i < propInfoList.count; i++) {
-        NSDictionary *dic     = propInfoList[i];
-        NSString *    name    = dic[@"name"];
-        NSString *    type    = dic[@"type"];
-        NSString *    sqlType = [self sqlTypeWithType:type];
+        NSDictionary *dic = propInfoList[i];
+        NSString *name    = dic[@"name"];
+        NSString *type    = dic[@"type"];
+        NSString *sqlType = [self sqlTypeWithType:type];
 
         NSString *strTmp = nil;
         if ([name containsString:kPkid]) {
@@ -142,8 +142,8 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     NSMutableString *strProperties = [@"" mutableCopy];
     NSMutableString *strQuestions  = [@"" mutableCopy];
     for (int i = 0; i < propInfoList.count; i++) {
-        id        dicTmp = propInfoList[i];
-        NSString *name   = dicTmp[@"name"];
+        id dicTmp      = propInfoList[i];
+        NSString *name = dicTmp[@"name"];
         // dont insert primary key
         if ([name containsString:kPkid])
             continue;
@@ -170,8 +170,8 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                   dicModel:(NSDictionary *)dicModel {
     NSString *setsStr = @"";
     for (int i = 0; i < propInfoList.count; i++) {
-        id        dicTmp = propInfoList[i];
-        NSString *name   = dicTmp[@"name"];
+        id dicTmp      = propInfoList[i];
+        NSString *name = dicTmp[@"name"];
         // dont update primary key
         if ([name containsString:kPkid])
             continue;
@@ -204,11 +204,11 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                                  type:(TypeOfAutoSql)type
                           whereByProp:(NSString *)whereByProp
 {
-    Class            cls           = class ?: [model class];
-    NSString *       tableName     = NSStringFromClass(cls);
+    Class cls                      = class ?: [model class];
+    NSString *tableName            = NSStringFromClass(cls);
     NSMutableString *strProperties = [@"" mutableCopy];
     NSMutableString *strQuestions  = [@"" mutableCopy];
-    NSDictionary *   dicModel =
+    NSDictionary *dicModel =
         [self changeSpecifiedValToUTF8StringVal:model fromClass:cls];
     BOOL isFirst = NO;
 
@@ -478,10 +478,10 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
     while (1) {
         NSArray *propInfoList = (!isFirst) ? [self xt_autosql_propertiesInfo:cls] : [cls propertiesInfo];
         for (int i = 0; i < propInfoList.count; i++) {
-            NSDictionary *dic         = propInfoList[i];
-            NSString *    name        = dic[@"name"];
-            NSString *    type        = dic[@"type"];
-            NSString *    valFromFMDB = tmpDic[name];
+            NSDictionary *dic     = propInfoList[i];
+            NSString *name        = dic[@"name"];
+            NSString *type        = dic[@"type"];
+            NSString *valFromFMDB = tmpDic[name];
             if (!valFromFMDB || [valFromFMDB isKindOfClass:[NSNull class]])
                 continue;
             if ([valFromFMDB isKindOfClass:[NSString class]] && !valFromFMDB.length)
@@ -498,7 +498,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                      [type containsString:@"NSMutableArray"]) {
                 Class containerCls =
                     [m_orginCls modelContainerPropertyGenericClass][name];
-                NSArray *       resultArr =
+                NSArray *resultArr =
                     [NSArray yy_modelArrayWithClass:containerCls json:valFromFMDB];
                 if (!resultArr)
                     continue;
@@ -508,7 +508,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                      [type containsString:@"NSMutableDictionary"]) {
                 Class containerCls =
                     [m_orginCls modelContainerPropertyGenericClass][name];
-                NSDictionary *  resultDic =
+                NSDictionary *resultDic =
                     [NSDictionary yy_modelDictionaryWithClass:containerCls
                                                          json:valFromFMDB];
                 if (!resultDic)
@@ -533,9 +533,9 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                 [tmpDic setObject:tmpDate forKey:name];
             }
             else if ([self isAbnormalTypeString:type]) { // custom cls
-                Class cls      = NSClassFromString([type substringToIndex:type.length - 1]);
-                SEL   testFunc = NSSelectorFromString(@"yy_modelWithJSON:");
-                id    obj =
+                Class cls    = NSClassFromString([type substringToIndex:type.length - 1]);
+                SEL testFunc = NSSelectorFromString(@"yy_modelWithJSON:");
+                id obj =
                     ((id (*)(id, SEL, id))objc_msgSend)(cls, testFunc, valFromFMDB);
                 [tmpDic setObject:obj forKey:name];
             }
@@ -558,18 +558,18 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
  2. 注入默认字段
  */
 - (id)resetDictionaryFromDBModel:(NSDictionary *)dbModel resultItem:(id)item {
-    m_orginCls    = [item class];
-    Class cls     = m_orginCls;
-    BOOL  isFirst = NO;
+    m_orginCls   = [item class];
+    Class cls    = m_orginCls;
+    BOOL isFirst = NO;
 
     while (1) {
         NSArray *propInfoList =
             !isFirst ? [self xt_autosql_propertiesInfo:cls] : [cls propertiesInfo];
         for (int i = 0; i < propInfoList.count; i++) {
-            NSDictionary *dic         = propInfoList[i];
-            NSString *    name        = dic[@"name"];
-            NSString *    type        = dic[@"type"];
-            id            valFromFMDB = dbModel[name];
+            NSDictionary *dic = propInfoList[i];
+            NSString *name    = dic[@"name"];
+            NSString *type    = dic[@"type"];
+            id valFromFMDB    = dbModel[name];
             if (!valFromFMDB || [valFromFMDB isKindOfClass:[NSNull class]])
                 continue;
             if ([valFromFMDB isKindOfClass:[NSString class]] &&

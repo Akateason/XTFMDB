@@ -1,23 +1,104 @@
 PODS:
+  - AFNetworking (3.2.1):
+    - AFNetworking/NSURLSession (= 3.2.1)
+    - AFNetworking/Reachability (= 3.2.1)
+    - AFNetworking/Security (= 3.2.1)
+    - AFNetworking/Serialization (= 3.2.1)
+    - AFNetworking/UIKit (= 3.2.1)
+  - AFNetworking/NSURLSession (3.2.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.2.1)
+  - AFNetworking/Security (3.2.1)
+  - AFNetworking/Serialization (3.2.1)
+  - AFNetworking/UIKit (3.2.1):
+    - AFNetworking/NSURLSession
+  - CYLTableViewPlaceHolder (1.0.9)
   - FMDB (2.7.2):
     - FMDB/standard (= 2.7.2)
   - FMDB/standard (2.7.2)
+  - FTPopOverMenu (2.0.1)
   - Masonry (1.1.0)
   - MJRefresh (3.1.15.3)
+  - ReactiveObjC (3.1.0)
+  - RxWebViewController (0.0.2)
+  - SDWebImage (4.4.2):
+    - SDWebImage/Core (= 4.4.2)
+  - SDWebImage/Core (4.4.2)
+  - SSZipArchive (2.1.4)
+  - SVProgressHUD (2.2.5)
+  - Valet (2.4.2)
+  - XTColor (1.0.3)
+  - XTFMDB (2.0.3):
+    - FMDB
+    - YYModel
+  - XTlib/base (1.5.12):
+    - CYLTableViewPlaceHolder
+    - FTPopOverMenu
+    - Masonry
+    - MJRefresh
+    - ReactiveObjC
+    - RxWebViewController
+    - SDWebImage
+    - SSZipArchive
+    - Valet (= 2.4.2)
+    - XTColor
+    - XTFMDB (> 2.0.0)
+    - XTReq (> 1.3.0)
+  - XTReq (2.0.0):
+    - AFNetworking
+    - SVProgressHUD
+    - XTFMDB (> 2.0.0)
+    - YYModel
   - YYModel (1.0.4)
 
 DEPENDENCIES:
   - FMDB
   - Masonry
   - MJRefresh
+  - XTlib/base
   - YYModel
 
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - AFNetworking
+    - CYLTableViewPlaceHolder
+    - FMDB
+    - FTPopOverMenu
+    - Masonry
+    - MJRefresh
+    - ReactiveObjC
+    - RxWebViewController
+    - SDWebImage
+    - SSZipArchive
+    - SVProgressHUD
+    - Valet
+    - XTColor
+    - XTFMDB
+    - XTlib
+    - XTReq
+    - YYModel
+
 SPEC CHECKSUMS:
+  AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
+  CYLTableViewPlaceHolder: 678e070180a24e2f241adc7830d5d7f5e2abbaa5
   FMDB: 6198a90e7b6900cfc046e6bc0ef6ebb7be9236aa
+  FTPopOverMenu: 7b076d7b3ae615f575c22b7ce85258a56370b99e
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MJRefresh: b48380ae2b927b46c4ef000de9adb8dc748e1df7
+  ReactiveObjC: 2a38ea15335de4119d8b17caf1db1484f61db902
+  RxWebViewController: 79bcbf51aff13d93db9779404348b052ab0cd440
+  SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
+  SSZipArchive: 41455d4b8d2b6ab93990820b50dc697c2554a322
+  SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
+  Valet: 14463ef24fab8fd5809044ecedb61484b799fdd6
+  XTColor: 77dc1fb053ad58e6821d7de84fabbec361402d94
+  XTFMDB: e90ad2deda58b2b1105002d3d746a19243f7bd41
+  XTlib: d76a46627754afb7455a6d5aabfe5d5cde7ed630
+  XTReq: 1f7439b385056d8c3ec3fa4f198a46f2d29519bd
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 66aedf3ba549a2fabcb3493bee664c94e89cac8f
+PODFILE CHECKSUM: 0c2d1d30e5dcf61ba9572325f11bebe030a72cd3
 
-COCOAPODS: 1.4.0
+COCOAPODS: 1.5.0

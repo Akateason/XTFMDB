@@ -11,5 +11,6 @@ pod 'Masonry'
 pod ‘MJRefresh’
 pod ‘YYModel’
 pod ‘FMDB’
+pod 'XTlib/base'
 
 end

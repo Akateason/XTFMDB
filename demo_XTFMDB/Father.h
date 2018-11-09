@@ -12,7 +12,7 @@
 
 @interface Father : NSObject
 
-@property (copy, nonatomic) NSString *           fatherName;
+@property (copy, nonatomic) NSString *fatherName;
 @property (copy, nonatomic) NSArray<SomeInfo *> *fatherList;
 
 + (instancetype)randomAFather;

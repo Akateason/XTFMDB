@@ -15,7 +15,7 @@
 
 @interface DisplayViewController () <UITableViewDataSource, UITableViewDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *table;
-@property (nonatomic, copy) NSArray *             list;
+@property (nonatomic, copy) NSArray *list;
 @end
 
 

@@ -48,7 +48,7 @@
 
 + (NSString *)xt_getStrWithTick:(long long)tick format:(NSString *)format {
     NSTimeInterval timeInterval = (double)tick / kUnitConversion;
-    NSDate *       theDate      = [NSDate dateWithTimeIntervalSince1970:timeInterval];
+    NSDate *theDate             = [NSDate dateWithTimeIntervalSince1970:timeInterval];
     return [theDate xt_getStrWithFormat:format];
 }
 

@@ -230,8 +230,8 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
         return [self xt_updateWhereByProp:kPkid];
     }
     else {
-        NSDictionary *keywordsMap     = [self.class modelPropertiesSqliteKeywords];
-        NSString *    getOneUniqueKey = nil;
+        NSDictionary *keywordsMap = [self.class modelPropertiesSqliteKeywords];
+        NSString *getOneUniqueKey = nil;
         for (NSString *key in keywordsMap.allKeys) {
             NSString *val = keywordsMap[key];
             if ([val isEqualToString:@"UNIQUE"] || [val isEqualToString:@"unique"]) {

@@ -31,12 +31,12 @@
 - (NSDictionary *)propertyDictionary {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     unsigned int outCount;
-    Class        cls = [self class];
+    Class cls = [self class];
     while (1) {
         objc_property_t *props = class_copyPropertyList(cls, &outCount);
         for (int i = 0; i < outCount; i++) {
             objc_property_t prop = props[i];
-            NSString *      propName =
+            NSString *propName =
                 [[NSString alloc] initWithCString:property_getName(prop)
                                          encoding:NSUTF8StringEncoding];
             id propValue = [self valueForKey:propName];
@@ -57,12 +57,12 @@
 }
 
 + (NSArray *)propertyKeys {
-    unsigned int     propertyCount = 0;
-    objc_property_t *properties    = class_copyPropertyList(self, &propertyCount);
-    NSMutableArray *propertyNames  = [NSMutableArray array];
+    unsigned int propertyCount    = 0;
+    objc_property_t *properties   = class_copyPropertyList(self, &propertyCount);
+    NSMutableArray *propertyNames = [NSMutableArray array];
     for (unsigned int i = 0; i < propertyCount; ++i) {
         objc_property_t property = properties[i];
-        const char *    name     = property_getName(property);
+        const char *name         = property_getName(property);
         [propertyNames addObject:[NSString stringWithUTF8String:name]];
     }
     free(properties);
@@ -75,7 +75,7 @@
 
 + (NSArray *)propertiesInfo {
     NSMutableArray *propertieArray = [NSMutableArray array];
-    unsigned int     propertyCount;
+    unsigned int propertyCount;
     objc_property_t *properties =
         class_copyPropertyList([self class], &propertyCount);
     for (int i = 0; i < propertyCount; i++) {
@@ -94,7 +94,7 @@
 
 + (NSDictionary *)propertiesInfoDict {
     NSMutableDictionary *propertieDic = [NSMutableDictionary dictionary];
-    unsigned int     propertyCount;
+    unsigned int propertyCount;
     objc_property_t *properties =
         class_copyPropertyList([self class], &propertyCount);
     for (int i = 0; i < propertyCount; i++) {
@@ -158,11 +158,11 @@
 }
 
 - (NSArray *)methodList {
-    u_int           count;
+    u_int count;
     NSMutableArray *methodList = [NSMutableArray array];
     Method *methods            = class_copyMethodList([self class], &count);
     for (int i = 0; i < count; i++) {
-        SEL       name    = method_getName(methods[i]);
+        SEL name          = method_getName(methods[i]);
         NSString *strName = [NSString stringWithCString:sel_getName(name)
                                                encoding:NSUTF8StringEncoding];
         [methodList addObject:strName];
@@ -172,7 +172,7 @@
 }
 
 - (NSArray *)methodListInfo {
-    u_int           count;
+    u_int count;
     NSMutableArray *methodList = [NSMutableArray array];
     Method *methods            = class_copyMethodList([self class], &count);
     for (int i = 0; i < count; i++) {
@@ -216,11 +216,11 @@
 }
 
 + (NSArray *)methodList {
-    u_int           count;
+    u_int count;
     NSMutableArray *methodList = [NSMutableArray array];
     Method *methods            = class_copyMethodList([self class], &count);
     for (int i = 0; i < count; i++) {
-        SEL       name    = method_getName(methods[i]);
+        SEL name          = method_getName(methods[i]);
         NSString *strName = [NSString stringWithCString:sel_getName(name)
                                                encoding:NSUTF8StringEncoding];
         [methodList addObject:strName];
@@ -235,7 +235,7 @@
     NSMutableArray *result = [NSMutableArray array];
 
     unsigned int count;
-    Class *      classes = objc_copyClassList(&count);
+    Class *classes = objc_copyClassList(&count);
     for (int i = 0; i < count; i++) {
         [result addObject:NSStringFromClass(classes[i])];
     }
@@ -292,8 +292,8 @@
 }
 
 + (NSArray *)instanceVariable {
-    unsigned int    outCount;
-    Ivar *          ivars  = class_copyIvarList([self class], &outCount);
+    unsigned int outCount;
+    Ivar *ivars            = class_copyIvarList([self class], &outCount);
     NSMutableArray *result = [NSMutableArray array];
     for (int i = 0; i < outCount; i++) {
         NSString *type = [[self class] decodeType:ivar_getTypeEncoding(ivars[i])];
@@ -332,7 +332,7 @@
 
         NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
 
-        unsigned int               attributeCount;
+        unsigned int attributeCount;
         objc_property_attribute_t *attrs =
             property_copyAttributeList(property, &attributeCount);
 

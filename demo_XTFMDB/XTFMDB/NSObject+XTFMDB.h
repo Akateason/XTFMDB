@@ -14,10 +14,10 @@
 @interface NSObject (XTFMDB)
 
 // Default columns
-@property (nonatomic) int       pkid; // primaryKey
+@property (nonatomic) int pkid; // primaryKey
 @property (nonatomic) long long xt_createTime;
 @property (nonatomic) long long xt_updateTime;
-@property (nonatomic) BOOL      xt_isDel;
+@property (nonatomic) BOOL xt_isDel;
 
 #pragma mark - create
 

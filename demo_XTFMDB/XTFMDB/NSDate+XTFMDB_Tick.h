@@ -16,8 +16,8 @@ static NSString *const kTIME_STR_FORMAT_5 = @"YYYY-MM-dd HH:mm";
 static NSString *const kTIME_STR_FORMAT_6 = @"YYYY-MM-dd";
 static NSString *const kTIME_STR_FORMAT_7 = @"MM-dd HH:mm";
 static NSString *const kTIME_STR_FORMAT_8 = @"MM-dd";
-static const float     kMillisecond       = 1000.0;
-static const float     kSecond            = 1.0;
+static const float kMillisecond           = 1000.0;
+static const float kSecond                = 1.0;
 #define kUnitConversion kSecond
 
 
