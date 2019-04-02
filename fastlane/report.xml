@@ -5,57 +5,59 @@
     
     
       
-      <testcase classname="fastlane.lanes" name="00: import_from_git" time="3.166645">
+      <testcase classname="fastlane.lanes" name="00: import_from_git" time="3.147254">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="01: git_pull" time="2.412396">
+      <testcase classname="fastlane.lanes" name="01: git_pull" time="3.024124">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="02: ensure_git_branch" time="0.012159">
+      <testcase classname="fastlane.lanes" name="02: ensure_git_branch" time="0.01379">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="03: version_bump_podspec" time="0.002553">
+      <testcase classname="fastlane.lanes" name="03: version_bump_podspec" time="0.002704">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="04: git_add" time="0.021791">
+      <testcase classname="fastlane.lanes" name="04: git_add" time="0.016744">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="05: git_commit" time="0.303045">
+      <testcase classname="fastlane.lanes" name="05: git_commit" time="0.076362">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="06: push_to_git_remote" time="5.981029">
+      <testcase classname="fastlane.lanes" name="06: push_to_git_remote" time="18.175283">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="07: git_tag_exists" time="0.013259">
+      <testcase classname="fastlane.lanes" name="07: git_tag_exists" time="0.017247">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="08: add_git_tag" time="0.023138">
+      <testcase classname="fastlane.lanes" name="08: add_git_tag" time="0.022087">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="09: push_git_tags" time="4.945627">
+      <testcase classname="fastlane.lanes" name="09: push_git_tags" time="5.302783">
         
       </testcase>
     
       
-      <testcase classname="fastlane.lanes" name="10: pod_push" time="102.673374">
+      <testcase classname="fastlane.lanes" name="10: pod_push" time="143.430307">
+        
+          <failure message="/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.107.0/fastlane/lib/fastlane/actions/actions_helper.rb:48:in `execute_action'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.107.0/fastlane/lib/fastlane/runner.rb:232:in `block in execute_action'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.107.0/fastlane/lib/fastlane/runner.rb:227:in `chdir'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.107.0/fastlane/lib/fastlane/runner.rb:227:in `execute_action'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.107.0/fastlane/lib/fastlane/runner.rb:157:in `trigger_action_by_name'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.107.0/fastlane/lib/fastlane/fast_file.rb:149:in `method_missing'&#10;../../../../../../var/folders/cf/55wtc_bj5wq7w4k9t5wz5s180000gn/T/fl_clone20190402-18504-1xq18sr/fastlane-files/fastlane/Fastfile:27:in `block in parsing_binding'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.107.0/fastlane/lib/fastlane/lane.rb:33:in `call'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.107.0/fastlane/lib/fastlane/runner.rb:49:in `block in execute'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.107.0/fastlane/lib/fastlane/runner.rb:45:in `chdir'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.107.0/fastlane/lib/fastlane/runner.rb:45:in `execute'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.107.0/fastlane/lib/fastlane/lane_manager.rb:56:in `cruise_lane'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.107.0/fastlane/lib/fastlane/command_line_handler.rb:36:in `handle'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.107.0/fastlane/lib/fastlane/commands_generator.rb:108:in `block (2 levels) in run'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:178:in `call'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/commander-fastlane-4.4.6/lib/commander/command.rb:153:in `run'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/commander-fastlane-4.4.6/lib/commander/runner.rb:476:in `run_active_command'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.107.0/fastlane_core/lib/fastlane_core/ui/fastlane_runner.rb:76:in `run!'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/commander-fastlane-4.4.6/lib/commander/delegates.rb:15:in `run!'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.107.0/fastlane/lib/fastlane/commands_generator.rb:333:in `run'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.107.0/fastlane/lib/fastlane/commands_generator.rb:41:in `start'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.107.0/fastlane/lib/fastlane/cli_tools_distributor.rb:108:in `take_off'&#10;/usr/local/lib/ruby/gems/2.5.0/gems/fastlane-2.107.0/bin/fastlane:23:in `&lt;top (required)&gt;'&#10;/usr/local/bin/fastlane:23:in `load'&#10;/usr/local/bin/fastlane:23:in `&lt;main&gt;'&#10;&#10;Exit status of command 'pod trunk push 'XTFMDB.podspec' --allow-warnings --use-libraries' was 1 instead of 0.&#10;Updating spec repo `master`&#10;&#10;CocoaPods 1.7.0.beta.3 is available.&#10;To update use: `sudo gem install cocoapods --pre`&#10;[!] This is a test version we'd love you to try.&#10;&#10;For more information, see https://blog.cocoapods.org and the CHANGELOG for this version at https://github.com/CocoaPods/CocoaPods/releases/tag/1.7.0.beta.3&#10;&#10;Validating podspec&#10; -&gt; XTFMDB -&gt; XTFMDB (2.0.6)&#10;    - NOTE  | xcodebuild:  note: Using new build system&#10;    - NOTE  | [iOS] xcodebuild:  note: Planning build&#10;    - NOTE  | [iOS] xcodebuild:  note: Constructing build description&#10;    - NOTE  | [iOS] xcodebuild:  warning: The iOS Simulator deployment target is set to 4.3, but the range of supported deployment target versions for this platform is 8.0 to 12.1. (in target 'FMDB')&#10;    - NOTE  | [iOS] xcodebuild:  warning: The iOS Simulator deployment target is set to 6.0, but the range of supported deployment target versions for this platform is 8.0 to 12.1. (in target 'YYModel')&#10;    - NOTE  | [iOS] xcodebuild:  warning: Skipping code signing because the target does not have an Info.plist file. (in target 'App')&#10;    - WARN  | xcodebuild:  XTFMDB/demo_XTFMDB/XTFMDB/XTFMDBBase.h:10:9: warning: non-portable path to file '&lt;fmdb/FMDB.h&gt;'; specified path differs in case from file name on disk [-Wnonportable-include-path]&#10;    - WARN  | xcodebuild:  XTFMDB/demo_XTFMDB/XTFMDB/XTAutoSqlUtil.m:14:9: warning: non-portable path to file '&lt;fmdb/FMDB.h&gt;'; specified path differs in case from file name on disk [-Wnonportable-include-path]&#10;    - WARN  | xcodebuild:  Headers/Private/YYModel/NSObject+YYModel.h:29:7: warning: '@interface' command should not be used in a comment attached to a non-interface declaration [-Wdocumentation]&#10;    - WARN  | xcodebuild:  Headers/Private/YYModel/NSObject+YYModel.h:36:7: warning: '@interface' command should not be used in a comment attached to a non-interface declaration [-Wdocumentation]&#10;    - WARN  | xcodebuild:  Headers/Private/YYModel/NSObject+YYModel.h:54:7: warning: '@interface' command should not be used in a comment attached to a non-interface declaration [-Wdocumentation]&#10;    - WARN  | xcodebuild:  Headers/Private/YYModel/NSObject+YYModel.h:285:10: warning: '@interface' command should not be used in a comment attached to a non-interface declaration [-Wdocumentation]&#10;    - WARN  | xcodebuild:  Headers/Private/YYModel/NSObject+YYModel.h:313:10: warning: '@class' command should not be used in a comment attached to a non-class declaration [-Wdocumentation]&#10;    - WARN  | xcodebuild:  Headers/Private/YYModel/NSObject+YYModel.h:315:10: warning: '@interface' command should not be used in a comment attached to a non-interface declaration [-Wdocumentation]&#10;    - WARN  | xcodebuild:  Headers/Private/YYModel/NSObject+YYModel.h:343:10: warning: '@class' command should not be used in a comment attached to a non-class declaration [-Wdocumentation]&#10;&#10;[!] There was an error pushing a new version to trunk: execution expired&#10;" />
         
       </testcase>
     
