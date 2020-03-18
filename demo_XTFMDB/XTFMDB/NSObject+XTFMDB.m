@@ -120,7 +120,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
             default:
                 break;
         }
-    }];
+    }] ;
 
     return bSuccess;
 }
