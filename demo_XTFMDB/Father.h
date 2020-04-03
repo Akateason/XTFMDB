@@ -14,6 +14,8 @@
 
 @property (copy, nonatomic) NSString *fatherName;
 @property (copy, nonatomic) NSArray<SomeInfo *> *fatherList;
+@property (nonatomic, copy)
+    NSDictionary *fDic;
 
 + (instancetype)randomAFather;
 

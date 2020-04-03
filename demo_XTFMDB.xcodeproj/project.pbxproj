@@ -106,6 +106,50 @@
 			name = model;
 			sourceTree = "<group>";
 		};
+		8F8962C5243794500099C978 /* VC */ = {
+			isa = PBXGroup;
+			children = (
+				8FFD73931EBB1C2C00148B83 /* ViewController.h */,
+				8FFD73941EBB1C2C00148B83 /* ViewController.m */,
+				8F2BFFCB204016C90013394D /* MainVCell.h */,
+				8F2BFFCC204016C90013394D /* MainVCell.m */,
+				8FFD73A41EBB1CAE00148B83 /* DisplayViewController.h */,
+				8FFD73A51EBB1CAE00148B83 /* DisplayViewController.m */,
+				8FFD73F71EBB249500148B83 /* DisplayCell.h */,
+				8FFD73F81EBB249500148B83 /* DisplayCell.m */,
+			);
+			name = VC;
+			sourceTree = "<group>";
+		};
+		8F8962C62437958E0099C978 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				7DBF8FCD202308080030C3D5 /* XTDBVersion.h */,
+				7DBF8FCE202308090030C3D5 /* XTDBVersion.m */,
+				8F16B9AE1F25EE750049CEE1 /* XTFMDBConst.h */,
+				8F108F50203E718400217B87 /* NSDate+XTFMDB_Tick.h */,
+				8F108F51203E718400217B87 /* NSDate+XTFMDB_Tick.m */,
+				8F108F56203E943100217B87 /* NSObject+XTFMDB_Reflection.h */,
+				8F108F57203E943100217B87 /* NSObject+XTFMDB_Reflection.m */,
+				8F9357BB207B04C2003F5522 /* XTAutoSqlUtil.h */,
+				8F9357BC207B04C2003F5522 /* XTAutoSqlUtil.m */,
+			);
+			name = Util;
+			sourceTree = "<group>";
+		};
+		8F8962C7243795B80099C978 /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				8FFD73FD1EC0464D00148B83 /* XTFMDBBase.h */,
+				8FFD73FE1EC0464D00148B83 /* XTFMDBBase.m */,
+				8FFD73FA1EC0397000148B83 /* NSObject+XTFMDB.h */,
+				8FFD73FB1EC0397000148B83 /* NSObject+XTFMDB.m */,
+				8FA9D3B720C7CE85005AFEDF /* NSArray+XTFMDB.h */,
+				8FA9D3B820C7CE85005AFEDF /* NSArray+XTFMDB.m */,
+			);
+			name = Main;
+			sourceTree = "<group>";
+		};
 		8F9357B4207A158A003F5522 /* subCls */ = {
 			isa = PBXGroup;
 			children = (
@@ -144,14 +188,7 @@
 				8FFD73A91EBB1D8500148B83 /* XTFMDB */,
 				8FFD73901EBB1C2C00148B83 /* AppDelegate.h */,
 				8FFD73911EBB1C2C00148B83 /* AppDelegate.m */,
-				8FFD73931EBB1C2C00148B83 /* ViewController.h */,
-				8FFD73941EBB1C2C00148B83 /* ViewController.m */,
-				8F2BFFCB204016C90013394D /* MainVCell.h */,
-				8F2BFFCC204016C90013394D /* MainVCell.m */,
-				8FFD73A41EBB1CAE00148B83 /* DisplayViewController.h */,
-				8FFD73A51EBB1CAE00148B83 /* DisplayViewController.m */,
-				8FFD73F71EBB249500148B83 /* DisplayCell.h */,
-				8FFD73F81EBB249500148B83 /* DisplayCell.m */,
+				8F8962C5243794500099C978 /* VC */,
 				7D4B27B4202820DA001CA91B /* model */,
 				8FFD73961EBB1C2C00148B83 /* Main.storyboard */,
 				8FFD73991EBB1C2C00148B83 /* Assets.xcassets */,
@@ -174,21 +211,8 @@
 			isa = PBXGroup;
 			children = (
 				8FFD74001EC0479C00148B83 /* XTFMDB.h */,
-				8F9357BB207B04C2003F5522 /* XTAutoSqlUtil.h */,
-				8F9357BC207B04C2003F5522 /* XTAutoSqlUtil.m */,
-				8F108F56203E943100217B87 /* NSObject+XTFMDB_Reflection.h */,
-				8F108F57203E943100217B87 /* NSObject+XTFMDB_Reflection.m */,
-				7DBF8FCD202308080030C3D5 /* XTDBVersion.h */,
-				7DBF8FCE202308090030C3D5 /* XTDBVersion.m */,
-				8F108F50203E718400217B87 /* NSDate+XTFMDB_Tick.h */,
-				8F108F51203E718400217B87 /* NSDate+XTFMDB_Tick.m */,
-				8F16B9AE1F25EE750049CEE1 /* XTFMDBConst.h */,
-				8FFD73FD1EC0464D00148B83 /* XTFMDBBase.h */,
-				8FFD73FE1EC0464D00148B83 /* XTFMDBBase.m */,
-				8FFD73FA1EC0397000148B83 /* NSObject+XTFMDB.h */,
-				8FFD73FB1EC0397000148B83 /* NSObject+XTFMDB.m */,
-				8FA9D3B720C7CE85005AFEDF /* NSArray+XTFMDB.h */,
-				8FA9D3B820C7CE85005AFEDF /* NSArray+XTFMDB.m */,
+				8F8962C7243795B80099C978 /* Main */,
+				8F8962C62437958E0099C978 /* Util */,
 			);
 			name = XTFMDB;
 			sourceTree = "<group>";
@@ -253,6 +277,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);

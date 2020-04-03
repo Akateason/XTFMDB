@@ -10,8 +10,8 @@ Pod::Spec.new do |s|
   s.platform     = :ios, "8.0"
   s.source       = { :git => "https://github.com/Akateason/XTFMDB.git", :tag => s.version }
 
-  s.source_files  = "demo_XTFMDB/XTFMDB"
-  s.public_header_files = "demo_XTFMDB/XTFMDB/*.h"
+  s.source_files  = "demo_XTFMDB/XTFMDB","demo_XTFMDB/XTFMDB/Main","demo_XTFMDB/XTFMDB/Util"
+  s.public_header_files = "demo_XTFMDB/XTFMDB/*.h","demo_XTFMDB/XTFMDB/Main/*.h","demo_XTFMDB/XTFMDB/Util/*h"
 
   s.dependency "FMDB"
   s.dependency "YYModel"

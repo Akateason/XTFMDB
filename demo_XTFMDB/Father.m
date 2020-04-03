@@ -23,7 +23,8 @@
     ;
 
     Father *f    = [Father new];
-    f.fatherName = [NSString stringWithFormat:@"我是你爹%d", randomNum];
+    f.fatherName = [NSString stringWithFormat:@"我是父类%d", randomNum];
+    f.fDic = @{@"fatherDic":@"fffff"};
 
     SomeInfo *info = [SomeInfo new];
     info.infoStr   = [@(randomNum) stringValue];

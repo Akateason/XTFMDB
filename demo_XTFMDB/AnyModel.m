@@ -59,6 +59,7 @@
     // super cls
     m1.fatherName = @"this prop is from super class";
     m1.fatherList = @[ info ];
+    m1.fDic = @{@"ffffffff":@"123123"};
 
     return m1;
 }
