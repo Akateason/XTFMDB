@@ -20,14 +20,14 @@
 
 static void *key_pkid = &key_pkid;
 - (void)setPkid:(int)pkid {
-    objc_setAssociatedObject(self, &key_pkid, @(pkid), OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, &key_pkid, @(pkid), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 - (int)pkid {
     return [objc_getAssociatedObject(self, &key_pkid) intValue];
 }
 static void *key_createtime = &key_createtime;
 - (void)setXt_createTime:(long long)xt_createTime {
-    objc_setAssociatedObject(self, &key_createtime, @(xt_createTime), OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, &key_createtime, @(xt_createTime), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 - (long long)xt_createTime {
     return [objc_getAssociatedObject(self, &key_createtime) longLongValue];
@@ -35,7 +35,7 @@ static void *key_createtime = &key_createtime;
 
 static void *key_updatetime = &key_updatetime;
 - (void)setXt_updateTime:(long long)xt_updateTime {
-    objc_setAssociatedObject(self, &key_updatetime, @(xt_updateTime), OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, &key_updatetime, @(xt_updateTime), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 - (long long)xt_updateTime {
     return [objc_getAssociatedObject(self, &key_updatetime) longLongValue];
@@ -43,7 +43,7 @@ static void *key_updatetime = &key_updatetime;
 
 static void *key_isdel = &key_isdel;
 - (void)setXt_isDel:(BOOL)xt_isDel {
-    objc_setAssociatedObject(self, &key_isdel, @(xt_isDel), OBJC_ASSOCIATION_ASSIGN);
+    objc_setAssociatedObject(self, &key_isdel, @(xt_isDel), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 - (BOOL)xt_isDel {
     return [objc_getAssociatedObject(self, &key_isdel) boolValue];
