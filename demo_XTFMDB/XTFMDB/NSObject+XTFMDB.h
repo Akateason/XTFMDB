@@ -110,4 +110,9 @@
 // Container property , value should be Class or Class name. Same as YYmodel .
 + (NSDictionary *)modelContainerPropertyGenericClass;
 
+#pragma mark--
+#pragma mark - tools
+// NSStringFromClass - fix swift bundle name
++ (NSString *)xt_stringFromClass:(Class)aClass;
+    
 @end

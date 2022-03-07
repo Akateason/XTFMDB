@@ -1,6 +1,11 @@
 # 设计初衷:
 
-快速一站式 sqlite 数据库搭建. 调用更轻.快. 无需关注细节 .
+OC/Swift iOS 快速一站式 sqlite 数据库搭建. 调用更轻.快. 无需关注细节 .
+
+# Swift接入注意事项
+
+只要在每个属性var前加入 `@objc dynamic`. 其他使用方式同Objective-C
+
 
 # 特性:
 

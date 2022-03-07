@@ -28,7 +28,7 @@
 @property (strong, nonatomic) SomeInfo *sInfo; // 什么都不用做
 
 // 更新数据库
-//@property (nonatomic,copy)      NSString *lztmjyxjzdzmy ; //
+//@property (nonatomic,copy)      NSString *lztmjyxjzdzmy ; // 打开测试代码. 测试加字段
 
 + (instancetype)customRandomModel;
 @end

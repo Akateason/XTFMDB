@@ -53,7 +53,7 @@ static void *key_isdel = &key_isdel;
 #pragma mark - create
 
 + (BOOL)xt_tableIsExist {
-    NSString *tableName = NSStringFromClass([self class]);
+    NSString *tableName = [NSObject xt_stringFromClass:[self class]];
     return [[XTFMDBBase sharedInstance] isTableExist:tableName];
 }
 
@@ -66,7 +66,7 @@ static void *key_isdel = &key_isdel;
 }
 
 + (BOOL)xt_createTable {
-    NSString *tableName = NSStringFromClass([self class]);
+    NSString *tableName = [NSObject xt_stringFromClass:[self class]];
     if (![[XTFMDBBase sharedInstance] verify])
         return FALSE;
 
@@ -170,11 +170,11 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 
         if (bAllSuccess) {
             XTFMDBLog(@"xt_db transaction insert %@ all complete\n\n",
-                      NSStringFromClass([self class]));
+                      [NSObject xt_stringFromClass:[self class]]);
         }
         else {
             XTFMDBLog(@"xt_db transaction insert %@ all fail\n\n",
-                      NSStringFromClass([self class]));
+                      [NSObject xt_stringFromClass:[self class]]);
         }
 
     }];
@@ -245,7 +245,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
         }
         else {
             XTFMDBLog(@"xt_db update Failed from tb %@ \n no primary key\n",
-                      NSStringFromClass([self class]));
+                      [NSObject xt_stringFromClass:[self class]]);
             return NO;
         }
     }
@@ -258,7 +258,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 
 // update by custom key .
 - (BOOL)xt_updateWhereByProp:(NSString *)propName {
-    NSString *tableName = NSStringFromClass([self class]);
+    NSString *tableName = [NSObject xt_stringFromClass:[self class]];
     if (![[XTFMDBBase sharedInstance] verify])
         return FALSE;
     [self.class xt_autoCreateIfNotExist];
@@ -344,7 +344,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 }
 
 + (NSArray *)xt_findWhere:(NSString *)strWhere {
-    NSString *tableName = NSStringFromClass([self class]);
+    NSString *tableName = [NSObject xt_stringFromClass:[self class]];
     NSString *sql =
         !strWhere ? [NSString stringWithFormat:@"SELECT * FROM %@", tableName] : [NSString stringWithFormat:@"SELECT * FROM %@ WHERE %@",
                                                                                                             tableName,
@@ -404,10 +404,9 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 + (int)xt_countWhere:(NSString *)whereStr {
     whereStr = whereStr ? [NSString stringWithFormat:@"WHERE %@", whereStr] : @"";
     return [[self
-        xt_anyFuncWithSql:[NSString
-                              stringWithFormat:@"SELECT count(*) FROM %@ %@",
-                                               NSStringFromClass([self class]),
-                                               whereStr]] intValue];
+        xt_anyFuncWithSql:[NSString stringWithFormat:@"SELECT count(*) FROM %@ %@",
+                                                    [NSObject xt_stringFromClass:[self class]],
+                                                    whereStr]] intValue];
 }
 
 + (double)xt_maxOf:(NSString *)property {
@@ -419,8 +418,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     return [[self
         xt_anyFuncWithSql:[NSString stringWithFormat:@"SELECT max(%@) FROM %@ %@",
                                                      property,
-                                                     NSStringFromClass(
-                                                         [self class]),
+                                                     [NSObject xt_stringFromClass:[self class]],
                                                      whereStr]] doubleValue];
 }
 
@@ -433,8 +431,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     return [[self
         xt_anyFuncWithSql:[NSString stringWithFormat:@"SELECT min(%@) FROM %@ %@",
                                                      property,
-                                                     NSStringFromClass(
-                                                         [self class]),
+                                                     [NSObject xt_stringFromClass:[self class]],
                                                      whereStr]] doubleValue];
 }
 
@@ -447,8 +444,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     return [[self
         xt_anyFuncWithSql:[NSString stringWithFormat:@"SELECT sum(%@) FROM %@ %@",
                                                      property,
-                                                     NSStringFromClass(
-                                                         [self class]),
+                                                     [NSObject xt_stringFromClass:[self class]],
                                                      whereStr]] doubleValue];
 }
 
@@ -461,8 +457,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
     return [[self
         xt_anyFuncWithSql:[NSString stringWithFormat:@"SELECT avg(%@) FROM %@ %@",
                                                      property,
-                                                     NSStringFromClass(
-                                                         [self class]),
+                                                     [NSObject xt_stringFromClass:[self class]],
                                                      whereStr]] doubleValue];
 }
 
@@ -476,7 +471,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 }
 
 + (BOOL)xt_deleteModelWhere:(NSString *)strWhere {
-    NSString *tableName = NSStringFromClass([self class]);
+    NSString *tableName = [NSObject xt_stringFromClass:[self class]];
     if (![[XTFMDBBase sharedInstance] verify])
         return FALSE;
     [self.class xt_autoCreateIfNotExist];
@@ -497,7 +492,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 }
 
 + (BOOL)xt_dropTable {
-    NSString *tableName = NSStringFromClass([self class]);
+    NSString *tableName = [NSObject xt_stringFromClass:[self class]];
     if (![[XTFMDBBase sharedInstance] verify])
         return FALSE;
     [self.class xt_autoCreateIfNotExist];
@@ -519,7 +514,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 #pragma mark - alter
 
 + (BOOL)xt_alterAddColumn:(NSString *)name type:(NSString *)type {
-    NSString *tableName = NSStringFromClass([self class]);
+    NSString *tableName = [NSObject xt_stringFromClass:[self class]];
     if (![[XTFMDBBase sharedInstance] verify])
         return FALSE;
     [self.class xt_autoCreateIfNotExist];
@@ -539,7 +534,7 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 }
 
 + (BOOL)xt_alterRenameToNewTableName:(NSString *)name {
-    NSString *tableName = NSStringFromClass([self class]);
+    NSString *tableName = [NSObject xt_stringFromClass:[self class]];
     if (![[XTFMDBBase sharedInstance] verify])
         return FALSE;
     [self.class xt_autoCreateIfNotExist];
@@ -575,5 +570,18 @@ typedef NS_ENUM(NSUInteger, XTFMDB_insertWay) {
 + (NSDictionary *)modelContainerPropertyGenericClass {
     return nil;
 }
+
+#pragma mark--
+#pragma mark - tools
+// NSStringFromClass - fix swift bundle name
++ (NSString *)xt_stringFromClass:(Class)aClass {
+    NSString *str = NSStringFromClass(aClass);
+    if ([str containsString:@"."]) { // swift
+        return [[str componentsSeparatedByString:@"."] lastObject];
+    } else { // oc
+        return str;
+    }
+}
+
 
 @end

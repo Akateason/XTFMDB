@@ -8,24 +8,24 @@
 
 #import "NSObject+XTFMDB_Reflection.h"
 #import <objc/runtime.h>
-
+#import "NSObject+XTFMDB.h"
 
 @implementation NSObject (XTFMDB_Reflection)
 
 - (NSString *)className {
-    return NSStringFromClass([self class]);
+    return [NSObject xt_stringFromClass:[self class]];
 }
 
 - (NSString *)superClassName {
-    return NSStringFromClass([self superclass]);
+    return [NSObject xt_stringFromClass:[self superclass]];
 }
 
 + (NSString *)className {
-    return NSStringFromClass([self class]);
+    return [NSObject xt_stringFromClass:[self class]];
 }
 
 + (NSString *)superClassName {
-    return NSStringFromClass([self superclass]);
+    return [NSObject xt_stringFromClass:[self superclass]];
 }
 
 - (NSDictionary *)propertyDictionary {
@@ -44,8 +44,8 @@
         }
         free(props);
         cls = [cls superclass];
-        if ([NSStringFromClass(cls)
-                isEqualToString:NSStringFromClass([NSObject class])]) {
+        
+        if ([[NSObject xt_stringFromClass:cls] isEqualToString:[NSObject xt_stringFromClass:[NSObject class]]]) {
             break;
         }
     }
@@ -236,8 +236,8 @@
 
     unsigned int count;
     Class *classes = objc_copyClassList(&count);
-    for (int i = 0; i < count; i++) {
-        [result addObject:NSStringFromClass(classes[i])];
+    for (int i = 0; i < count; i++) {        
+        [result addObject:[NSObject xt_stringFromClass:classes[i]]];
     }
     free(classes);
     [result sortedArrayUsingSelector:@selector(compare:)];

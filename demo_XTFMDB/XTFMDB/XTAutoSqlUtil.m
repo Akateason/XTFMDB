@@ -205,7 +205,7 @@ typedef NS_ENUM(NSUInteger, TypeOfAutoSql) {
                           whereByProp:(NSString *)whereByProp
 {
     Class cls                      = class ?: [model class];
-    NSString *tableName            = NSStringFromClass(cls);
+    NSString *tableName            = [NSObject xt_stringFromClass:cls];
     NSMutableString *strProperties = [@"" mutableCopy];
     NSMutableString *strQuestions  = [@"" mutableCopy];
     NSDictionary *dicModel =

@@ -111,7 +111,7 @@
 - (void)dbUpgradeTable:(Class)tableCls
              paramsAdd:(NSArray *)paramsAdd
                version:(int)version {
-    NSString *tableName = NSStringFromClass(tableCls);
+    NSString *tableName = [NSObject xt_stringFromClass:tableCls];
     int dbVersion       = self.version;
     if (version <= dbVersion) {
         XTFMDBLog(@"xt_db already Upgraded. v%d for table %@", version, tableName);
