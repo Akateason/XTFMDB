@@ -17,6 +17,7 @@
 		8F9357B3207A146D003F5522 /* SomeInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9357B2207A146D003F5522 /* SomeInfo.m */; };
 		8F9357B7207A15C6003F5522 /* AccessObj.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9357B6207A15C6003F5522 /* AccessObj.m */; };
 		8F9357BD207B04C2003F5522 /* XTAutoSqlUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8F9357BC207B04C2003F5522 /* XTAutoSqlUtil.m */; };
+		8F9511EE27D64E06005F03A1 /* cn_readme.md in Resources */ = {isa = PBXBuildFile; fileRef = 8F9511ED27D64E06005F03A1 /* cn_readme.md */; };
 		8FA9D3B920C7CE85005AFEDF /* NSArray+XTFMDB.m in Sources */ = {isa = PBXBuildFile; fileRef = 8FA9D3B820C7CE85005AFEDF /* NSArray+XTFMDB.m */; };
 		8FCB88642137B7C600492AB0 /* Podfile in Resources */ = {isa = PBXBuildFile; fileRef = 8FCB88632137B7C600492AB0 /* Podfile */; };
 		8FCB88662137B7CF00492AB0 /* XTFMDB.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 8FCB88652137B7CF00492AB0 /* XTFMDB.podspec */; };
@@ -57,6 +58,7 @@
 		8F9357B6207A15C6003F5522 /* AccessObj.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AccessObj.m; sourceTree = "<group>"; };
 		8F9357BB207B04C2003F5522 /* XTAutoSqlUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = XTAutoSqlUtil.h; path = XTFMDB/XTAutoSqlUtil.h; sourceTree = "<group>"; };
 		8F9357BC207B04C2003F5522 /* XTAutoSqlUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = XTAutoSqlUtil.m; path = XTFMDB/XTAutoSqlUtil.m; sourceTree = "<group>"; };
+		8F9511ED27D64E06005F03A1 /* cn_readme.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = cn_readme.md; sourceTree = "<group>"; };
 		8FA9D3B720C7CE85005AFEDF /* NSArray+XTFMDB.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "NSArray+XTFMDB.h"; path = "XTFMDB/NSArray+XTFMDB.h"; sourceTree = "<group>"; };
 		8FA9D3B820C7CE85005AFEDF /* NSArray+XTFMDB.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = "NSArray+XTFMDB.m"; path = "XTFMDB/NSArray+XTFMDB.m"; sourceTree = "<group>"; };
 		8FCB88632137B7C600492AB0 /* Podfile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Podfile; sourceTree = SOURCE_ROOT; };
@@ -184,6 +186,7 @@
 			children = (
 				8FCB88632137B7C600492AB0 /* Podfile */,
 				8FCB88652137B7CF00492AB0 /* XTFMDB.podspec */,
+				8F9511ED27D64E06005F03A1 /* cn_readme.md */,
 				8F211CC6208F1DAE0031DC40 /* README.md */,
 				8FFD73A91EBB1D8500148B83 /* XTFMDB */,
 				8FFD73901EBB1C2C00148B83 /* AppDelegate.h */,
@@ -297,6 +300,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8FCB88642137B7C600492AB0 /* Podfile in Resources */,
+				8F9511EE27D64E06005F03A1 /* cn_readme.md in Resources */,
 				8FCB88662137B7CF00492AB0 /* XTFMDB.podspec in Resources */,
 				8FFD739D1EBB1C2C00148B83 /* LaunchScreen.storyboard in Resources */,
 				8FFD739A1EBB1C2C00148B83 /* Assets.xcassets in Resources */,

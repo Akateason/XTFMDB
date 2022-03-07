@@ -1,57 +1,57 @@
-# 设计初衷:
+# Original intention:
 
-OC/Swift iOS 快速一站式 sqlite 数据库搭建. 调用更轻.快. 无需关注细节 .
+OC/Swift iOS fast one-stop SQLite database setup. Call lighter. Faster. No need to pay attention to details.
 
-# Swift接入注意事项
+# Precautions for Swift access
 
-只要在每个属性var前加入 `@objc dynamic`. 其他使用方式同Objective-C
+Just add '@objc dynamic' before each attribute var. Other uses are the same as objective-C
 
 
-# 特性:
+# features:
 
-- 无基类, 无入侵性. 可直接在第三方类上建表 .
-- 直接脱离项目中控制表的繁杂代码, Model 直接进入 CURD 操作.脱离 sql 语句 .
-- 自带默认字段 pkid, xt_createTime, xt_updateTime, xt_isDel. 无需关注主键和创建更新时间变化处理 .
-- 自动建表 .
-- 主键自增. 插入不需设主键. 默认 pkid .
-- 任何操作. 线程安全 .
-- 批量操作默认实务.以及失败回滚   .
-- 支持各容器类存储. NSArray, NSDictionary. 以及容器中带有自定义类等. 能处理任意嵌套组合 .
-- 数据库升级简单, 一行代码完成数据库多表升级. 只需设置一个新的数据库版本号 .
-- 每个字段可自定义设置关键字. 已经集成默认关键字, 无需再写非空和默认值( NOT NULL, DEFAULT''字符类型默认值,DEFAULT'0'数字类型默认值 ) .
-- 支持忽略属性, 比如 ViewModel 可指定哪些字段不参与 CURD 操作 .
-- 常规函数,数量,求和,最值等 .
-- 支持 NSData 类型 .
-- 支持 UIImage 类型 .
+- No base class, no invasion. You can build tables directly on third-party classes.
+- Directly from the project control table complex code, Model directly into the CURD operation. Detach from SQL statements.
+- Built-in default fields pKID, xt_createTime, xt_updateTime, xt_isDel. Do not worry about primary keys and create update time changes handling.
+- Automatic table building.
+- The primary key is added automatically. You do not need to set the primary key. Pkid by default.
+- Any operation. Thread safe.
+- Batch operation Default practice. And failed rollback.
+- Supports storage of various container classes. NSArray, NSDictionary. And containers with custom classes. Can handle arbitrary nested combinations.
+- Easy database upgrade. One line of code can upgrade multiple database tables. Just set a new database version number.
+- You can customize the keyword for each field. The DEFAULT keyword is already integrated, so there is no need to write non-null and DEFAULT values (NOT NULL, DEFAULT'' character type DEFAULT,DEFAULT'0' numeric type DEFAULT).
+- Support for ignoring properties, such as ViewModel to specify which fields do not participate in CURD operations.
+- General functions, quantities, sums, maxima, etc.
+- Supports the NSData type.
+- Supports THE UIImage type.
 
-# 设计思路:
+# Design idea:
 
-运用 iOS Runtime 在目前最权威的 sqlite 开源库 FMDB 之上增加 ORM 模型关系映射, 并使用 Category 的方式脱离基类, 并动态加入默认字段. 使任何类都能建表.
+Use iOS Runtime to add ORM model relational mapping on FMDB, the most authoritative SQLite open source library, and use the way of Category to separate from the base class, and add the default field dynamically. Enable any class to build tables.
 
 ---
 
-# 接入方式:
+Access mode:
 
 ```
 pod 'XTFMDB'
 ```
 
-# 如何使用:
+# How to use:
 
-导入头文件 #import <XTFMDB.h>
+Import header file #import < xtfMDB.h >
 
-- 启动时配置
+- Configuration at startup
 
-在 AppDelegate didFinishLaunchingWithOptions 中完成配置
-
-```
-    [XTFMDBBase sharedInstance].isDebugMode = YES; //是否打印内部log
-    NSString *yourDbPath = @".../your_DB_Name";
-    [[XTFMDBBase sharedInstance] configureDBWithPath:yourDbPath];
+Complete the configuration in the AppDelegate didFinishLaunchingWithOptions
 
 ```
+[XTFMDBBase sharedInstance].isDebugMode = YES; // Whether to print the internal log
+NSString *yourDbPath = @"... /your_DB_Name";
+[[XTFMDBBase sharedInstance] configureDBWithPath:yourDbPath];
 
-- 插入
+```
+
+- Insert
 
 ```
 // insert
@@ -70,70 +70,70 @@ pod 'XTFMDB'
 - (BOOL)xt_upsertWhereByProp:(NSString *)propName;
 ```
 
-以下 m1 代表 AnyModel.class 下的实例.
+The following M1 represents instances under anyModel.class.
 
 1. insert
 
 ```
-    [m1 xt_insert];//单个
-    [AnyModel xt_insertList:list];//批量
+[m1 xt_insert]; / / a single
+[AnyModel xt_insertList:list]; / / batch
 
 ```
 
 2. insert or ignore
 
 ```
-    [m1 xt_insertOrIgnore]; //如果存在则忽略, 单个
-    [AnyModel xt_insertOrIgnoreWithList:list]; //如果存在则忽略, 批量
+[m1 xt_insertOrIgnore]; // If there is one, ignore it
+[AnyModel xt_insertOrIgnoreWithList:list]; // If there is one, ignore it
 
 ```
 
 3. insert or replace
 
 ```
-    [m1 xt_insertOrReplace]; //如果存在则替换, 单个
-    [AnyModel xt_insertOrReplaceWithList:list]; //如果存在则替换, 批量
+[m1 xt_insertOrReplace]; // If there is one, replace it
+[AnyModel xt_insertOrReplaceWithList:list]; // If there is one, replace it
 
 ```
 
 4. upsert
 
 ```
-    [m1 xt_upsertWhereByProp:@"name"];//存在则更新,不存在则插入.    
+[m1 xt_upsertWhereByProp:@"name"]; // Update if it exists, insert if it does not.
 
 ```
 
-- 更新
+- update
 
 ```
 // update by pkid .
 - (BOOL)xt_update; // Update default update by pkid. if pkid nil, update by a unique prop if has .
-+ (BOOL)xt_updateListByPkid:(NSArray *)modelList;//批量更新
++ (BOOL)xt_updateListByPkid:(NSArray *)modelList; // Batch update
 
 // update by custom key
-- (BOOL)xt_updateWhereByProp:(NSString *)propName;//单个
-+ (BOOL)xt_updateList:(NSArray *)modelList whereByProp:(NSString *)propName;//批量
+- (BOOL)xt_updateWhereByProp:(NSString *)propName; / / a single
++ (BOOL)xt_updateList:(NSArray *)modelList whereByProp:(NSString *)propName; / / batch
 
 ```
 
 e.g.
 
-1. 根据主键 update 整个 model
+1. Update the entire model based on the primary key
 
 ```
-    [m1 xt_update];//更新此对象(先找pkid,如果主键空,则寻找是否含有唯一的字段去更新.)
-    [AnyModel xt_updateListByPkid:list];//批量
+[m1 xt_update]; // Update this object (pkid first, if the primary key is empty, find if there is a unique field to update.)
+[AnyModel xt_updateListByPkid:list]; / / batch
 
 ```
 
-2. 指定根据某字段 update 整个 model
+2. Specify that the entire model is updated based on a field
 
 ```
-    [m1 xt_updateWhereByProp:@"name"];//更新此对象(按手动指定某字段)
-    [AnyModel xt_updateList:list whereByProp:@"name"];//批量
+[m1 xt_updateWhereByProp:@"name"]; // Update this object (manually specify a field)
+[AnyModel xt_updateList:list whereByProp:@"name"]; / / batch
 ```
 
-- 查询
+- query
 
 ```
 + (NSArray *)xt_findAll;
@@ -150,38 +150,38 @@ e.g.
 
 e.g.
 
-1. 列表查询
+1. List query
 
 ```
-    list = [AnyModel xt_findAll]; //查询此表所有记录
-    list = [AnyModel xt_findWhere:@"name == 'mamba'"];//条件查询
-
-```
-
-2. 单个查询
-
-```
-    item = [AnyModel xt_findFirstWhere:@"name == 'mamba'"];//查询单个
-    item = [AnyModel xt_findFirst];
+list = [AnyModel xt_findAll]; // Query all records in this table
+list = [AnyModel xt_findWhere:@"name == 'mamba'"]; // Conditional query
 
 ```
 
-3. 查是否存在
+2. Single query
 
 ```
-    bool has = [AnyModel xt_hasModelWhere:@"age < 4"] ; //是否存在满足条件的数据
-
-```
-
-4. 自定义查询
-
-```
-    list = [AnyModel xt_findWithSql:@"select * from AnyModel"] ;//自定义sql语句, 查询列表
-    item = [AnyModel xt_findFirstWithSql:@"select * from AnyModel where age == 111"] ;//自定义sql语句, 查询单个
+item = [AnyModel xt_findFirstWhere:@"name == 'mamba'"]; // Query a single item
+item = [AnyModel xt_findFirst];
 
 ```
 
-- 删除
+3. Check whether it exists
+
+```
+bool has = [AnyModel xt_hasModelWhere:@"age < 4"] ; // Check whether there is data that meets the condition
+
+```
+
+4. Customize the query
+
+```
+list = [AnyModel xt_findWithSql:@"select * from AnyModel"] ; // Custom SQL statement, query list
+item = [AnyModel xt_findFirstWithSql:@"select * from AnyModel where age == 111"] ; // Custom SQL statement, query a single
+
+```
+
+- delete
 
 ```
 - (BOOL)xt_deleteModel;
@@ -191,28 +191,28 @@ e.g.
 
 e.g.
 
-1. 删除当前 Model
+1. Delete the current Model
 
 ```
-    [m1 xt_deleteModel];//删除记录
-
-```
-
-2. 删除指定 Model
-
-```
-    [AnyModel xt_deleteModelWhere:@"name == 'peter'"];
+[m1 xt_deleteModel]; // Delete the record
 
 ```
 
-3. 删除表
+2. Delete the specified Model
 
 ```
-    [AnyModel xt_dropTable]; //删除表
+[AnyModel xt_deleteModelWhere:@"name == 'peter'"];
 
 ```
 
-- 常用函数
+3. Delete table
+
+```
+[AnyModel xt_dropTable]; / / delete table
+
+```
+
+- Common functions
 
 ```
 // func execute Statements
@@ -232,33 +232,33 @@ e.g.
 
 e.g.
 
-1. 常用函数
+1. Common functions
 
 ```
-    int count = [AnyModel xt_count] ;
-    int count = [AnyModel xt_countWhere:@"age < 10"] ;
+int count = [AnyModel xt_count] ;
+int count = [AnyModel xt_countWhere:@"age < 10"] ;
 
-    double max = [AnyModel xt_maxOf:@"age"] ;
-    double max = [AnyModel xt_maxOf:@"age" where:@"location == 'shanghai'"] ;
+double max = [AnyModel xt_maxOf:@"age"] ;
+double max = [AnyModel xt_maxOf:@"age" where:@"location == 'shanghai'"] ;
 
 ```
 
-2. 自定义函数
+2. Custom functions
 
 ```
 id val = [AnyModel shmdb_anyFuncWithSql:@"..."] ;
 
 ```
 
-- 排序
+- Sort
 
 ```
-/**
+/ * *
 Order by . (in memory)
 @param columnName  --- must be a int column
 @param descOrAsc   BOOL  desc - 1 , asc - 0
 @return a sorted list
-*/
+* /
 - (NSArray *)shmdb_orderby:(NSString *)columnName
 descOrAsc:(BOOL)descOrAsc;
 ```
@@ -266,12 +266,12 @@ descOrAsc:(BOOL)descOrAsc;
 e.g.
 
 ```
-    [list shmdb_orderby:@"age" descOrAsc:1]; //按年龄降序排列
+[list shmdb_orderby:@"age" descOrAsc:1]; // In descending order of age
 ```
 
-- 配置约束
+- Configuration Constraints
 
-需要更深入的配置建表, 在 AnyModel 类中重载三个方法
+To further configure the table, override three methods in the AnyModel class
 
 ```
 // props Sqlite Keywords
@@ -285,29 +285,29 @@ e.g.
 
 ```
 
-1.  配置属性约束
+1. Configure attribute constraints
 
-modelPropertiesSqliteKeywords , 配置属性约束, 非空与默认值已经加入无需配置, 例如在这里可以指定某字段的唯一性
+ModelPropertiesSqliteKeywords, configuration properties, a default value is not empty and has joined without configuration, for example, in here you can specify the uniqueness of a particular field
 
 ```
 + (NSDictionary *)modelPropertiesSqliteKeywords {
-  return @{@"name":@"UNIQUE"} ;
+return @{@"name":@"UNIQUE"} ;
 }
 ```
 
-1. 配置不想参加建表的字段
+1. Configure the fields that you do not want to participate in table building
 
-ignoreProperties, 配置不想参加建表的字段. 例如 ViewModel 相关的属性等.
+IgnoreProperties, which configures fields that do not want to participate in table building. For example, viewModel-related properties.
 
 ```
 + (NSArray *)ignoreProperties {
-  return @[@"a1",@"a2"] ;
+return @[@"a1",@"a2"] ;
 }
 ```
 
-1. 配置容器类中的所需要存放的数据类型
+1. Configure the data types to be stored in container classes
 
-modelContainerPropertyGenericClass, 处理在容器类型中嵌套有其他类.
+ModelContainerPropertyGenericClass, dealing with nested in the container types have other classes.
 
 ```
 @class Shadow, Border, Attachment;
@@ -320,45 +320,45 @@ modelContainerPropertyGenericClass, 处理在容器类型中嵌套有其他类.
 @end
 
 @implementation Attributes
-// 返回容器类中的所需要存放的数据类型 (以 Class 或 Class Name 的形式)。
+// Return the data type (Class or Class Name) that needs to be stored in the container Class.
 + (NSDictionary *)modelContainerPropertyGenericClass {
-    return @{@"shadows" : [Shadow class],
-             @"borders" : Border.class,
-             @"attachments" : @"Attachment" };
+return @{@"shadows" : [Shadow class],
+@"borders" : Border.class,
+@"attachments" : @"Attachment" };
 }
 @end
 ```
 
-- 升级
+- Upgrade
 
 ```
-/**
- DB Version Upgrade
- @param tableCls    Class
- @param paramsAdd   @[propName1 ,propName2 ,... ,]
- @param version (int) start from 1
- */
+/ * *
+The DB Version Upgrade
+@ param tableCls Class
+@param paramsAdd @[propName1,propName2...]
+@param version (int) start from 1
+* /
 - (void)dbUpgradeTable:(Class)tableCls
-             paramsAdd:(NSArray *)paramsAdd
-               version:(int)version;
+ParamsAdd paramsAdd: (NSArray *)
+Version: (int) version;
 ```
 
-e.g. 一行代码完成数据库升级.
+e.g. One line of code completes the database upgrade.
 
 ```
 [[XTFMDBBase sharedInstance] dbUpgradeTable:AnyModel1.class
-                                      paramsAdd:@[ @"b1",@"b2",@"b3" ]
-                                        version:2];
-//只需传入对应表,新增字段数组,和对应数据库版本号.版本号默认从1开始. 逐次升级后递增.
-以此版本号为标识.
+ParamsAdd: @ @ "b1" @ "b2" @ "b3"]
+Version: 2];
+// Just pass in the corresponding table, the new field array, and the corresponding database version number. The version number starts from 1 by default. Each upgrade increases incrementally.
+Identified by this version number.
 [[XTFMDBBase sharedInstance] dbUpgradeTable:AnyModel2.class
-                                      paramsAdd:@[ @"c1",@"c2",@"c3" ]
-                                        version:3];
+paramsAdd:@[ @"c1",@"c2",@"c3" ]
+version:3];
 ```
 
 <end>
 
-# 附:
+# attached:
 
-- mac 上的 sqlite 可视化工具推荐 SQLite Professional
-- 使用中如有任何疑问,请 issue 于我 Akateason
+- SqLite Professional is recommended for MAC visualization
+- If you have any questions, please issue me Akateason
