@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "XTFMDB"
-  s.version      = "2.1.1"
+  s.version      = "3.0.0"
   s.summary      = "An FMDB based package. Rapid development framework."
   s.homepage     = "https://github.com/Akateason/XTFMDB"
   s.license      = { :type => "MIT", :file => "LICENSE" }
