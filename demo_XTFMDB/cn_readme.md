@@ -1,4 +1,4 @@
-# 设计初衷:
+# XTFMDB
 
 OC/Swift iOS 快速一站式 sqlite 数据库搭建. 调用更轻.快. 无需关注细节 .
 

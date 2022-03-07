@@ -1,6 +1,8 @@
-# Original intention:
+# XTFMDB
 
 OC/Swift iOS fast one-stop SQLite database setup. Call lighter. Faster. No need to pay attention to details.
+
+[中文介绍](https://github.com/Akateason/XTFMDB/blob/master/demo_XTFMDB/cn_readme.md)
 
 # Precautions for Swift access
 
